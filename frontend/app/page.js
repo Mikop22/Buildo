@@ -6,6 +6,7 @@ import styles from "./page.module.css";
 
 export default function Home() {
   const [stars, setStars] = useState([]);
+  const [inputText, setInputText] = useState("");
 
   useEffect(() => {
     const generatedStars = Array.from({ length: 50 }, (_, i) => ({
@@ -71,7 +72,7 @@ export default function Home() {
       <section className={styles.hero}>
         <div className={styles.heroContent}>
           <div className={`${styles.logoContainer} float`}>
-            <i class="nes-octocat animate"></i>
+            <i className="nes-octocat animate"></i>
           </div>
 
           <h1 className={`${styles.title} glow-text`}>
@@ -81,6 +82,19 @@ export default function Home() {
           <p className={styles.subtitle}>
             <span className="glow-green">SUB</span> TITLE
           </p>
+
+          <div className={styles.inputContainer}>
+            <input
+              type="text"
+              className={`nes-input is-dark ${styles.heroInput}`}
+              placeholder="CREATE A NEW PROJECT..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+            />
+            <button className={`nes-btn is-error ${styles.submitBtn}`}>
+              CREATE
+            </button>
+          </div>
 
           <div className={styles.blinkContainer}>
             <span className={styles.pressStart}>SELECT A GAME</span>
