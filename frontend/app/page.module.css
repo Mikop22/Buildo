@@ -40,7 +40,7 @@
 
 /* Hero Section */
 .hero {
-  min-height: 100vh;
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,13 +55,18 @@
   max-width: 800px;
 }
 
-.pixelArt {
+.logoContainer {
   font-size: 4rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.logoIcon {
+  font-size: 5rem;
+  display: block;
 }
 
 .title {
-  font-size: clamp(2rem, 8vw, 4rem);
+  font-size: clamp(2rem, 8vw, 3.5rem);
   margin-bottom: 1rem;
   color: var(--accent-primary);
   letter-spacing: 0.1em;
@@ -69,7 +74,7 @@
 }
 
 .subtitle {
-  font-size: clamp(0.8rem, 3vw, 1.2rem);
+  font-size: clamp(0.7rem, 2.5vw, 1rem);
   margin-bottom: 2rem;
   color: var(--text-muted);
   letter-spacing: 0.2em;
@@ -80,11 +85,10 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-bottom: 3rem;
 }
 
 .pressStart {
-  font-size: clamp(0.6rem, 2vw, 0.9rem);
+  font-size: clamp(0.5rem, 1.5vw, 0.8rem);
   color: var(--pixel-yellow);
   letter-spacing: 0.15em;
 }
@@ -94,59 +98,107 @@
   color: var(--pixel-yellow);
 }
 
-.buttonGroup {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.buttonGroup .nes-btn {
-  font-size: 0.8rem !important;
-  padding: 1rem 2rem !important;
-}
-
-/* Features Section */
-.features {
-  padding: 4rem 2rem;
+/* Games Section */
+.gamesSection {
+  padding: 3rem 2rem;
   position: relative;
   z-index: 1;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.featureGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.featureCard {
+.sectionTitle {
   text-align: center;
-  padding: 1.5rem;
-  transition: transform 0.2s ease;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  margin-bottom: 2.5rem;
+  color: var(--accent-primary);
 }
 
-.featureCard:hover {
-  transform: translateY(-5px);
+.gamesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
 }
 
-.featureTitle {
-  font-size: 0.9rem;
+.gameCardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.gameCard {
+  text-align: center;
+  padding: 2rem !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gameCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 0 30px rgba(233, 69, 96, 0.4);
+}
+
+.gameIcon {
+  margin-bottom: 1.5rem;
+}
+
+.gameName {
+  font-size: 1rem;
   color: var(--pixel-yellow);
-  margin: 1rem 0 0.5rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.05em;
 }
 
-.featureText {
-  font-size: 0.6rem;
+.gameDescription {
+  font-size: 0.55rem;
   color: var(--text-muted);
-  line-height: 1.6;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.gameStats {
+  margin-bottom: 1.5rem;
+}
+
+.gameStat {
+  margin-bottom: 0.75rem;
+}
+
+.gameStatLabel {
+  display: block;
+  font-size: 0.5rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+.gameStat progress {
+  width: 100%;
+}
+
+.playBtn {
+  width: 100%;
+  font-size: 0.7rem !important;
+  padding: 0.75rem 1rem !important;
 }
 
 /* Stats Section */
 .stats {
-  padding: 4rem 2rem;
+  padding: 3rem 2rem;
   position: relative;
   z-index: 1;
   max-width: 800px;
@@ -167,7 +219,7 @@
 }
 
 .statNumber {
-  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-size: clamp(1.2rem, 4vw, 2rem);
 }
 
 .statLabel {
@@ -176,117 +228,48 @@
   letter-spacing: 0.1em;
 }
 
-/* Characters Section */
-.characters {
-  padding: 4rem 2rem;
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.sectionTitle {
-  text-align: center;
-  font-size: clamp(1rem, 4vw, 1.5rem);
-  margin-bottom: 3rem;
-  color: var(--accent-primary);
-}
-
-.characterGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.5rem;
-}
-
-.characterCard {
-  text-align: center;
-  padding: 1.5rem !important;
-  background: rgba(0, 0, 0, 0.4) !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.characterCard:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
-}
-
-.avatar {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.characterName {
-  display: block;
-  font-size: 0.7rem;
-  color: var(--pixel-yellow);
-  margin-bottom: 1rem;
-}
-
-.healthBar {
-  margin-top: 0.5rem;
-}
-
-.healthBar progress {
-  width: 100%;
-}
-
-/* Newsletter Section */
-.newsletter {
-  padding: 4rem 2rem;
-  position: relative;
-  z-index: 1;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.newsletterText {
-  font-size: 0.7rem;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: var(--text-muted);
-}
-
-.inputGroup {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-end;
-}
-
-.inputGroup .nes-field {
-  flex: 1;
-  min-width: 200px;
-}
-
-.inputGroup .nes-input {
-  font-size: 0.7rem !important;
-}
-
-.inputGroup .nes-btn {
-  font-size: 0.7rem !important;
-}
-
-/* Social Section */
-.social {
+/* Features Section */
+.features {
   padding: 3rem 2rem;
   position: relative;
   z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
-.socialLinks {
-  display: flex;
-  justify-content: center;
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
+  margin-top: 1.5rem;
 }
 
-.socialLink {
+.featureCard {
+  text-align: center;
+  padding: 1.5rem;
   transition: transform 0.2s ease;
-  display: inline-block;
 }
 
-.socialLink:hover {
-  transform: scale(1.2) rotate(5deg);
+.featureCard:hover {
+  transform: translateY(-5px);
+}
+
+.featureEmoji {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.featureTitle {
+  font-size: 0.8rem;
+  color: var(--pixel-yellow);
+  margin-bottom: 0.5rem;
+}
+
+.featureText {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  line-height: 1.6;
 }
 
 /* Footer */
@@ -294,6 +277,7 @@
   padding: 2rem;
   position: relative;
   z-index: 1;
+  margin-top: 2rem;
 }
 
 .footerText {
@@ -313,89 +297,147 @@
   gap: 0.3rem;
 }
 
-/* Dialog Overlay */
-.dialogOverlay {
+/* Back Button Component */
+.backButton {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 100;
+  font-size: 0.6rem !important;
+}
+
+/* Game Page Specific */
+.gamePageHero {
+  min-height: 40vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  text-align: center;
+  padding: 4rem 2rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.gamePageTitle {
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  margin-bottom: 1rem;
+  color: var(--accent-primary);
+  letter-spacing: 0.1em;
+}
+
+.gamePageSubtitle {
+  font-size: clamp(0.6rem, 2vw, 0.8rem);
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.gameContainer {
   padding: 2rem;
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.dialogContainer {
-  max-width: 400px;
-  width: 100%;
-  animation: dialogPop 0.3s ease;
+.gameArea {
+  background: rgba(0, 0, 0, 0.6) !important;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem !important;
 }
 
-@keyframes dialogPop {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
+.gameAreaContent {
+  text-align: center;
+}
 
+.gameAreaEmoji {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+  0%,
   100% {
     transform: scale(1);
-    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.1);
   }
 }
 
-.dialogContent {
-  text-align: center;
-  padding: 1.5rem 0;
-}
-
-.dialogContent i {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.dialogContent p {
+.gameAreaText {
   font-size: 0.7rem;
-  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.gameControls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.gameControls button {
+  font-size: 0.7rem !important;
+}
+
+/* Instructions Section */
+.instructionsSection {
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.instructionsList {
+  list-style: none;
+  padding: 0;
+}
+
+.instructionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.6rem;
   color: var(--text-light);
 }
 
-.dialogButtons {
+.instructionNumber {
+  background: var(--accent-primary);
+  color: white;
+  width: 24px;
+  height: 24px;
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.dialogButtons .nes-btn {
-  font-size: 0.7rem !important;
+  flex-shrink: 0;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+  .gamesGrid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
   .statsGrid {
-    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
 
-  .characterGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .buttonGroup {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .inputGroup {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .characterGrid {
-    grid-template-columns: 1fr;
+  .backButton {
+    top: 1rem;
+    left: 1rem;
   }
 }

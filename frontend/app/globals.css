@@ -1,5 +1,6 @@
-/* NES.css Retro Theme Overrides */
-:root {
+/* Themes */
+:root,
+[data-theme='dark'] {
   --bg-dark: #1a1a2e;
   --bg-darker: #16213e;
   --accent-primary: #e94560;
@@ -10,6 +11,53 @@
   --pixel-blue: #00d4ff;
   --pixel-yellow: #ffd700;
   --pixel-pink: #ff6ec7;
+}
+
+[data-theme='light'] {
+  --bg-dark: #87CEEB;
+  /* Sky Blue */
+  --bg-darker: #f0f8ff;
+  --accent-primary: #FF0000;
+  /* Mario Red */
+  --accent-secondary: #2C3E50;
+  --text-light: #2c3e50;
+  --text-muted: #576574;
+  --pixel-green: #2ecc71;
+  --pixel-blue: #3498db;
+  --pixel-yellow: #f1c40f;
+  --pixel-pink: #e056fd;
+}
+
+[data-theme='cyberpunk'] {
+  --bg-dark: #000b1e;
+  --bg-darker: #020024;
+  --accent-primary: #ff00ff;
+  --accent-secondary: #00ffff;
+  --text-light: #ffffff;
+  --text-muted: #bdc3c7;
+  --pixel-green: #39ff14;
+  --pixel-blue: #00f3ff;
+  --pixel-yellow: #fcee0a;
+  --pixel-pink: #ff0099;
+}
+
+[data-theme='gameboy'] {
+  --bg-dark: #306230;
+  /* Dark Green */
+  --bg-darker: #0f380f;
+  /* Darkest Green (Black) */
+  --accent-primary: #9bbc0f;
+  /* Lightest Green */
+  --accent-secondary: #8bac0f;
+  /* Light Green */
+  --text-light: #9bbc0f;
+  /* Lightest Green */
+  --text-muted: #8bac0f;
+  /* Light Green */
+  --pixel-green: #9bbc0f;
+  --pixel-blue: #8bac0f;
+  --pixel-yellow: #9bbc0f;
+  --pixel-pink: #8bac0f;
 }
 
 * {
