@@ -69,6 +69,13 @@ export default function Home() {
         ))}
       </div>
 
+      {/* Nyan Cat Background */}
+      <img
+        src="https://media.tenor.com/-AyTtMgs2mMAAAAi/nyan-cat-nyan.gif"
+        alt="Nyan Cat"
+        className={styles.nyanCatBackground}
+      />
+
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
@@ -103,14 +110,13 @@ export default function Home() {
           {/* Loading Screen */}
           {isLoading && (
             <div className={styles.loadingScreen}>
-              <div className={styles.loadingContent}>
-                <img
-                  src="https://media.tenor.com/-AyTtMgs2mMAAAAi/nyan-cat-nyan.gif"
-                  alt="Nyan Cat"
-                  className={styles.nyanCat}
-                />
-                <p className={`${styles.loadingText} blink`}>LOADING...</p>
+              <div className={styles.batteryContainer}>
+                <div className={styles.batteryBody}>
+                  <div className={styles.batteryLevel}></div>
+                </div>
+                <div className={styles.batteryBump}></div>
               </div>
+              <p className={`${styles.loadingText} blink`}>CHARGING...</p>
             </div>
           )}
 
