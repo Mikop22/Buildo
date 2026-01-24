@@ -1,5 +1,6 @@
 [project]
 dependencies = [
     "flask",
-    "python-dotenv"
+    "python-dotenv",
+    "google-genai"
 ]
