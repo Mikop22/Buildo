@@ -1,0 +1,200 @@
+/* NES.css Retro Theme Overrides */
+:root {
+  --bg-dark: #1a1a2e;
+  --bg-darker: #16213e;
+  --accent-primary: #e94560;
+  --accent-secondary: #0f3460;
+  --text-light: #eaeaea;
+  --text-muted: #a0a0a0;
+  --pixel-green: #00ff41;
+  --pixel-blue: #00d4ff;
+  --pixel-yellow: #ffd700;
+  --pixel-pink: #ff6ec7;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-press-start), "Press Start 2P", cursive;
+  background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-darker) 100%);
+  min-height: 100vh;
+  color: var(--text-light);
+  overflow-x: hidden;
+}
+
+/* Pixel-perfect scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+  border: 2px solid var(--accent-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border: 2px solid var(--accent-secondary);
+}
+
+/* Scanline overlay effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg,
+      rgba(0, 0, 0, 0.1) 0px,
+      rgba(0, 0, 0, 0.1) 1px,
+      transparent 1px,
+      transparent 2px);
+  z-index: 9999;
+}
+
+/* Custom NES container styles */
+.nes-container {
+  background: var(--bg-darker) !important;
+  color: var(--text-light) !important;
+}
+
+.nes-container.is-dark {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+.nes-container.with-title>.title {
+  background-color: var(--bg-dark) !important;
+  color: var(--pixel-yellow) !important;
+}
+
+/* Button hover animations */
+.nes-btn:hover {
+  transform: translateY(-2px);
+  transition: transform 0.1s ease;
+}
+
+.nes-btn:active {
+  transform: translateY(1px);
+}
+
+/* Glowing text effect */
+.glow-text {
+  text-shadow:
+    0 0 5px var(--accent-primary),
+    0 0 10px var(--accent-primary),
+    0 0 20px var(--accent-primary);
+}
+
+.glow-green {
+  text-shadow:
+    0 0 5px var(--pixel-green),
+    0 0 10px var(--pixel-green),
+    0 0 20px var(--pixel-green);
+}
+
+.glow-blue {
+  text-shadow:
+    0 0 5px var(--pixel-blue),
+    0 0 10px var(--pixel-blue),
+    0 0 20px var(--pixel-blue);
+}
+
+/* Animated pixel stars background */
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+.star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  animation: twinkle 2s infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Blink animation for cursor effect */
+@keyframes blink {
+
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Rainbow text effect */
+@keyframes rainbow {
+  0% {
+    color: var(--accent-primary);
+  }
+
+  25% {
+    color: var(--pixel-yellow);
+  }
+
+  50% {
+    color: var(--pixel-green);
+  }
+
+  75% {
+    color: var(--pixel-blue);
+  }
+
+  100% {
+    color: var(--accent-primary);
+  }
+}
+
+.rainbow-text {
+  animation: rainbow 4s linear infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  html {
+    font-size: 12px;
+  }
+}
