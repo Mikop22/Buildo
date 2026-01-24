@@ -1,15 +1,14 @@
+from services.parts_catalog import PARTS_DATA
+
 def generate_parts_and_spec(description: str) -> dict:
+    # Filler logic for demonstration: returns all example parts in every category from the catalog
+    # You may change this logic later to choose only relevant categories/parts based on the description
     return {
-        "device_spec": {
-            "name": "Smart Plant Waterer",
-            "sensors": ["moisture sensor", "temperature sensor"],
-            "actuators": ["water pump"],
-            "microcontroller": "ESP32"
-        },
-        "parts_list": [
-            {"part": "ESP32", "qty": 1},
-            {"part": "Soil Moisture Sensor", "qty": 1},
-            {"part": "Temperature Sensor", "qty": 1},
-            {"part": "Water Pump", "qty": 1}
-        ]
+        "controller": PARTS_DATA.get("controller", []),
+        "power": PARTS_DATA.get("power", []),
+        "communication": PARTS_DATA.get("communication", []),
+        "inputs": PARTS_DATA.get("inputs", []),
+        "outputs": PARTS_DATA.get("outputs", []),
+        "interconnect": PARTS_DATA.get("interconnect", []),
+        "mechanical": PARTS_DATA.get("mechanical", [])
     }
