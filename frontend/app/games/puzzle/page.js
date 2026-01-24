@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "../../page.module.css";
+import { updateLocalScore } from "../../utils/userData";
 
 export default function PuzzleGame() {
     const [stars, setStars] = useState([]);
@@ -14,6 +15,7 @@ export default function PuzzleGame() {
     const [level, setLevel] = useState(1);
     const [message, setMessage] = useState("Press START to begin!");
     const [gameOver, setGameOver] = useState(false);
+    const [score, setScore] = useState(0);
 
     const colors = [
         { id: 0, color: "is-error", emoji: "🔴" },
@@ -81,7 +83,10 @@ export default function PuzzleGame() {
             // Wrong!
             setGameOver(true);
             setIsPlaying(false);
-            setMessage(`Game Over! You reached Level ${level}`);
+            const finalScore = (level - 1) * 100;
+            setScore(finalScore);
+            updateLocalScore(finalScore);
+            setMessage(`Game Over! Score: ${finalScore}`);
             return;
         }
 

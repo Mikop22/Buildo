@@ -1,0 +1,33 @@
+.main {
+    min-height: 100vh;
+    padding: 2rem;
+    background-image:
+        radial-gradient(var(--bg-dark) 15%, transparent 16%),
+        radial-gradient(var(--bg-dark) 15%, transparent 16%);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+    background-color: var(--bg-darker);
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profileSection {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.avatarPreview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    .profileSection {
+        flex-direction: column;
+    }
+}

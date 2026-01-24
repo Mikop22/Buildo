@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "../../page.module.css";
+import { updateLocalScore } from "../../utils/userData";
 
 export default function AdventureGame() {
     const [stars, setStars] = useState([]);
@@ -10,6 +11,14 @@ export default function AdventureGame() {
     const [gold, setGold] = useState(0);
     const [location, setLocation] = useState("entrance");
     const [message, setMessage] = useState("You stand at the dungeon entrance...");
+    const [saved, setSaved] = useState(false);
+
+    useEffect(() => {
+        if (health === 0 && gold > 0 && !saved) {
+            updateLocalScore(gold);
+            setSaved(true);
+        }
+    }, [health, gold, saved]);
 
     useEffect(() => {
         const generatedStars = Array.from({ length: 50 }, (_, i) => ({
@@ -65,6 +74,7 @@ export default function AdventureGame() {
         setGold(0);
         setLocation("entrance");
         setMessage("You stand at the dungeon entrance...");
+        setSaved(false);
     };
 
     const currentLocation = locations[location];
@@ -157,6 +167,7 @@ export default function AdventureGame() {
                             <p className={styles.gameAreaText}>
                                 You collected {gold} gold before falling in battle.
                             </p>
+                            {saved && <p className="is-success" style={{ color: "#92cc41", marginBottom: "1rem" }}>Score Saved!</p>}
                             <button
                                 type="button"
                                 className="nes-btn is-success"

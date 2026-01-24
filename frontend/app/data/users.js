@@ -1,0 +1,32 @@
+export const achievements = [
+    { id: "first_win", name: "First Blood", description: "Win your first game", icon: "heart" },
+    { id: "high_score", name: "High Roller", description: "Score over 1,000 pts", icon: "coin" },
+    { id: "veteran", name: "Veteran", description: "Play 50 games", icon: "trophy" },
+    { id: "collector", name: "Collector", description: "Unlock all avatars", icon: "close" },
+    { id: "speed", name: "Speed Demon", description: "Complete a level in <30s", icon: "like" },
+    { id: "sniper", name: "Pixel Sniper", description: "100% Accuracy in a game", icon: "star" },
+    { id: "night_owl", name: "Night Owl", description: "Play between 2AM and 5AM", icon: "moon" },
+];
+
+export const mockUsers = [
+    { id: "u1", username: "PixelMaster99", avatarId: 1, score: 999999, rank: 1, joined: "2024", stats: { games: 142, wins: 89, playtime: "42h" }, achievements: ["first_win", "high_score", "veteran", "collector"] },
+    { id: "u2", username: "RetroKing", avatarId: 2, score: 854000, rank: 2, joined: "2025", stats: { games: 98, wins: 45, playtime: "28h" }, achievements: ["first_win", "high_score"] },
+    { id: "u3", username: "BitWarrior", avatarId: 3, score: 720500, rank: 3, joined: "2024", stats: { games: 156, wins: 62, playtime: "55h" }, achievements: ["first_win", "veteran"] },
+    { id: "u4", username: "GlitchHunter", avatarId: 7, score: 650000, rank: 4, joined: "2026", stats: { games: 45, wins: 12, playtime: "10h" }, achievements: ["first_win"] },
+    { id: "u5", username: "ArcadeQueen", avatarId: 5, score: 540200, rank: 5, joined: "2024", stats: { games: 112, wins: 33, playtime: "35h" }, achievements: ["speed", "veteran"] },
+    { id: "u6", username: "NintenDude", avatarId: 4, score: 420000, rank: 6, joined: "2023", stats: { games: 200, wins: 15, playtime: "100h" }, achievements: ["veteran", "night_owl"] },
+    { id: "u7", username: "SegaSonic", avatarId: 9, score: 380100, rank: 7, joined: "2025", stats: { games: 34, wins: 10, playtime: "8h" }, achievements: ["speed"] },
+    { id: "u8", username: "PongChamp", avatarId: 8, score: 250000, rank: 8, joined: "2024", stats: { games: 88, wins: 22, playtime: "25h" }, achievements: ["first_win"] },
+    { id: "u9", username: "TetrisGod", avatarId: 6, score: 195000, rank: 9, joined: "2026", stats: { games: 15, wins: 5, playtime: "4h" }, achievements: ["sniper"] },
+    { id: "u10", username: "PacManFan", avatarId: 10, score: 150000, rank: 10, joined: "2025", stats: { games: 40, wins: 8, playtime: "12h" }, achievements: ["collector"] },
+    { id: "u11", username: "NeoGeo", avatarId: 11, score: 120000, rank: 11, joined: "2024", stats: { games: 67, wins: 30, playtime: "22h" }, achievements: ["first_win"] },
+    { id: "u12", username: "CyberPunk", avatarId: 12, score: 98000, rank: 12, joined: "2026", stats: { games: 20, wins: 2, playtime: "5h" }, achievements: ["speed"] },
+    { id: "u13", username: "8BitHero", avatarId: 13, score: 85000, rank: 13, joined: "2023", stats: { games: 150, wins: 40, playtime: "60h" }, achievements: ["veteran"] },
+    { id: "u14", username: "JoystickJ", avatarId: 14, score: 72000, rank: 14, joined: "2025", stats: { games: 44, wins: 11, playtime: "14h" }, achievements: [] },
+    { id: "u15", username: "LevelUpLisa", avatarId: 15, score: 65000, rank: 15, joined: "2024", stats: { games: 30, wins: 10, playtime: "9h" }, achievements: ["first_win"] },
+    { id: "u16", username: "GameOver", avatarId: 16, score: 50000, rank: 16, joined: "2026", stats: { games: 5, wins: 0, playtime: "1h" }, achievements: [] },
+    { id: "u17", username: "InsertCoin", avatarId: 17, score: 42000, rank: 17, joined: "2025", stats: { games: 25, wins: 5, playtime: "7h" }, achievements: ["sniper"] },
+    { id: "u18", username: "BossFighter", avatarId: 18, score: 35000, rank: 18, joined: "2024", stats: { games: 60, wins: 20, playtime: "18h" }, achievements: ["veteran"] },
+    { id: "u19", username: "SpeedRunr", avatarId: 19, score: 28000, rank: 19, joined: "2026", stats: { games: 10, wins: 1, playtime: "2h" }, achievements: ["speed"] },
+    { id: "u20", username: "Newbie101", avatarId: 20, score: 1000, rank: 20, joined: "2026", stats: { games: 1, wins: 0, playtime: "10m" }, achievements: [] },
+];

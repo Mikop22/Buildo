@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "../../page.module.css";
+import { updateLocalScore } from "../../utils/userData";
 
 export default function ArcadeGame() {
     const [stars, setStars] = useState([]);
     const [score, setScore] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [saved, setSaved] = useState(false);
 
     useEffect(() => {
         const generatedStars = Array.from({ length: 50 }, (_, i) => ({
@@ -25,6 +27,15 @@ export default function ArcadeGame() {
         setScore(0);
     };
 
+    const handleStop = () => {
+        setIsPlaying(false);
+        if (score > 0) {
+            updateLocalScore(score);
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+        }
+    };
+
     const handleClick = () => {
         if (isPlaying) {
             setScore(s => s + 10);
@@ -33,6 +44,12 @@ export default function ArcadeGame() {
 
     return (
         <main className={styles.main}>
+            {/* Save Notification */}
+            {saved && (
+                <div style={{ position: "fixed", top: "20px", right: "20px", zIndex: 9999 }} className="nes-balloon from-right">
+                    <p>Saved +{score} pts!</p>
+                </div>
+            )}
             {/* Star Background */}
             <div className={styles.starContainer}>
                 {stars.map((star) => (
@@ -108,9 +125,9 @@ export default function ArcadeGame() {
                                     <button
                                         type="button"
                                         className="nes-btn"
-                                        onClick={() => setIsPlaying(false)}
+                                        onClick={handleStop}
                                     >
-                                        STOP
+                                        STOP & SAVE
                                     </button>
                                 </div>
                             </>
