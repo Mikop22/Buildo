@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function Home() {
   const [stars, setStars] = useState([]);
-  const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
-    // Generate random stars for background
     const generatedStars = Array.from({ length: 50 }, (_, i) => ({
       id: i,
       left: Math.random() * 100,
@@ -18,6 +17,36 @@ export default function Home() {
     }));
     setStars(generatedStars);
   }, []);
+
+  const games = [
+    {
+      id: "arcade",
+      name: "ARCADE BLITZ",
+      description: "Fast-paced action with explosive gameplay",
+      icon: "coin",
+      color: "is-warning",
+      difficulty: 75,
+      players: "1-2",
+    },
+    {
+      id: "adventure",
+      name: "DUNGEON QUEST",
+      description: "Explore mysterious dungeons and find treasure",
+      icon: "heart",
+      color: "is-error",
+      difficulty: 60,
+      players: "1",
+    },
+    {
+      id: "puzzle",
+      name: "BRAIN BLOCKS",
+      description: "Test your mind with challenging puzzles",
+      icon: "trophy",
+      color: "is-success",
+      difficulty: 85,
+      players: "1",
+    },
+  ];
 
   return (
     <main className={styles.main}>
@@ -41,67 +70,21 @@ export default function Home() {
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <div className={`${styles.pixelArt} float`}>
-            <i className="nes-octocat animate"></i>
+          <div className={`${styles.logoContainer} float`}>
+            <i class="nes-octocat animate"></i>
           </div>
 
           <h1 className={`${styles.title} glow-text`}>
-            PIXEL QUEST
+            PROJECT NAME
           </h1>
 
           <p className={styles.subtitle}>
-            <span className="glow-green">8-BIT</span> ADVENTURES AWAIT
+            <span className="glow-green">SUB</span> TITLE
           </p>
 
           <div className={styles.blinkContainer}>
-            <span className={styles.pressStart}>PRESS START</span>
-            <span className={`${styles.cursor} blink`}>_</span>
-          </div>
-
-          <div className={styles.buttonGroup}>
-            <button
-              type="button"
-              className="nes-btn is-primary"
-              onClick={() => setShowDialog(true)}
-            >
-              <span>START GAME</span>
-            </button>
-            <button type="button" className="nes-btn is-success">
-              <span>HIGH SCORES</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className={styles.features}>
-        <div className="nes-container is-dark with-title">
-          <p className="title">CHOOSE YOUR PATH</p>
-
-          <div className={styles.featureGrid}>
-            <div className={styles.featureCard}>
-              <i className="nes-icon is-large heart"></i>
-              <h3 className={styles.featureTitle}>ADVENTURE</h3>
-              <p className={styles.featureText}>
-                Explore dungeons and defeat monsters
-              </p>
-            </div>
-
-            <div className={styles.featureCard}>
-              <i className="nes-icon is-large star"></i>
-              <h3 className={styles.featureTitle}>COLLECT</h3>
-              <p className={styles.featureText}>
-                Gather coins and power-ups
-              </p>
-            </div>
-
-            <div className={styles.featureCard}>
-              <i className="nes-icon is-large trophy"></i>
-              <h3 className={styles.featureTitle}>COMPETE</h3>
-              <p className={styles.featureText}>
-                Challenge friends worldwide
-              </p>
-            </div>
+            <span className={styles.pressStart}>SELECT A GAME</span>
+            <span className={`${styles.cursor} blink`}>▼</span>
           </div>
         </div>
       </section>
@@ -111,153 +94,107 @@ export default function Home() {
         <div className="nes-container is-rounded">
           <div className={styles.statsGrid}>
             <div className={styles.statItem}>
-              <span className={`${styles.statNumber} rainbow-text`}>999</span>
-              <span className={styles.statLabel}>PLAYERS</span>
+              <span className={`${styles.statNumber} rainbow-text`}>3</span>
+              <span className={styles.statLabel}>GAMES</span>
             </div>
             <div className={styles.statItem}>
-              <span className={`${styles.statNumber} glow-blue`}>42</span>
+              <span className={`${styles.statNumber} glow-blue`}>∞</span>
               <span className={styles.statLabel}>LEVELS</span>
             </div>
             <div className={styles.statItem}>
-              <span className={`${styles.statNumber} glow-green`}>∞</span>
-              <span className={styles.statLabel}>FUN</span>
+              <span className={`${styles.statNumber} glow-green`}>24/7</span>
+              <span className={styles.statLabel}>PLAY</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Character Selection */}
-      <section className={styles.characters}>
-        <h2 className={`${styles.sectionTitle} glow-text`}>SELECT HERO</h2>
+      {/* Games Section */}
+      <section className={styles.gamesSection}>
+        <h2 className={`${styles.sectionTitle} glow-text`}>CHOOSE YOUR GAME</h2>
 
-        <div className={styles.characterGrid}>
-          <div className={`nes-container is-rounded ${styles.characterCard}`}>
-            <div className={`${styles.avatar} float`}>
-              <i className="nes-mario"></i>
-            </div>
-            <span className={styles.characterName}>MARIO</span>
-            <div className={styles.healthBar}>
-              <progress className="nes-progress is-error" value="80" max="100"></progress>
-            </div>
-          </div>
+        <div className={styles.gamesGrid}>
+          {games.map((game, index) => (
+            <Link
+              href={`/games/${game.id}`}
+              key={game.id}
+              className={styles.gameCardLink}
+            >
+              <div
+                className={`nes-container is-rounded ${styles.gameCard}`}
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                <div className={`${styles.gameIcon} float`} style={{ animationDelay: `${index * 0.3}s` }}>
+                  <i className={`nes-icon is-large ${game.icon}`}></i>
+                </div>
 
-          <div className={`nes-container is-rounded ${styles.characterCard}`}>
-            <div className={`${styles.avatar} float`} style={{ animationDelay: "0.5s" }}>
-              <i className="nes-ash"></i>
-            </div>
-            <span className={styles.characterName}>ASH</span>
-            <div className={styles.healthBar}>
-              <progress className="nes-progress is-warning" value="65" max="100"></progress>
-            </div>
-          </div>
+                <h3 className={styles.gameName}>{game.name}</h3>
+                <p className={styles.gameDescription}>{game.description}</p>
 
-          <div className={`nes-container is-rounded ${styles.characterCard}`}>
-            <div className={`${styles.avatar} float`} style={{ animationDelay: "1s" }}>
-              <i className="nes-pokeball"></i>
-            </div>
-            <span className={styles.characterName}>PIKA</span>
-            <div className={styles.healthBar}>
-              <progress className="nes-progress is-success" value="100" max="100"></progress>
-            </div>
-          </div>
+                <div className={styles.gameStats}>
+                  <div className={styles.gameStat}>
+                    <span className={styles.gameStatLabel}>DIFFICULTY</span>
+                    <progress
+                      className={`nes-progress ${game.color}`}
+                      value={game.difficulty}
+                      max="100"
+                    ></progress>
+                  </div>
+                  <div className={styles.gameStat}>
+                    <span className={styles.gameStatLabel}>PLAYERS: {game.players}</span>
+                  </div>
+                </div>
 
-          <div className={`nes-container is-rounded ${styles.characterCard}`}>
-            <div className={`${styles.avatar} float`} style={{ animationDelay: "1.5s" }}>
-              <i className="nes-kirby"></i>
-            </div>
-            <span className={styles.characterName}>KIRBY</span>
-            <div className={styles.healthBar}>
-              <progress className="nes-progress is-primary" value="90" max="100"></progress>
-            </div>
-          </div>
+                <button type="button" className={`nes-btn ${game.color} ${styles.playBtn}`}>
+                  PLAY NOW
+                </button>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className={styles.newsletter}>
+      {/* Features Section
+      <section className={styles.features}>
         <div className="nes-container is-dark with-title">
-          <p className="title">JOIN THE QUEST</p>
+          <p className="title">WHY PIXEL ARCADE?</p>
 
-          <p className={styles.newsletterText}>
-            Enter your name, brave adventurer!
-          </p>
-
-          <div className={styles.inputGroup}>
-            <div className="nes-field">
-              <input
-                type="text"
-                id="name_field"
-                className="nes-input"
-                placeholder="YOUR NAME..."
-              />
+          <div className={styles.featureGrid}>
+            <div className={styles.featureCard}>
+              <span className={styles.featureEmoji}>⚡</span>
+              <h3 className={styles.featureTitle}>INSTANT PLAY</h3>
+              <p className={styles.featureText}>
+                No downloads. Jump right into the action!
+              </p>
             </div>
-            <button type="button" className="nes-btn is-warning">
-              JOIN!
-            </button>
+
+            <div className={styles.featureCard}>
+              <span className={styles.featureEmoji}>🏆</span>
+              <h3 className={styles.featureTitle}>LEADERBOARDS</h3>
+              <p className={styles.featureText}>
+                Compete globally and claim your rank
+              </p>
+            </div>
+
+            <div className={styles.featureCard}>
+              <span className={styles.featureEmoji}>🎯</span>
+              <h3 className={styles.featureTitle}>ACHIEVEMENTS</h3>
+              <p className={styles.featureText}>
+                Unlock badges and show off your skills
+              </p>
+            </div>
           </div>
         </div>
-      </section>
-
-      {/* Social Links */}
-      <section className={styles.social}>
-        <div className={styles.socialLinks}>
-          <a href="#" className={styles.socialLink}>
-            <i className="nes-icon twitter is-medium"></i>
-          </a>
-          <a href="#" className={styles.socialLink}>
-            <i className="nes-icon github is-medium"></i>
-          </a>
-          <a href="#" className={styles.socialLink}>
-            <i className="nes-icon youtube is-medium"></i>
-          </a>
-        </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className={styles.footer}>
         <div className="nes-container is-centered">
           <p className={styles.footerText}>
-            © 2026 PIXEL QUEST
-          </p>
-          <p className={styles.footerCredits}>
-            MADE WITH <i className="nes-icon is-small heart"></i> & NES.CSS
+            Project Name
           </p>
         </div>
       </footer>
-
-      {/* Dialog */}
-      {showDialog && (
-        <div className={styles.dialogOverlay} onClick={() => setShowDialog(false)}>
-          <div className={styles.dialogContainer} onClick={(e) => e.stopPropagation()}>
-            <div className="nes-container is-rounded is-dark with-title">
-              <p className="title">READY?</p>
-
-              <div className={styles.dialogContent}>
-                <i className="nes-bcrikko"></i>
-                <p>Your adventure is about to begin!</p>
-                <p className="glow-green">Are you ready, hero?</p>
-              </div>
-
-              <div className={styles.dialogButtons}>
-                <button
-                  type="button"
-                  className="nes-btn is-success"
-                  onClick={() => setShowDialog(false)}
-                >
-                  YES!
-                </button>
-                <button
-                  type="button"
-                  className="nes-btn is-error"
-                  onClick={() => setShowDialog(false)}
-                >
-                  NOT YET
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
