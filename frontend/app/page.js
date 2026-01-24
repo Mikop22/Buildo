@@ -7,6 +7,7 @@ import styles from "./page.module.css";
 export default function Home() {
   const [stars, setStars] = useState([]);
   const [inputText, setInputText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const generatedStars = Array.from({ length: 50 }, (_, i) => ({
@@ -91,10 +92,27 @@ export default function Home() {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
             />
-            <button className={`nes-btn is-error ${styles.submitBtn}`}>
+            <button
+              className={`nes-btn is-error ${styles.submitBtn}`}
+              onClick={() => setIsLoading(true)}
+            >
               CREATE
             </button>
           </div>
+
+          {/* Loading Screen */}
+          {isLoading && (
+            <div className={styles.loadingScreen}>
+              <div className={styles.loadingContent}>
+                <img
+                  src="https://media.tenor.com/-AyTtMgs2mMAAAAi/nyan-cat-nyan.gif"
+                  alt="Nyan Cat"
+                  className={styles.nyanCat}
+                />
+                <p className={`${styles.loadingText} blink`}>LOADING...</p>
+              </div>
+            </div>
+          )}
 
           <div className={styles.blinkContainer}>
             <span className={styles.pressStart}>SELECT A GAME</span>
