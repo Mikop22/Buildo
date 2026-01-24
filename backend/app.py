@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from services.gemini import generate_parts_and_spec
+from services.gemini import fetch_parts_by_category
 from services.snowflake import generate_code_and_steps
 from services.cache import get_cached, save_cached
 
@@ -14,14 +14,11 @@ def generate():
     cached = get_cached(description)
     if cached:
         return jsonify(cached)
-    parts_spec = generate_parts_and_spec(description)
-    code_steps = generate_code_and_steps(parts_spec["device_spec"])
-    result = {
-        "device_spec": parts_spec["device_spec"],
-        "parts_list": parts_spec["parts_list"],
-        "firmware": code_steps["firmware"],
-        "assembly_steps": code_steps["assembly_steps"]
-    }
+    parts_by_category = fetch_parts_by_category(description)
+    code_steps = generate_code_and_steps(parts_by_category)
+    result = dict(parts_by_category)
+    result["firmware"] = code_steps["firmware"]
+    result["assembly_steps"] = code_steps["assembly_steps"]
     save_cached(description, result)
     return jsonify(result)
 
