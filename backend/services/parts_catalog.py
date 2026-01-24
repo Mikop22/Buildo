@@ -67,6 +67,36 @@ PARTS_DATA = {
             "quantity": 1,
             "description": "A 5V submersible water pump.",
             "why": "Physically delivers water to the plant when triggered."
+        },
+        {
+            "title": "Red LED",
+            "vendor": "AliExpress",
+            "price": 0.10,
+            "image": "https://example.com/red_led.jpg",
+            "link": "https://aliexpress.com/item/red-led",
+            "quantity": 1,
+            "description": "A standard red LED for visual indicator.",
+            "why": "Used for signaling or status indication."
+        },
+        {
+            "title": "Green LED",
+            "vendor": "AliExpress",
+            "price": 0.10,
+            "image": "https://example.com/green_led.jpg",
+            "link": "https://aliexpress.com/item/green-led",
+            "quantity": 1,
+            "description": "A standard green LED for visual indicator.",
+            "why": "Used for signaling or status indication."
+        },
+        {
+            "title": "Blue LED",
+            "vendor": "AliExpress",
+            "price": 0.10,
+            "image": "https://example.com/blue_led.jpg",
+            "link": "https://aliexpress.com/item/blue-led",
+            "quantity": 1,
+            "description": "A standard blue LED for visual indicator.",
+            "why": "Used for signaling or status indication."
         }
     ],
     "interconnect": [
