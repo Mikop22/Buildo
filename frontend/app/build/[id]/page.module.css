@@ -1,0 +1,47 @@
+/* Build Page Styles */
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+    padding: 2rem;
+}
+
+.loadingText {
+    font-size: 1.2rem;
+    color: var(--pixel-yellow);
+    margin-top: 2rem;
+}
+
+.loadingStage {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+}
+
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+    padding: 2rem;
+}
+
+.errorText {
+    font-size: 1rem;
+    color: var(--accent-primary);
+    margin-bottom: 2rem;
+}
+
+.buildContainer {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}

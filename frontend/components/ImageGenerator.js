@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getPartsAndGenerateImage } from '../lib/api';
+import { generateProject } from '../lib/api';
 import styles from './ImageGenerator.module.css';
 
 export default function ImageGenerator() {
@@ -35,8 +35,13 @@ export default function ImageGenerator() {
     }, 1500);
 
     try {
-      const result = await getPartsAndGenerateImage(deviceName);
-      setImageUrl(result.imageUrl);
+      const result = await generateProject(deviceName);
+      // Use assembled_product_image if available
+      if (result.assembled_product_image) {
+        setImageUrl(`data:image/png;base64,${result.assembled_product_image}`);
+      } else {
+        setError('No image was generated');
+      }
     } catch (err) {
       setError(err.message || 'Failed to generate image');
     } finally {
@@ -56,7 +61,7 @@ export default function ImageGenerator() {
   return (
     <div className="nes-container is-rounded is-dark with-title">
       <p className="title">GENERATE PRODUCT IMAGE</p>
-      
+
       {!imageUrl && !loading && (
         <div className={styles.inputGroup}>
           <div className="nes-field">
@@ -74,7 +79,7 @@ export default function ImageGenerator() {
               }}
             />
           </div>
-          
+
           <button
             className="nes-btn is-primary"
             onClick={handleGenerate}
@@ -106,9 +111,9 @@ export default function ImageGenerator() {
       {imageUrl && !loading && (
         <div className={styles.imageContainer}>
           <div className={styles.imageWrapper}>
-            <img 
-              src={imageUrl} 
-              alt={deviceName || 'Generated image'} 
+            <img
+              src={imageUrl}
+              alt={deviceName || 'Generated image'}
               className={styles.generatedImage}
             />
           </div>
