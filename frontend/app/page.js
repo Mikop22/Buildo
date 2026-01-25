@@ -1,14 +1,71 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import PixelBackground from "./components/PixelBackground";
+
+const placeholderIdeas = [
+  "Heart rate monitor",
+  "Coffee temperature checker",
+  "Plant soil health monitor",
+  "Motion-activated lighting",
+  "Smart doorbell with camera",
+  "Weather station display",
+  "Pet feeder automation",
+  "Air quality sensor"
+];
 
 export default function Home() {
   const router = useRouter();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isWhatYouGetOpen, setIsWhatYouGetOpen] = useState(false);
+  const inputRef = useRef(null);
+  const whatYouGetRef = useRef(null);
+
+  useEffect(() => {
+    const currentText = placeholderIdeas[placeholderIndex];
+    let timeout;
+
+    if (!isDeleting && displayedText.length < currentText.length) {
+      // Typing
+      timeout = setTimeout(() => {
+        setDisplayedText(currentText.slice(0, displayedText.length + 1));
+      }, 50);
+    } else if (!isDeleting && displayedText.length === currentText.length) {
+      // Finished typing, wait then start deleting
+      timeout = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2000);
+    } else if (isDeleting && displayedText.length > 0) {
+      // Deleting
+      timeout = setTimeout(() => {
+        setDisplayedText(displayedText.slice(0, -1));
+      }, 30);
+    } else if (isDeleting && displayedText.length === 0) {
+      // Finished deleting, move to next idea
+      setIsDeleting(false);
+      setPlaceholderIndex((prev) => (prev + 1) % placeholderIdeas.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, placeholderIndex, isDeleting]);
+
+  useEffect(() => {
+    if (isWhatYouGetOpen && whatYouGetRef.current) {
+      setTimeout(() => {
+        whatYouGetRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+  }, [isWhatYouGetOpen]);
+
 
   const handleCreate = () => {
     if (!inputText.trim()) return;
@@ -59,22 +116,31 @@ export default function Home() {
             </h1>
 
             <p className={styles.tagline}>
-              Turn a <span className="glow-green">description</span> into a buildable hardware prototype
+              From idea to build-ready hardware prototype
             </p>
 
             <p className={styles.subtitle}>
-              Generate wiring diagrams, parts lists, CAD models, and code from a single idea.
+              You imagine it. We build it.
             </p>
 
             <div className={styles.inputContainer}>
-              <input
-                type="text"
-                className={`nes-input is-dark ${styles.heroInput}`}
-                placeholder="DESCRIBE YOUR BUILD IDEA..."
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-              />
+              <div className={styles.inputWrapper}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className={`nes-input is-dark ${styles.heroInput}`}
+                  placeholder=""
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+                />
+                {!inputText && (
+                  <span className={styles.placeholderOverlay}>
+                    {displayedText}
+                    <span className={styles.cursor}>|</span>
+                  </span>
+                )}
+              </div>
               <button
                 className={`nes-btn is-success ${styles.submitBtn}`}
                 onClick={handleCreate}
@@ -86,6 +152,52 @@ export default function Home() {
             <p className={styles.hint}>
               <span className="blink">▶</span> Press ENTER or click BUILD to start
             </p>
+
+            {/* What You Get Section */}
+            <div ref={whatYouGetRef} className={styles.whatYouGetInline}>
+              <button 
+                className={styles.whatYouGetButtonInline}
+                onClick={() => setIsWhatYouGetOpen(!isWhatYouGetOpen)}
+              >
+                WHAT YOU GET {isWhatYouGetOpen ? "▼" : "▶"}
+              </button>
+
+              {isWhatYouGetOpen && (
+                <div className={styles.featureGridInline}>
+                  <div className={styles.featureCard}>
+                    <span className={styles.featureEmoji}>🔧</span>
+                    <h3 className={styles.featureTitle}>WIRING DIAGRAMS</h3>
+                    <p className={styles.featureText}>
+                      Visual guides showing how to connect all your components
+                    </p>
+                  </div>
+
+                  <div className={styles.featureCard}>
+                    <span className={styles.featureEmoji}>📦</span>
+                    <h3 className={styles.featureTitle}>PARTS LIST</h3>
+                    <p className={styles.featureText}>
+                      Validated bill of materials with real parts from suppliers
+                    </p>
+                  </div>
+
+                  <div className={styles.featureCard}>
+                    <span className={styles.featureEmoji}>📐</span>
+                    <h3 className={styles.featureTitle}>CAD MODELS</h3>
+                    <p className={styles.featureText}>
+                      Printable enclosures and mounts ready for 3D printing
+                    </p>
+                  </div>
+
+                  <div className={styles.featureCard}>
+                    <span className={styles.featureEmoji}>💻</span>
+                    <h3 className={styles.featureTitle}>FIRMWARE</h3>
+                    <p className={styles.featureText}>
+                      Working code scaffolding for your microcontroller
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </section>
       )}
@@ -103,94 +215,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* How It Works Section */}
-      {!isLoading && (
-        <section className={styles.howItWorks}>
-          <div className="nes-container is-dark with-title">
-            <p className="title">HOW IT WORKS</p>
-
-            <div className={styles.stepsGrid}>
-              <div className={styles.step}>
-                <div className={styles.stepNumber}>1</div>
-                <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>DESCRIBE</h3>
-                  <p className={styles.stepText}>
-                    Tell us what you want to build in plain English
-                  </p>
-                </div>
-              </div>
-
-              <div className={styles.stepArrow}>→</div>
-
-              <div className={styles.step}>
-                <div className={styles.stepNumber}>2</div>
-                <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>GENERATE</h3>
-                  <p className={styles.stepText}>
-                    We create all the artifacts you need to build it
-                  </p>
-                </div>
-              </div>
-
-              <div className={styles.stepArrow}>→</div>
-
-              <div className={styles.step}>
-                <div className={styles.stepNumber}>3</div>
-                <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>BUILD</h3>
-                  <p className={styles.stepText}>
-                    Order parts, print enclosures, and assemble your project
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* What You Get Section */}
-      {!isLoading && (
-        <section className={styles.features}>
-          <div className="nes-container is-dark with-title">
-            <p className="title">WHAT YOU GET</p>
-
-            <div className={styles.featureGrid}>
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>🔧</span>
-                <h3 className={styles.featureTitle}>WIRING DIAGRAMS</h3>
-                <p className={styles.featureText}>
-                  Visual guides showing how to connect all your components
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>📦</span>
-                <h3 className={styles.featureTitle}>PARTS LIST</h3>
-                <p className={styles.featureText}>
-                  Validated bill of materials with real parts from suppliers
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>📐</span>
-                <h3 className={styles.featureTitle}>CAD MODELS</h3>
-                <p className={styles.featureText}>
-                  Printable enclosures and mounts ready for 3D printing
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>💻</span>
-                <h3 className={styles.featureTitle}>FIRMWARE</h3>
-                <p className={styles.featureText}>
-                  Working code scaffolding for your microcontroller
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* Stats Section */}
       {!isLoading && (
         <section className={styles.stats}>
@@ -201,7 +225,7 @@ export default function Home() {
                 <span className={styles.statLabel}>IDEAS</span>
               </div>
               <div className={styles.statItem}>
-                <span className={`${styles.statNumber} glow-blue`}>1000+</span>
+                <span className={`${styles.statNumber} glow-blue`}>3k+</span>
                 <span className={styles.statLabel}>PARTS</span>
               </div>
               <div className={styles.statItem}>
@@ -219,7 +243,7 @@ export default function Home() {
           <div className="nes-container is-rounded is-centered">
             <p className={styles.ctaText}>Ready to bring your idea to life?</p>
             <button
-              className="nes-btn is-primary"
+              className={`nes-btn is-success ${styles.ctaButton}`}
               onClick={() => document.querySelector(`.${styles.heroInput}`)?.focus()}
             >
               START BUILDING NOW

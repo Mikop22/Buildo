@@ -12,9 +12,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
-  padding: 4rem 2rem 2rem;
+  padding: 0.5rem 2rem 2rem;
+  padding-top: calc(80px - 0.5rem);
   position: relative;
   z-index: 1;
 }
@@ -26,11 +27,11 @@
 
 .logoContainer {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 .title {
-  font-size: clamp(2.5rem, 10vw, 4rem);
+  font-size: clamp(2.2rem, 9vw, 3.5rem);
   margin-bottom: 1rem;
   color: var(--accent-primary);
   letter-spacing: 0.1em;
@@ -38,15 +39,15 @@
 }
 
 .tagline {
-  font-size: clamp(0.75rem, 2.5vw, 1.1rem);
+  font-size: clamp(0.9rem, 2.7vw, 1.25rem);
   margin-bottom: 0.75rem;
   color: var(--text-light);
   letter-spacing: 0.05em;
 }
 
 .subtitle {
-  font-size: clamp(0.55rem, 1.5vw, 0.75rem);
-  margin-bottom: 2.5rem;
+  font-size: clamp(0.7rem, 1.8vw, 0.9rem);
+  margin-bottom: 1.5rem;
   color: var(--text-muted);
   line-height: 1.6;
   max-width: 600px;
@@ -55,7 +56,7 @@
 }
 
 .inputContainer {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   max-width: 700px;
   width: 100%;
   padding: 0 1rem;
@@ -67,13 +68,51 @@
   flex-wrap: wrap;
 }
 
-.heroInput {
+.inputWrapper {
   flex: 1;
   min-width: 200px;
+  position: relative;
+}
+
+.heroInput {
+  width: 100%;
   height: auto !important;
   padding: 1rem !important;
   font-size: clamp(0.7rem, 1.8vw, 1rem) !important;
   min-height: 48px;
+}
+
+.placeholderOverlay {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(160, 160, 160, 0.6);
+  font-size: clamp(0.7rem, 1.8vw, 1rem) !important;
+  font-family: var(--font-press-start), "Press Start 2P", cursive !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 2rem);
+  z-index: 1;
+}
+
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: cursorBlink 1s steps(1) infinite;
+  color: rgba(160, 160, 160, 0.9);
+  font-weight: bold;
+}
+
+@keyframes cursorBlink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
 }
 
 .submitBtn {
@@ -86,9 +125,45 @@
 }
 
 .hint {
-  font-size: 0.6rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
   color: var(--pixel-yellow);
   letter-spacing: 0.1em;
+  text-align: center;
+  width: 100%;
+  margin-top: 0;
+  padding-top: 0.75rem;
+}
+
+.whatYouGetInline {
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 2rem;
+}
+
+.whatYouGetButtonInline {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  padding: 0.75rem;
+  color: var(--pixel-yellow);
+  font-family: var(--font-press-start), "Press Start 2P", cursive;
+  font-size: clamp(0.6rem, 1.5vw, 0.8rem);
+  transition: opacity 0.2s ease;
+  letter-spacing: 0.05em;
+}
+
+.whatYouGetButtonInline:hover {
+  opacity: 0.8;
+}
+
+.featureGridInline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  animation: slideDown 0.3s ease-out;
 }
 
 /* Loading Screen */
@@ -189,6 +264,22 @@
   margin: 0 auto;
 }
 
+.howItWorksButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  color: inherit;
+  font-family: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.howItWorksButton:hover {
+  opacity: 0.8;
+}
+
 .stepsGrid {
   display: flex;
   align-items: center;
@@ -196,6 +287,18 @@
   gap: 1rem;
   margin-top: 1.5rem;
   flex-wrap: wrap;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .step {
@@ -209,14 +312,14 @@
 }
 
 .stepNumber {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: var(--accent-primary);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
   border: 2px solid white;
 }
@@ -226,13 +329,13 @@
 }
 
 .stepTitle {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--pixel-yellow);
   margin-bottom: 0.5rem;
 }
 
 .stepText {
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   line-height: 1.6;
 }
@@ -266,11 +369,28 @@
   margin: 0 auto;
 }
 
+.whatYouGetButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  color: inherit;
+  font-family: inherit;
+  transition: opacity 0.2s ease;
+}
+
+.whatYouGetButton:hover {
+  opacity: 0.8;
+}
+
 .featureGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
+  animation: slideDown 0.3s ease-out;
 }
 
 .featureCard {
@@ -330,7 +450,7 @@
 }
 
 .statLabel {
-  font-size: 0.5rem;
+  font-size: 0.65rem;
   color: var(--text-muted);
   letter-spacing: 0.1em;
 }
@@ -342,6 +462,11 @@
   z-index: 1;
   max-width: 600px;
   margin: 0 auto;
+}
+
+.ctaSection .nes-container {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-radius: 4px;
 }
 
 .ctaText {
@@ -359,7 +484,7 @@
 }
 
 .footerText {
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   text-align: center;
   color: var(--text-muted);
   display: flex;
@@ -371,6 +496,10 @@
 /* Responsive */
 @media (max-width: 900px) {
   .featureGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .featureGridInline {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -428,11 +557,20 @@
   .featureEmoji {
     font-size: 1.5rem;
   }
+
+  .featureGridInline {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
 }
 
 @media (max-width: 480px) {
   .featureGrid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .featureGridInline {
+    grid-template-columns: 1fr;
   }
 
   .statsGrid {
