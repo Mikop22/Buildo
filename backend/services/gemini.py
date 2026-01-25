@@ -103,13 +103,17 @@ def fetch_parts_by_category(description: str) -> dict:
     breadboard_words = ["breadboard", "protoboard", "prototype"]
     wire_words = ["wire", "cable", "jumper", "dupont", "connector"]
     led_words = ["led", "light", "lighting", "diode"]
+    display_words = ["lcd", "oled", "display", "screen"]
     
-    if any(word in description_lower for word in breadboard_words):
+    # If description mentions displays, automatically add breadboard and wires
+    has_display = any(word in description_lower for word in display_words)
+    
+    if any(word in description_lower for word in breadboard_words) or has_display:
         if "Prototyping" not in component_keywords:
             component_keywords["Prototyping"] = []
         component_keywords["Prototyping"].extend(["breadboard", "MB-102"])
     
-    if any(word in description_lower for word in wire_words):
+    if any(word in description_lower for word in wire_words) or has_display:
         if "Connectors" not in component_keywords:
             component_keywords["Connectors"] = []
         component_keywords["Connectors"].extend(["jumper wire", "dupont"])

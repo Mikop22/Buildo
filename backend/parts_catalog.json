@@ -16586,7 +16586,17 @@
     "name": "100PCS 3mm 5mm LED Light Emitting Diodes 5 Colors Electronic Components Red Green Blue White Yellow Color DIY Kit LED Light",
     "price": 0.89,
     "rating": 5.0,
-    "sales_count": "9",
+    "sales_count": "9 sold",
     "subcategory": "Lighting"
+  },
+  {
+    "url": "https://www.digikey.ca/en/products/detail/seeed-technology-co-ltd/104030001/5487814",
+    "category": "Displays",
+    "image_url": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/images/735/MFG_104030001.jpg?hidebanner=true",
+    "name": "Grove LCD RGB Backlight 16x2 Character Display Module I2C Interface for Arduino Raspberry Pi",
+    "price": 25.96,
+    "rating": 4.0,
+    "sales_count": "700+ sold",
+    "subcategory": "LCD"
   }
 ]
