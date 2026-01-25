@@ -27,21 +27,17 @@ def test_parts_and_instructions(description):
         print(json.dumps(parts_by_category, indent=2))
         
         print("\n" + "="*60)
-        print("Generating Instructions (Snowflake)")
+        print("Generating Assembly Instructions (Snowflake)")
         print("="*60)
         
         code_steps = generate_code_and_steps(parts_by_category)
         
-        print("\nFirmware Code:\n")
-        print(code_steps["firmware"])
-        
         print("\n" + "="*60)
-        print("Assembly Steps:\n")
+        print("Assembly Steps (JSON format):\n")
         print(json.dumps(code_steps["assembly_steps"], indent=2))
         
         return {
             "parts": parts_by_category,
-            "firmware": code_steps["firmware"],
             "assembly_steps": code_steps["assembly_steps"]
         }
     except Exception as e:

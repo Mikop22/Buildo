@@ -45,18 +45,6 @@ def generate_code_and_steps(parts_by_category: dict) -> dict:
     with open(os.path.join(TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
         user_prompt_template = f.read()
     
-    firmware_task = "Generate complete, working firmware code for this hardware setup using these parts:"
-    firmware_requirements = """Requirements:
-- Proper pin definitions based on the parts
-- Sensor reading functions (if sensors are present)
-- Actuator control functions (if actuators are present)
-- Display output functions (if displays are present)
-- Main loop logic
-- Comments explaining each section
-- Include necessary libraries
-
-Return ONLY the code, no explanations or markdown formatting."""
-    
     assembly_task = "Generate step-by-step assembly instructions for putting together this device using these parts:"
     assembly_requirements = """Provide clear, straightforward, step-by-step instructions covering:
 - Component preparation and identification
@@ -71,21 +59,12 @@ Return ONLY a JSON array of strings, where each string is one clear instruction 
 
 Make each step clear, actionable, and easy to follow. Do not include any text outside the JSON array."""
     
-    firmware_user = user_prompt_template.format(
-        task_description=firmware_task,
-        parts_json=parts_json,
-        requirements=firmware_requirements
-    )
-    firmware_prompt = f"{system_prompt}\n\n{firmware_user}"
-    
     assembly_user = user_prompt_template.format(
         task_description=assembly_task,
         parts_json=parts_json,
         requirements=assembly_requirements
     )
     assembly_prompt = f"{system_prompt}\n\n{assembly_user}"
-
-    firmware = call_cortex(firmware_prompt) or "// Error generating firmware"
     
     assembly_response = call_cortex(assembly_prompt) or "[]"
     try:
@@ -96,7 +75,6 @@ Make each step clear, actionable, and easy to follow. Do not include any text ou
         assembly_steps = ["Error generating assembly steps"]
     
     return {
-        "firmware": firmware,
         "assembly_steps": assembly_steps
     }
 

@@ -17,7 +17,6 @@ def generate():
     parts_by_category = fetch_parts_by_category(description)
     code_steps = generate_code_and_steps(parts_by_category)
     result = dict(parts_by_category)
-    result["firmware"] = code_steps["firmware"]
     result["assembly_steps"] = code_steps["assembly_steps"]
     save_cached(description, result)
     return jsonify(result)
