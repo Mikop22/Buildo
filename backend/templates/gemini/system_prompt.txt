@@ -21,7 +21,9 @@ Rules:
 
 Example output for "an LCD that says I love conuhacks":
 {
-  "Microcontrollers": {},
+  "Microcontrollers": {
+    "Arduino": ["Arduino UNO R4", "UNO R4 WIFI", "ABX00087"]
+  },
   "Sensors": {},
   "Actuators": {},
   "Displays": {
@@ -29,8 +31,8 @@ Example output for "an LCD that says I love conuhacks":
   },
   "Power": {},
   "Components": {
-    "Prototyping": ["breadboard"],
-    "Connectors": ["jumper wires", "dupont wires"]
+    "Prototyping": ["MB-102", "breadboard", "830 tie points"],
+    "Connectors": ["jumper wires", "dupont", "jumper cables"]
   }
 }
 
