@@ -1,33 +1,243 @@
+/* Settings Page Styles */
+
 .main {
     min-height: 100vh;
-    padding: 2rem;
-    background-image:
-        radial-gradient(var(--bg-dark) 15%, transparent 16%),
-        radial-gradient(var(--bg-dark) 15%, transparent 16%);
-    background-size: 60px 60px;
-    background-position: 0 0, 30px 30px;
-    background-color: var(--bg-darker);
+    padding: 0;
+    position: relative;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 700px;
     margin: 0 auto;
+    padding: 1rem;
+    position: relative;
+    z-index: 1;
 }
 
+/* Toast Notification */
+.toast {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: var(--bg-darker);
+    border: 4px solid var(--pixel-green);
+    padding: 1rem 1.5rem;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Profile Section */
 .profileSection {
     display: flex;
     gap: 2rem;
-    align-items: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }
 
 .avatarPreview {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
 }
 
+.currentAvatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    border: 4px solid var(--accent-primary);
+    background: var(--bg-darker);
+}
+
+.profileFields {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Avatar Gallery */
+.avatarGallery {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px dashed var(--accent-secondary);
+}
+
+.sectionLabel {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+}
+
+.avatarGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.75rem;
+}
+
+.avatarOption {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--bg-darker);
+    border: 3px solid var(--accent-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatarOption:hover {
+    border-color: var(--accent-primary);
+    transform: scale(1.05);
+}
+
+.avatarOption img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.avatarSelected {
+    border-color: var(--pixel-yellow) !important;
+    box-shadow: 0 0 10px var(--pixel-yellow);
+}
+
+/* Theme Grid */
+.themeGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+/* Color Grid */
+.colorGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.75rem;
+}
+
+.colorOption {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 3px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+    text-shadow: 0 0 2px black;
+}
+
+.colorOption:hover {
+    transform: scale(1.1);
+    border-color: white;
+}
+
+.colorSelected {
+    border-color: white !important;
+    box-shadow: 0 0 15px currentColor;
+}
+
+/* Preferences Grid */
+.preferencesGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.75rem;
+}
+
+/* Keyboard Shortcuts */
+.shortcutsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.shortcut {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.kbd {
+    background: var(--bg-darker);
+    border: 2px solid var(--accent-secondary);
+    border-radius: 4px;
+    padding: 0.3rem 0.6rem;
+    font-family: var(--font-press-start);
+    font-size: 0.6rem;
+    color: var(--pixel-yellow);
+    min-width: 50px;
+    text-align: center;
+}
+
+/* Action Buttons */
+.actionButtons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.actionButtons button {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Responsive */
 @media (max-width: 600px) {
+    .avatarGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .colorGrid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
     .profileSection {
         flex-direction: column;
+        align-items: center;
+    }
+
+    .profileFields {
+        width: 100%;
+    }
+
+    .themeGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .actionButtons {
+        flex-direction: column;
+    }
+
+    .actionButtons button {
+        width: 100%;
     }
 }

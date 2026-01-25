@@ -3,23 +3,12 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
+import PixelBackground from "./components/PixelBackground";
 
 export default function Home() {
   const router = useRouter();
-  const [stars, setStars] = useState([]);
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const generatedStars = Array.from({ length: 50 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      delay: Math.random() * 3,
-      size: Math.random() * 3 + 2,
-    }));
-    setStars(generatedStars);
-  }, []);
 
   const handleCreate = () => {
     if (!inputText.trim()) return;
@@ -54,37 +43,14 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      {/* Animated star background */}
-      <div className={styles.starContainer}>
-        {stars.map((star) => (
-          <div
-            key={star.id}
-            className={styles.star}
-            style={{
-              left: `${star.left}%`,
-              top: `${star.top}%`,
-              animationDelay: `${star.delay}s`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Nyan Cat Background */}
-      {!isLoading && (
-        <img
-          src="https://media.tenor.com/-AyTtMgs2mMAAAAi/nyan-cat-nyan.gif"
-          alt="Nyan Cat"
-          className={styles.nyanCatBackground}
-        />
-      )}
+      {/* Animated pixel background */}
+      <PixelBackground variant="city" />
 
       {/* Hero Section */}
       {!isLoading && (
         <section className={styles.hero}>
           <div className={styles.heroContent}>
-            <div className={`${styles.logoContainer} float`}>
+            <div className={styles.logoContainer}>
               <i className="nes-octocat animate"></i>
             </div>
 
@@ -92,8 +58,12 @@ export default function Home() {
               BUILDO
             </h1>
 
+            <p className={styles.tagline}>
+              Turn a <span className="glow-green">description</span> into a buildable hardware prototype
+            </p>
+
             <p className={styles.subtitle}>
-              <span className="glow-green">TURN YOUR</span> IDEAS INTO REALITY
+              Generate wiring diagrams, parts lists, CAD models, and code from a single idea.
             </p>
 
             <div className={styles.inputContainer}>
@@ -113,10 +83,9 @@ export default function Home() {
               </button>
             </div>
 
-            <div className={styles.blinkContainer}>
-              <span className={styles.pressStart}>ENTER YOUR IDEA TO GET STARTED</span>
-              <span className={`${styles.cursor} blink`}>▼</span>
-            </div>
+            <p className={styles.hint}>
+              <span className="blink">▶</span> Press ENTER or click BUILD to start
+            </p>
           </div>
         </section>
       )}
@@ -132,6 +101,94 @@ export default function Home() {
           </div>
           <p className={`${styles.loadingText} blink`}>GENERATING BUILD...</p>
         </div>
+      )}
+
+      {/* How It Works Section */}
+      {!isLoading && (
+        <section className={styles.howItWorks}>
+          <div className="nes-container is-dark with-title">
+            <p className="title">HOW IT WORKS</p>
+
+            <div className={styles.stepsGrid}>
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>1</div>
+                <div className={styles.stepContent}>
+                  <h3 className={styles.stepTitle}>DESCRIBE</h3>
+                  <p className={styles.stepText}>
+                    Tell us what you want to build in plain English
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.stepArrow}>→</div>
+
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>2</div>
+                <div className={styles.stepContent}>
+                  <h3 className={styles.stepTitle}>GENERATE</h3>
+                  <p className={styles.stepText}>
+                    We create all the artifacts you need to build it
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.stepArrow}>→</div>
+
+              <div className={styles.step}>
+                <div className={styles.stepNumber}>3</div>
+                <div className={styles.stepContent}>
+                  <h3 className={styles.stepTitle}>BUILD</h3>
+                  <p className={styles.stepText}>
+                    Order parts, print enclosures, and assemble your project
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* What You Get Section */}
+      {!isLoading && (
+        <section className={styles.features}>
+          <div className="nes-container is-dark with-title">
+            <p className="title">WHAT YOU GET</p>
+
+            <div className={styles.featureGrid}>
+              <div className={styles.featureCard}>
+                <span className={styles.featureEmoji}>🔧</span>
+                <h3 className={styles.featureTitle}>WIRING DIAGRAMS</h3>
+                <p className={styles.featureText}>
+                  Visual guides showing how to connect all your components
+                </p>
+              </div>
+
+              <div className={styles.featureCard}>
+                <span className={styles.featureEmoji}>📦</span>
+                <h3 className={styles.featureTitle}>PARTS LIST</h3>
+                <p className={styles.featureText}>
+                  Validated bill of materials with real parts from suppliers
+                </p>
+              </div>
+
+              <div className={styles.featureCard}>
+                <span className={styles.featureEmoji}>📐</span>
+                <h3 className={styles.featureTitle}>CAD MODELS</h3>
+                <p className={styles.featureText}>
+                  Printable enclosures and mounts ready for 3D printing
+                </p>
+              </div>
+
+              <div className={styles.featureCard}>
+                <span className={styles.featureEmoji}>💻</span>
+                <h3 className={styles.featureTitle}>FIRMWARE</h3>
+                <p className={styles.featureText}>
+                  Working code scaffolding for your microcontroller
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       )}
 
       {/* Stats Section */}
@@ -156,45 +213,17 @@ export default function Home() {
         </section>
       )}
 
-      {/* Features Section */}
+      {/* CTA Section */}
       {!isLoading && (
-        <section className={styles.features}>
-          <div className="nes-container is-dark with-title">
-            <p className="title">WHY BUILDO?</p>
-
-            <div className={styles.featureGrid}>
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>🔧</span>
-                <h3 className={styles.featureTitle}>WIRING DIAGRAMS</h3>
-                <p className={styles.featureText}>
-                  Get detailed wiring and connection guides
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>📦</span>
-                <h3 className={styles.featureTitle}>PARTS LIST</h3>
-                <p className={styles.featureText}>
-                  Everything you need to buy, organized
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>📐</span>
-                <h3 className={styles.featureTitle}>CAD MODELS</h3>
-                <p className={styles.featureText}>
-                  3D models ready for printing or reference
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>💻</span>
-                <h3 className={styles.featureTitle}>CODE</h3>
-                <p className={styles.featureText}>
-                  Ready-to-flash firmware and software
-                </p>
-              </div>
-            </div>
+        <section className={styles.ctaSection}>
+          <div className="nes-container is-rounded is-centered">
+            <p className={styles.ctaText}>Ready to bring your idea to life?</p>
+            <button
+              className="nes-btn is-primary"
+              onClick={() => document.querySelector(`.${styles.heroInput}`)?.focus()}
+            >
+              START BUILDING NOW
+            </button>
           </div>
         </section>
       )}
@@ -203,7 +232,7 @@ export default function Home() {
       <footer className={styles.footer}>
         <div className="nes-container is-centered">
           <p className={styles.footerText}>
-            Buildo © 2026
+            Buildo © 2026 - Made with <i className="nes-icon is-small heart"></i> for makers
           </p>
         </div>
       </footer>

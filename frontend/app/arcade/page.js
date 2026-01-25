@@ -3,21 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
+import PixelBackground from "../components/PixelBackground";
 
 export default function ArcadePage() {
-    const [stars, setStars] = useState([]);
-
-    useEffect(() => {
-        const generatedStars = Array.from({ length: 50 }, (_, i) => ({
-            id: i,
-            left: Math.random() * 100,
-            top: Math.random() * 100,
-            delay: Math.random() * 3,
-            size: Math.random() * 3 + 2,
-        }));
-        setStars(generatedStars);
-    }, []);
-
     const games = [
         {
             id: "arcade",
@@ -50,22 +38,8 @@ export default function ArcadePage() {
 
     return (
         <main className={styles.main}>
-            {/* Animated star background */}
-            <div className={styles.starContainer}>
-                {stars.map((star) => (
-                    <div
-                        key={star.id}
-                        className={styles.star}
-                        style={{
-                            left: `${star.left}%`,
-                            top: `${star.top}%`,
-                            animationDelay: `${star.delay}s`,
-                            width: `${star.size}px`,
-                            height: `${star.size}px`,
-                        }}
-                    />
-                ))}
-            </div>
+            {/* Animated pixel background */}
+            <PixelBackground variant="space" />
 
             {/* Header */}
             <section className={styles.header}>

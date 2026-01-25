@@ -1,0 +1,187 @@
+/* Pixel Background Component Styles */
+
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.noAnimation * {
+    animation: none !important;
+}
+
+/* Gradient Layer */
+.gradientLayer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+            var(--bg-dark) 0%,
+            var(--bg-darker) 60%,
+            var(--accent-secondary) 100%);
+    opacity: 0.3;
+}
+
+/* Scanlines Effect */
+.scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,
+            rgba(0, 0, 0, 0.03) 0px,
+            rgba(0, 0, 0, 0.03) 1px,
+            transparent 1px,
+            transparent 2px);
+}
+
+/* ========== SPACE VARIANT ========== */
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 0;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.5);
+    animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* ========== CITY VARIANT ========== */
+.cityscape {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    display: flex;
+    align-items: flex-end;
+}
+
+.building {
+    position: absolute;
+    bottom: 0;
+    background: var(--bg-darker);
+    border: 2px solid var(--accent-secondary);
+    border-bottom: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 8px 4px;
+}
+
+.window {
+    width: 60%;
+    height: 8px;
+    background: var(--pixel-yellow);
+    opacity: 0.8;
+    animation: windowFlicker 4s ease-in-out infinite;
+}
+
+@keyframes windowFlicker {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        background: var(--pixel-yellow);
+    }
+
+    25% {
+        opacity: 1;
+        background: var(--pixel-blue);
+    }
+
+    50% {
+        opacity: 0.6;
+        background: var(--pixel-pink);
+    }
+
+    75% {
+        opacity: 0.9;
+        background: var(--pixel-green);
+    }
+}
+
+/* ========== GRID VARIANT ========== */
+.gridPattern {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--accent-secondary) 1px, transparent 1px),
+        linear-gradient(90deg, var(--accent-secondary) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.15;
+    animation: gridPulse 8s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+
+    0%,
+    100% {
+        opacity: 0.1;
+    }
+
+    50% {
+        opacity: 0.2;
+    }
+}
+
+.floatingPixel {
+    position: absolute;
+    background: var(--accent-primary);
+    opacity: 0.4;
+    border: 1px solid var(--accent-secondary);
+    animation: floatPixel 6s ease-in-out infinite;
+}
+
+@keyframes floatPixel {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.2;
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(45deg);
+        opacity: 0.6;
+    }
+}
+
+/* Different colors for variety */
+.floatingPixel:nth-child(3n) {
+    background: var(--pixel-blue);
+}
+
+.floatingPixel:nth-child(3n+1) {
+    background: var(--pixel-pink);
+}
+
+.floatingPixel:nth-child(3n+2) {
+    background: var(--pixel-green);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .building {
+        min-width: 15px;
+    }
+
+    .gridPattern {
+        background-size: 30px 30px;
+    }
+}
