@@ -1,0 +1,344 @@
+/* Assembly Container */
+.assemblyContainer {
+    position: relative;
+    width: 100%;
+}
+
+/* Video Section - Expands to push content down */
+.videoSection {
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, margin-bottom 0.4s ease-out;
+    margin-bottom: 0;
+}
+
+.videoSectionOpen {
+    max-height: 500px;
+    margin-bottom: 2rem;
+}
+
+/* Video Panel */
+.videoPanel {
+    background: rgba(0, 0, 0, 0.6);
+    border: 4px solid var(--accent-secondary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.videoHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.videoTitle {
+    font-size: 14px;
+    color: var(--pixel-yellow);
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.closeVideoBtn {
+    padding: 0.5rem;
+    min-width: auto;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeVideoBtn:hover {
+    transform: scale(1.1);
+}
+
+.videoContainer {
+    width: 100%;
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.videoPlaceholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--text-muted);
+}
+
+.videoPlaceholderSubtext {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Main Content */
+.mainContent {
+    position: relative;
+    width: 100%;
+}
+
+/* Floating Video Button */
+.videoButton {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    font-size: 11px;
+}
+
+.videoButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+}
+
+.videoButtonHidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    .videoButton {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        width: 100%;
+        margin-bottom: 1.5rem;
+        justify-content: center;
+    }
+
+    .videoButtonHidden {
+        display: none;
+    }
+
+    .videoSection {
+        order: -1; /* Video appears first on mobile */
+    }
+}
+
+/* Safety Warnings */
+.safetyWarnings {
+    margin-bottom: 7rem;
+    margin-top: 1rem;
+    border: 3px solid var(--pixel-yellow);
+    background: rgba(255, 215, 0, 0.1) !important;
+}
+
+.warningHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.warningTitle {
+    font-size: 16px;
+    color: var(--pixel-yellow);
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.warningList {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.warningItem {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.warningItem:last-child {
+    margin-bottom: 0;
+}
+
+/* Steps Container */
+.stepsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 0;
+}
+
+.stepsTitle {
+    font-size: 18px;
+    color: var(--pixel-yellow);
+    margin-bottom: 1rem;
+    margin-top: 3rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* Step Card */
+.stepCard {
+    border: 2px solid var(--accent-secondary);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stepCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.stepHeader {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.stepNumber {
+    width: 48px;
+    height: 48px;
+    background: var(--pixel-green);
+    color: var(--bg-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    flex-shrink: 0;
+    border: 3px solid var(--accent-secondary);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.stepTitle {
+    font-size: 16px;
+    color: var(--text-light);
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.stepContent {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .stepContent {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* Step Image Section */
+.stepImageSection {
+    width: 100%;
+}
+
+.stepImage {
+    width: 100%;
+    height: auto;
+    border: 3px solid var(--accent-secondary);
+    border-radius: 4px;
+    image-rendering: pixelated;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.stepImagePlaceholder {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: rgba(0, 0, 0, 0.3);
+    border: 3px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+}
+
+.placeholderText {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Step Instructions */
+.stepInstructions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.instructionsList {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.instructionItem {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.instructionItem:last-child {
+    margin-bottom: 0;
+}
+
+/* Tip Callout */
+.tipCallout {
+    background: rgba(0, 255, 65, 0.1);
+    border: 2px solid var(--pixel-green);
+    border-radius: 4px;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.tipHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tipLabel {
+    font-size: 12px;
+    color: var(--pixel-green);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.tipText {
+    font-size: 11px;
+    color: var(--text-light);
+    margin: 0;
+    line-height: 1.5;
+}
