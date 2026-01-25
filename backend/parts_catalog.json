@@ -16558,5 +16558,35 @@
     "rating": 3.8,
     "sales_count": "29 sold",
     "subcategory": "Management"
+  },
+  {
+    "url": "https://www.aliexpress.com/item/1005006975515312.html",
+    "category": "Components",
+    "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/H9f96a7db77474626819a8a5c9824085cq.jpg_960x960q75.jpg_.avif",
+    "name": "1pc 830 Tie Points Solderless Breadboard MB-102 Prototype Universal Test PCB DIY Bread Board for Arduino Circuit Raspberry Pi",
+    "price": 3.10,
+    "rating": 4.4,
+    "sales_count": "725 sold",
+    "subcategory": "Prototyping"
+  },
+  {
+    "url": "https://www.aliexpress.com/item/1005003269498051.html",
+    "category": "Components",
+    "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/S7637cf4a017a4885b67cb36ca86bfab7k.jpg?has_lang=1&ver=1_960x960q75.jpg_.avif",
+    "name": "Jumper Cables 24awg Dupont Jumper Wire Kit - 10cm-30cm Male/female, 40pin, 10 Colors",
+    "price": 1.61,
+    "rating": 4.9,
+    "sales_count": "800+ sold",
+    "subcategory": "Connectors"
+  },
+  {
+    "url": "https://www.aliexpress.com/item/4000923137032.html",
+    "category": "Components",
+    "image_url": "https://ae-pic-a1.aliexpress-media.com/kf/Sf73e706f336847aa9fb4801c9cf6b4f5s.jpg_960x960q75.jpg_.avif",
+    "name": "100PCS 3mm 5mm LED Light Emitting Diodes 5 Colors Electronic Components Red Green Blue White Yellow Color DIY Kit LED Light",
+    "price": 0.89,
+    "rating": 5.0,
+    "sales_count": "9",
+    "subcategory": "Lighting"
   }
 ]

@@ -1,6 +1,6 @@
 import json
 
-with open("results.json", "r", encoding="utf-8") as f:
+with open("parts_catalog.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 
 filtered = [
@@ -26,7 +26,7 @@ print("Subcategory counts:")
 for key, count in sorted(subcategory_count.items()):
     print(f"  {key}: {count}")
 
-with open("results.json", "w", encoding="utf-8") as f:
+with open("parts_catalog.json", "w", encoding="utf-8") as f:
     json.dump(filtered, f, indent=2, ensure_ascii=False)
 
-print("\nDone! results.json updated.")
+print("\nDone! parts_catalog.json updated.")

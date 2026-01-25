@@ -9,7 +9,7 @@ def load():
     if _PARTS_DB is not None:
         return _PARTS_DB
     
-    results_path = os.path.join(os.path.dirname(__file__), "..", "results.json")
+    results_path = os.path.join(os.path.dirname(__file__), "..", "parts_catalog.json")
     with open(results_path, "r", encoding="utf-8") as f:
         _PARTS_DB = json.load(f)
     
