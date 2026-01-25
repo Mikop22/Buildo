@@ -25,7 +25,7 @@ Rules:
 - For each subcategory, provide an array of 1-3 specific parts needed.
 - Each part should be a descriptive string with multiple keywords (e.g., "Arduino UNO R3 ATmega328P development board" not just "Arduino").
 - Include specific details like: model numbers, sizes, voltages, interfaces (I2C, SPI), colors, quantities.
-- Return an empty object {} for categories not needed.
+- ONLY include categories that are needed. Do NOT include empty categories or empty objects {}.
 - Do NOT explain, only output JSON.
 
 Example output for "an LCD that says I love conuhacks":

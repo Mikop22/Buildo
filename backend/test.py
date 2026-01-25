@@ -15,8 +15,10 @@ def test_parts_only(description):
     print("="*60)
     try:
         result = fetch_parts_by_category(description)
+        result_json = json.dumps(result, indent=2)
         print("\nGemini + Catalog Response:\n")
-        print(json.dumps(result, indent=2))
+        print(result_json)
+        print(f"\n[Stats] Full parts JSON: {len(result_json)} chars")
         return result
     except Exception as e:
         print(f"Error: {e}\n")
@@ -30,18 +32,22 @@ def test_parts_and_instructions(description):
     print("="*60)
     try:
         parts_by_category = fetch_parts_by_category(description)
+        parts_json = json.dumps(parts_by_category, indent=2)
         print("\nGemini + Catalog Response:\n")
-        print(json.dumps(parts_by_category, indent=2))
+        print(parts_json)
+        print(f"\n[Stats] Full parts JSON: {len(parts_json)} chars")
         
         print("\n" + "="*60)
         print("Generating Assembly Instructions (Snowflake)")
         print("="*60)
         
-        code_steps = generate_code_and_steps(parts_by_category)
+        code_steps = generate_code_and_steps(parts_by_category, description)
         
         print("\n" + "="*60)
         print("Assembly Steps (JSON format):\n")
-        print(json.dumps(code_steps["assembly_steps"], indent=2))
+        steps_json = json.dumps(code_steps["assembly_steps"], indent=2)
+        print(steps_json)
+        print(f"\n[Stats] Assembly steps output: {len(steps_json)} chars")
         
         return {
             "parts": parts_by_category,
@@ -55,23 +61,28 @@ def test_parts_and_instructions(description):
 
 def test_parts_instructions_and_code(description):
     """Test option 3: Generate parts, instructions, and skeleton code"""
+    fetch_parts_by_category, generate_code_and_steps, generate_skeleton_code, _ = _import_services()
     print("\n" + "="*60)
     print("Testing Parts Generation (Gemini)")
     print("="*60)
     try:
         parts_by_category = fetch_parts_by_category(description)
+        parts_json = json.dumps(parts_by_category, indent=2)
         print("\nGemini + Catalog Response:\n")
-        print(json.dumps(parts_by_category, indent=2))
+        print(parts_json)
+        print(f"\n[Stats] Full parts JSON: {len(parts_json)} chars")
         
         print("\n" + "="*60)
         print("Generating Assembly Instructions (Snowflake)")
         print("="*60)
         
-        code_steps = generate_code_and_steps(parts_by_category)
+        code_steps = generate_code_and_steps(parts_by_category, description)
         
         print("\n" + "="*60)
         print("Assembly Steps (JSON format):\n")
-        print(json.dumps(code_steps["assembly_steps"], indent=2))
+        steps_json = json.dumps(code_steps["assembly_steps"], indent=2)
+        print(steps_json)
+        print(f"\n[Stats] Assembly steps output: {len(steps_json)} chars")
         
         print("\n" + "="*60)
         print("Generating Skeleton Code (Snowflake Code)")
@@ -84,6 +95,7 @@ def test_parts_instructions_and_code(description):
             print("="*60)
             print(skeleton_code)
             print("="*60)
+            print(f"\n[Stats] Generated code: {len(skeleton_code)} chars")
         else:
             print("\n✗ No code generated (device may not require programming)")
         
@@ -106,18 +118,22 @@ def test_parts_instructions_and_image(description):
     print("="*60)
     try:
         parts_by_category = fetch_parts_by_category(description)
+        parts_json = json.dumps(parts_by_category, indent=2)
         print("\nGemini + Catalog Response:\n")
-        print(json.dumps(parts_by_category, indent=2))
+        print(parts_json)
+        print(f"\n[Stats] Full parts JSON: {len(parts_json)} chars")
         
         print("\n" + "="*60)
         print("Generating Assembly Instructions (Snowflake)")
         print("="*60)
         
-        code_steps = generate_code_and_steps(parts_by_category)
+        code_steps = generate_code_and_steps(parts_by_category, description)
         
         print("\n" + "="*60)
         print("Assembly Steps (JSON format):\n")
-        print(json.dumps(code_steps["assembly_steps"], indent=2))
+        steps_json = json.dumps(code_steps["assembly_steps"], indent=2)
+        print(steps_json)
+        print(f"\n[Stats] Assembly steps output: {len(steps_json)} chars")
         
         print("\n" + "="*60)
         print("Generating Final Build Image (Gemini Image)")

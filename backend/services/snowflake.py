@@ -49,8 +49,31 @@ def call_cortex(prompt):
         traceback.print_exc()
         raise
 
-def generate_code_and_steps(parts_by_category: dict) -> dict:
-    parts_json = json.dumps(parts_by_category, indent=2)
+def simplify_parts(parts_by_category: dict) -> dict:
+    """Extract only part names from the full parts data to reduce token count."""
+    simplified_parts = {}
+    for category, subcats in parts_by_category.items():
+        if not subcats or not isinstance(subcats, dict):  # Skip empty or non-dict categories
+            continue
+        simplified_parts[category] = {}
+        for subcategory, parts in subcats.items():
+            if not parts or not isinstance(parts, list):  # Skip empty or non-list subcategories
+                continue
+            # Only include part names
+            simplified_parts[category][subcategory] = [
+                part.get("name", "Unknown part") if isinstance(part, dict) else str(part) 
+                for part in parts
+            ]
+    return simplified_parts
+
+def generate_code_and_steps(parts_by_category: dict, description: str) -> dict:
+    # Extract only essential part info (name) to reduce token count
+    simplified_parts = simplify_parts(parts_by_category)
+    parts_json = json.dumps(simplified_parts, indent=2)
+    
+    # Log token savings
+    full_json = json.dumps(parts_by_category, indent=2)
+    print(f"[Instructions] Parts JSON reduced from {len(full_json)} to {len(parts_json)} chars ({100 - len(parts_json)*100//len(full_json) if full_json else 0}% reduction)")
     
     INSTRUCTIONS_TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "snowflake", "instructions")
     
@@ -59,13 +82,13 @@ def generate_code_and_steps(parts_by_category: dict) -> dict:
     with open(os.path.join(INSTRUCTIONS_TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
         user_prompt_template = f.read()
     
-    assembly_task = "Generate step-by-step PHYSICAL ASSEMBLY instructions for putting together this device using these parts:"
-    
     assembly_user = user_prompt_template.format(
-        task_description=assembly_task,
+        task_description=description,
         parts_json=parts_json
     )
     assembly_prompt = f"{system_prompt}\n\n{assembly_user}"
+    
+    print(f"[Instructions] Total prompt: {len(assembly_prompt)} chars")
     
     assembly_response = call_cortex(assembly_prompt) or "[]"
     try:
@@ -92,7 +115,15 @@ def generate_skeleton_code(parts_by_category: dict, description: str, assembly_s
         Skeleton code as a string, or None if generation fails
     """
     print(f"[Code Generation] Building prompt for code generation...")
-    parts_json = json.dumps(parts_by_category, indent=2)
+    
+    # Use simplified parts to reduce token count
+    simplified_parts = simplify_parts(parts_by_category)
+    parts_json = json.dumps(simplified_parts, indent=2)
+    
+    # Log token savings
+    full_json = json.dumps(parts_by_category, indent=2)
+    print(f"[Code Generation] Parts JSON reduced from {len(full_json)} to {len(parts_json)} chars ({100 - len(parts_json)*100//len(full_json) if full_json else 0}% reduction)")
+    
     assembly_steps_text = "\n".join([f"{i+1}. {step}" for i, step in enumerate(assembly_steps)])
     
     CODE_TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "snowflake", "code")

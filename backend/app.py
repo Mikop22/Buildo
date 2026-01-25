@@ -33,7 +33,7 @@ def generate():
         return jsonify(cached)
     # If cache has old format, regenerate
     parts_by_category = fetch_parts_by_category(description)
-    code_steps = generate_code_and_steps(parts_by_category)
+    code_steps = generate_code_and_steps(parts_by_category, description)
     
     # Generate skeleton code for the device
     print(f"[Code Generation] Starting code generation for: {description}")

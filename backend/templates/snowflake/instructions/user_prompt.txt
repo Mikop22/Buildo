@@ -5,13 +5,19 @@ Parts to be used (in JSON format with categories, subcategories, and product det
 
 Example output format (return ONLY a JSON array of strings, where each string is one clear instruction step):
 [
-  "Step 1: Identify and prepare all components from the parts list.",
-  "Step 2: Insert Arduino Nano into the Data Logging Shield.",
-  "Step 3: Mount the combined assembly onto the Expansion Board.",
-  "Step 4: Connect soil moisture sensor VCC to 3.3V, GND to GND, signal to D2.",
-  "Step 5: Connect relay module VCC to 5V, GND to ground, control pin to D3.",
-  "Step 6: Connect OLED display VCC to 3.3V, GND to ground, SDA to A4, SCL to A5.",
-  "Step 7: Verify all pins are properly seated and connections are secure."
+  "Step 1: Gather the Arduino Nano, soil moisture sensor, relay module, water pump, OLED display, breadboard, and jumper wires.",
+  "Step 2: Insert the Arduino Nano into the breadboard.",
+  "Step 3: Connect the soil moisture sensor VCC to 3.3V, GND to GND, signal to D2.",
+  "Step 4: Connect the relay module VCC to 5V, GND to GND, control pin to D3.",
+  "Step 5: Wire the water pump positive terminal to relay NO, negative to GND.",
+  "Step 6: Connect the OLED display VCC to 3.3V, GND to GND, SDA to A4, SCL to A5.",
+  "Step 7: Connect the power supply positive to VIN, negative to GND."
 ]
 
-Make each step concise, actionable, and use imperative verbs. Reference specific parts from the parts list. Do not include any text outside the JSON array.
+RULES:
+- Step 1 is ALWAYS "Gather the [list all part names from the parts list]." - list the actual component names.
+- Every other step must be a direct physical action (connect, insert, mount, wire, attach, solder).
+- Include specific pin assignments for all connections.
+- NO "verify", "check", "test", "identify", "prepare", or "place on table" steps.
+- Reference specific parts from the parts list.
+- Return ONLY the JSON array, no other text.
