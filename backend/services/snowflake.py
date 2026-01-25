@@ -18,23 +18,36 @@ def get_snowflake_conn():
     )
 
 def call_cortex(prompt):
-    conn = get_snowflake_conn()
-    cur = conn.cursor()
-    
-    escaped_prompt = prompt.replace("'", "''")
-    
-    cur.execute(f"""
-        SELECT SNOWFLAKE.CORTEX.COMPLETE(
-            '{SNOWFLAKE_CONFIG["model"]}',
-            '{escaped_prompt}'
-        )
-    """)
-    
-    result = cur.fetchone()
-    cur.close()
-    conn.close()
-    
-    return result[0] if result else None
+    print(f"[Snowflake] Calling Cortex API (prompt length: {len(prompt)} chars)...")
+    try:
+        conn = get_snowflake_conn()
+        cur = conn.cursor()
+        
+        escaped_prompt = prompt.replace("'", "''")
+        
+        cur.execute(f"""
+            SELECT SNOWFLAKE.CORTEX.COMPLETE(
+                '{SNOWFLAKE_CONFIG["model"]}',
+                '{escaped_prompt}'
+            )
+        """)
+        
+        print("[Snowflake] Waiting for response...")
+        result = cur.fetchone()
+        cur.close()
+        conn.close()
+        
+        response = result[0] if result else None
+        if response:
+            print(f"[Snowflake] Received response ({len(response)} chars)")
+        else:
+            print("[Snowflake] No response received")
+        return response
+    except Exception as e:
+        print(f"[Snowflake] Error calling Cortex: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
 
 def generate_code_and_steps(parts_by_category: dict) -> dict:
     parts_json = json.dumps(parts_by_category, indent=2)
@@ -78,6 +91,7 @@ def generate_skeleton_code(parts_by_category: dict, description: str, assembly_s
     Returns:
         Skeleton code as a string, or None if generation fails
     """
+    print(f"[Code Generation] Building prompt for code generation...")
     parts_json = json.dumps(parts_by_category, indent=2)
     assembly_steps_text = "\n".join([f"{i+1}. {step}" for i, step in enumerate(assembly_steps)])
     
@@ -95,6 +109,7 @@ def generate_skeleton_code(parts_by_category: dict, description: str, assembly_s
     )
     
     full_prompt = f"{system_prompt}\n\n{user_prompt}"
+    print(f"[Code Generation] Prompt ready ({len(full_prompt)} chars), calling Snowflake Cortex...")
     
     code_response = call_cortex(full_prompt)
     

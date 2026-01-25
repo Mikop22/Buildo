@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 import requests
 from services.gemini import fetch_parts_by_category
-from services.snowflake import generate_code_and_steps
+from services.snowflake import generate_code_and_steps, generate_skeleton_code
 from services.cache import get_cached, save_cached
 from services.image_generator import generate_final_build_image
 
@@ -35,12 +35,34 @@ def generate():
     parts_by_category = fetch_parts_by_category(description)
     code_steps = generate_code_and_steps(parts_by_category)
     
+    # Generate skeleton code for the device
+    print(f"[Code Generation] Starting code generation for: {description}")
+    try:
+        skeleton_code = generate_skeleton_code(
+            parts_by_category, 
+            description, 
+            code_steps["assembly_steps"]
+        )
+        if skeleton_code:
+            print(f"[Code Generation] Code generated successfully ({len(skeleton_code)} chars)")
+        else:
+            print("[Code Generation] No code generated (device may not require programming)")
+    except Exception as e:
+        print(f"[Code Generation] Error generating code: {e}")
+        import traceback
+        traceback.print_exc()
+        skeleton_code = None
+    
     # Generate assembled product image with all parts put together
     assembled_image = generate_final_build_image(parts_by_category, description)
     
     # Build result with parts and generated assembled image
     result = dict(parts_by_category)
     result["assembly_steps"] = code_steps["assembly_steps"]
+    
+    # Add firmware code if generated
+    if skeleton_code:
+        result["firmware"] = skeleton_code
     
     # Add the assembled product image
     if assembled_image:

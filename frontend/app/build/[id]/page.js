@@ -46,6 +46,7 @@ export default function BuildPage() {
           parts: data,
           assemblySteps: data.assembly_steps || [],
           assembledProductImage: data.assembled_product_image?.imageUrl,
+          firmware: data.firmware || null, // Include firmware code if generated
           stepImages: [] // Start with empty array, will be populated in background
         };
         
