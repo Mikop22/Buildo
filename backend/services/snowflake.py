@@ -1,68 +1,115 @@
+import os
+import json
+import snowflake.connector
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def get_snowflake_conn():
+    return snowflake.connector.connect(
+        user=os.getenv('SNOWFLAKE_USER'),
+        password=os.getenv('SNOWFLAKE_PASSWORD'),
+        account=os.getenv('SNOWFLAKE_ACCOUNT', 'YG65395.ca-central-1.aws'),
+        warehouse=os.getenv('SNOWFLAKE_WAREHOUSE'),
+        database=os.getenv('SNOWFLAKE_DATABASE'),
+        schema='PUBLIC',
+        role='ACCOUNTADMIN'
+    )
+
+def call_cortex(prompt):
+    conn = get_snowflake_conn()
+    cur = conn.cursor()
+    
+    escaped_prompt = prompt.replace("'", "''")
+    
+    cur.execute(f"""
+        SELECT SNOWFLAKE.CORTEX.COMPLETE(
+            'claude-3-5-sonnet',
+            '{escaped_prompt}'
+        )
+    """)
+    
+    result = cur.fetchone()
+    cur.close()
+    conn.close()
+    
+    return result[0] if result else None
+
 def generate_code_and_steps(parts_by_category: dict) -> dict:
-    """
-    Generate firmware code and assembly steps based on selected parts.
-    parts_by_category structure: {category: {subcategory: [parts]}}
-    """
-    # Find the microcontroller
-    microcontrollers = parts_by_category.get("Microcontrollers", {})
-    controller_name = "Microcontroller"
-    for subcat, parts in microcontrollers.items():
-        if parts:
-            controller_name = parts[0].get("name", "Microcontroller")
-            break
+    parts_json = json.dumps(parts_by_category, indent=2)
     
-    # Generate firmware scaffold
-    firmware = f"""// Firmware scaffold for {controller_name}
-#include <Arduino.h>
+    TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "snowflake")
+    
+    with open(os.path.join(TEMPLATES_PATH, "system_prompt.txt"), "r", encoding="utf-8") as f:
+        system_prompt = f.read()
+    with open(os.path.join(TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
+        user_prompt_template = f.read()
+    
+    firmware_task = "Generate complete, working firmware code for this hardware setup using these parts:"
+    firmware_requirements = """Requirements:
+- Proper pin definitions based on the parts
+- Sensor reading functions (if sensors are present)
+- Actuator control functions (if actuators are present)
+- Display output functions (if displays are present)
+- Main loop logic
+- Comments explaining each section
+- Include necessary libraries
 
-void setup() {{
-    Serial.begin(115200);
-    // Initialize hardware
-}}
+Return ONLY the code, no explanations or markdown formatting."""
+    
+    assembly_task = "Generate step-by-step assembly instructions for putting together this device using these parts:"
+    assembly_requirements = """Provide clear, straightforward, step-by-step instructions covering:
+- Component preparation and identification
+- Physical assembly order
+- Wiring connections with specific pin assignments
+- Power connections and safety considerations
+- Display connections (if applicable)
+- Final testing procedures
 
-void loop() {{
-    // Main logic
-}}
-"""
+Return ONLY a JSON array of strings, where each string is one clear instruction step. Example format:
+["Step 1: Prepare all components and identify each part", "Step 2: Connect the ESP32 to the breadboard", "Step 3: Connect the soil moisture sensor to pin 5", ...]
+
+Make each step clear, actionable, and easy to follow. Do not include any text outside the JSON array."""
     
-    # Generate assembly steps based on what parts are selected
-    steps = []
+    firmware_user = user_prompt_template.format(
+        task_description=firmware_task,
+        parts_json=parts_json,
+        requirements=firmware_requirements
+    )
+    firmware_prompt = f"{system_prompt}\n\n{firmware_user}"
     
-    if microcontrollers:
-        steps.append(f"Set up your {controller_name} development board.")
+    assembly_user = user_prompt_template.format(
+        task_description=assembly_task,
+        parts_json=parts_json,
+        requirements=assembly_requirements
+    )
+    assembly_prompt = f"{system_prompt}\n\n{assembly_user}"
+
+    firmware = call_cortex(firmware_prompt) or "// Error generating firmware"
     
-    sensors = parts_by_category.get("Sensors", {})
-    if sensors:
-        sensor_names = []
-        for subcat, parts in sensors.items():
-            for p in parts:
-                sensor_names.append(p.get("name", "sensor"))
-        steps.append(f"Connect sensors: {', '.join(sensor_names[:3])}.")
-    
-    actuators = parts_by_category.get("Actuators", {})
-    if actuators:
-        actuator_names = []
-        for subcat, parts in actuators.items():
-            for p in parts:
-                actuator_names.append(p.get("name", "actuator"))
-        steps.append(f"Connect actuators: {', '.join(actuator_names[:3])}.")
-    
-    displays = parts_by_category.get("Displays", {})
-    if displays:
-        display_names = []
-        for subcat, parts in displays.items():
-            for p in parts:
-                display_names.append(p.get("name", "display"))
-        steps.append(f"Connect display: {display_names[0] if display_names else 'display'}.")
-    
-    power = parts_by_category.get("Power", {})
-    if power:
-        steps.append("Set up power management module.")
-    
-    steps.append(f"Upload the firmware to your {controller_name}.")
-    steps.append("Test all connections and functionality.")
+    assembly_response = call_cortex(assembly_prompt) or "[]"
+    try:
+        assembly_steps = json.loads(assembly_response)
+        if not isinstance(assembly_steps, list):
+            assembly_steps = [assembly_steps]
+    except:
+        assembly_steps = ["Error generating assembly steps"]
     
     return {
         "firmware": firmware,
-        "assembly_steps": steps
+        "assembly_steps": assembly_steps
     }
+
+if __name__ == "__main__":
+    try:
+        test_prompt = "Say hello in one sentence."
+        print("Connecting to Snowflake...")
+        response = call_cortex(test_prompt)
+        print("LLM response:", response)
+    except Exception as e:
+        print(f"Error: {e}")
+        print("\nTroubleshooting:")
+        print(f"  Account: {os.getenv('SNOWFLAKE_ACCOUNT')}")
+        print(f"  User: {os.getenv('SNOWFLAKE_USER')}")
+        print(f"  Warehouse: {os.getenv('SNOWFLAKE_WAREHOUSE')}")
+        print(f"  Database: {os.getenv('SNOWFLAKE_DATABASE')}")
