@@ -1,6 +1,7 @@
 import json
 from services.gemini import fetch_parts_by_category
 from services.snowflake import generate_code_and_steps
+from services.image_generator import generate_final_build_image
 
 def test_parts_only(description):
     """Test option 1: Generate parts only using Gemini"""
@@ -46,6 +47,49 @@ def test_parts_and_instructions(description):
         traceback.print_exc()
         return None
 
+def test_parts_instructions_and_image(description):
+    """Test option 3: Generate parts, instructions, and final build image"""
+    print("\n" + "="*60)
+    print("Testing Parts Generation (Gemini)")
+    print("="*60)
+    try:
+        parts_by_category = fetch_parts_by_category(description)
+        print("\nGemini + Catalog Response:\n")
+        print(json.dumps(parts_by_category, indent=2))
+        
+        print("\n" + "="*60)
+        print("Generating Assembly Instructions (Snowflake)")
+        print("="*60)
+        
+        code_steps = generate_code_and_steps(parts_by_category)
+        
+        print("\n" + "="*60)
+        print("Assembly Steps (JSON format):\n")
+        print(json.dumps(code_steps["assembly_steps"], indent=2))
+        
+        print("\n" + "="*60)
+        print("Generating Final Build Image (Gemini Image)")
+        print("="*60)
+        
+        base64_image_data = generate_final_build_image(parts_by_category, description)
+        
+        if base64_image_data:
+            print(f"\n✓ Image generated and saved to backend folder")
+            print(f"  Base64 data length: {len(base64_image_data)} characters")
+        else:
+            print("\n✗ Failed to generate image")
+        
+        return {
+            "parts": parts_by_category,
+            "assembly_steps": code_steps["assembly_steps"],
+            "image_generated": base64_image_data is not None
+        }
+    except Exception as e:
+        print(f"Error: {e}\n")
+        import traceback
+        traceback.print_exc()
+        return None
+
 def main():
     print("="*60)
     print("Hardware Assembly Test Suite")
@@ -53,17 +97,18 @@ def main():
     print("\nSelect test option:")
     print("(1) Test parts generation only (Gemini)")
     print("(2) Test parts + instructions (Gemini → Snowflake)")
+    print("(3) Test parts + instructions + image (Gemini → Snowflake → Gemini Image)")
     print("\nEnter 'quit' or 'q' to exit at any time")
     
     while True:
-        choice = input("\nEnter your choice (1 or 2): ").strip()
+        choice = input("\nEnter your choice (1, 2, or 3): ").strip()
         
         if choice.lower() in {"quit", "exit", "q"}:
             print("Exiting...")
             break
         
-        if choice not in {"1", "2"}:
-            print("Invalid choice. Please enter 1 or 2.")
+        if choice not in {"1", "2", "3"}:
+            print("Invalid choice. Please enter 1, 2, or 3.")
             continue
         
         description = input("\nEnter your device description: ").strip()
@@ -80,6 +125,8 @@ def main():
             test_parts_only(description)
         elif choice == "2":
             test_parts_and_instructions(description)
+        elif choice == "3":
+            test_parts_instructions_and_image(description)
         
         print("\n" + "="*60)
         continue_choice = input("\nTest again? (y/n): ").strip().lower()
