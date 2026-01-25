@@ -61,9 +61,9 @@ export default function Home() {
   useEffect(() => {
     if (isWhatYouGetOpen && whatYouGetRef.current) {
       setTimeout(() => {
-        whatYouGetRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start' 
+        whatYouGetRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
         });
       }, 100);
     }
@@ -178,12 +178,12 @@ export default function Home() {
             </div>
 
             <p className={styles.hint}>
-              <span className="blink">▶</span> Press ENTER or click BUILD to start
+              <span className="blink">▶</span> Click BUILD to start
             </p>
 
             {/* What You Get Section */}
             <div ref={whatYouGetRef} className={styles.whatYouGetInline}>
-              <button 
+              <button
                 className={styles.whatYouGetButtonInline}
                 onClick={() => setIsWhatYouGetOpen(!isWhatYouGetOpen)}
               >

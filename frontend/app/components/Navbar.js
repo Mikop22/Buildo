@@ -31,9 +31,8 @@ export default function Navbar() {
                 <div className={styles.leftSection}>
                     <Link href="/" className={styles.logoLink}>
                         <i className="nes-icon snes-jp-logo is-small"></i>
-                        <span className={styles.logoText}>BUILDO</span>
                     </Link>
-                    <button 
+                    <button
                         className={styles.menuItem}
                         onClick={() => setIsHowItWorksOpen(!isHowItWorksOpen)}
                     >
@@ -72,13 +71,13 @@ export default function Navbar() {
                         <div className={styles.modalContent}>
                             <div className="nes-container is-dark with-title">
                                 <p className="title">How it works</p>
-                                <button 
+                                <button
                                     className={styles.closeButton}
                                     onClick={() => setIsHowItWorksOpen(false)}
                                 >
                                     ×
                                 </button>
-                                
+
                                 <div className={styles.stepsGrid}>
                                     <div className={styles.step}>
                                         <div className={styles.stepNumber}>1️⃣</div>
