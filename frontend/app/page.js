@@ -2,17 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import styles from "./page.module.css";
-
-// Removed GameDashboard import as it is no longer used here
 
 export default function Home() {
   const router = useRouter();
   const [stars, setStars] = useState([]);
   const [inputText, setInputText] = useState("");
-  // Game States: 'MENU', 'LOADING'
-  const [gameState, setGameState] = useState("MENU");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const generatedStars = Array.from({ length: 50 }, (_, i) => ({
@@ -26,44 +22,35 @@ export default function Home() {
   }, []);
 
   const handleCreate = () => {
-    if (!inputText.trim()) return; // Don't create empty projects
+    if (!inputText.trim()) return;
 
-    setGameState("LOADING");
-    // Simulate generation time
+    setIsLoading(true);
+    // Generate a URL-friendly ID from the project name
+    const projectId = inputText
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+
+    // Save to localStorage
+    const savedProjects = JSON.parse(localStorage.getItem("savedProjects") || "[]");
+    const exists = savedProjects.some(p => p.id === projectId);
+
+    if (!exists) {
+      const newProject = {
+        id: projectId,
+        name: inputText,
+        date: new Date().toLocaleDateString(),
+        status: "In Progress"
+      };
+      const updatedProjects = [newProject, ...savedProjects];
+      localStorage.setItem("savedProjects", JSON.stringify(updatedProjects));
+    }
+
+    // Navigate to the build page
     setTimeout(() => {
-      router.push(`/project-dashboard?name=${encodeURIComponent(inputText)}`);
-    }, 3000); // 3 seconds loading
+      router.push(`/build/${projectId}`);
+    }, 2000);
   };
-
-  const games = [
-    {
-      id: "arcade",
-      name: "ARCADE BLITZ",
-      description: "Fast-paced action with explosive gameplay",
-      icon: "coin",
-      color: "is-warning",
-      difficulty: 75,
-      players: "1-2",
-    },
-    {
-      id: "adventure",
-      name: "DUNGEON QUEST",
-      description: "Explore mysterious dungeons and find treasure",
-      icon: "heart",
-      color: "is-error",
-      difficulty: 60,
-      players: "1",
-    },
-    {
-      id: "puzzle",
-      name: "BRAIN BLOCKS",
-      description: "Test your mind with challenging puzzles",
-      icon: "trophy",
-      color: "is-success",
-      difficulty: 85,
-      players: "1",
-    },
-  ];
 
   return (
     <main className={styles.main}>
@@ -84,8 +71,8 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Nyan Cat Background - Only show in MENU */}
-      {gameState === "MENU" && (
+      {/* Nyan Cat Background */}
+      {!isLoading && (
         <img
           src="https://media.tenor.com/-AyTtMgs2mMAAAAi/nyan-cat-nyan.gif"
           alt="Nyan Cat"
@@ -93,8 +80,8 @@ export default function Home() {
         />
       )}
 
-      {/* Hero Section - Only show in MENU */}
-      {gameState === "MENU" && (
+      {/* Hero Section */}
+      {!isLoading && (
         <section className={styles.hero}>
           <div className={styles.heroContent}>
             <div className={`${styles.logoContainer} float`}>
@@ -102,31 +89,32 @@ export default function Home() {
             </div>
 
             <h1 className={`${styles.title} glow-text`}>
-              PROJECT NAME
+              BUILDO
             </h1>
 
             <p className={styles.subtitle}>
-              <span className="glow-green">SUB</span> TITLE
+              <span className="glow-green">TURN YOUR</span> IDEAS INTO REALITY
             </p>
 
             <div className={styles.inputContainer}>
               <input
                 type="text"
                 className={`nes-input is-dark ${styles.heroInput}`}
-                placeholder="CREATE A NEW PROJECT..."
+                placeholder="DESCRIBE YOUR BUILD IDEA..."
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleCreate()}
               />
               <button
-                className={`nes-btn is-error ${styles.submitBtn}`}
+                className={`nes-btn is-success ${styles.submitBtn}`}
                 onClick={handleCreate}
               >
-                CREATE
+                BUILD
               </button>
             </div>
 
             <div className={styles.blinkContainer}>
-              <span className={styles.pressStart}>SELECT A GAME</span>
+              <span className={styles.pressStart}>ENTER YOUR IDEA TO GET STARTED</span>
               <span className={`${styles.cursor} blink`}>▼</span>
             </div>
           </div>
@@ -134,7 +122,7 @@ export default function Home() {
       )}
 
       {/* Loading Screen */}
-      {gameState === "LOADING" && (
+      {isLoading && (
         <div className={styles.loadingScreen}>
           <div className={styles.batteryContainer}>
             <div className={styles.batteryBody}>
@@ -142,120 +130,80 @@ export default function Home() {
             </div>
             <div className={styles.batteryBump}></div>
           </div>
-          <p className={`${styles.loadingText} blink`}>CHARGING...</p>
+          <p className={`${styles.loadingText} blink`}>GENERATING BUILD...</p>
         </div>
-      )}
-
-      {/* Dashboard - Show in DASHBOARD state */}
-      {gameState === "DASHBOARD" && (
-        <section className={styles.dashboardSection} style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-          <GameDashboard />
-        </section>
       )}
 
       {/* Stats Section */}
-      <section className={styles.stats}>
-        <div className="nes-container is-rounded">
-          <div className={styles.statsGrid}>
-            <div className={styles.statItem}>
-              <span className={`${styles.statNumber} rainbow-text`}>3</span>
-              <span className={styles.statLabel}>GAMES</span>
-            </div>
-            <div className={styles.statItem}>
-              <span className={`${styles.statNumber} glow-blue`}>∞</span>
-              <span className={styles.statLabel}>LEVELS</span>
-            </div>
-            <div className={styles.statItem}>
-              <span className={`${styles.statNumber} glow-green`}>24/7</span>
-              <span className={styles.statLabel}>PLAY</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Games Section */}
-      <section className={styles.gamesSection}>
-        <h2 className={`${styles.sectionTitle} glow-text`}>CHOOSE YOUR GAME</h2>
-
-        <div className={styles.gamesGrid}>
-          {games.map((game, index) => (
-            <Link
-              href={`/games/${game.id}`}
-              key={game.id}
-              className={styles.gameCardLink}
-            >
-              <div
-                className={`nes-container is-rounded ${styles.gameCard}`}
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                <div className={`${styles.gameIcon} float`} style={{ animationDelay: `${index * 0.3}s` }}>
-                  <i className={`nes-icon is-large ${game.icon}`}></i>
-                </div>
-
-                <h3 className={styles.gameName}>{game.name}</h3>
-                <p className={styles.gameDescription}>{game.description}</p>
-
-                <div className={styles.gameStats}>
-                  <div className={styles.gameStat}>
-                    <span className={styles.gameStatLabel}>DIFFICULTY</span>
-                    <progress
-                      className={`nes-progress ${game.color}`}
-                      value={game.difficulty}
-                      max="100"
-                    ></progress>
-                  </div>
-                  <div className={styles.gameStat}>
-                    <span className={styles.gameStatLabel}>PLAYERS: {game.players}</span>
-                  </div>
-                </div>
-
-                <button type="button" className={`nes-btn ${game.color} ${styles.playBtn}`}>
-                  PLAY NOW
-                </button>
+      {!isLoading && (
+        <section className={styles.stats}>
+          <div className="nes-container is-rounded">
+            <div className={styles.statsGrid}>
+              <div className={styles.statItem}>
+                <span className={`${styles.statNumber} rainbow-text`}>∞</span>
+                <span className={styles.statLabel}>IDEAS</span>
               </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Features Section
-      <section className={styles.features}>
-        <div className="nes-container is-dark with-title">
-          <p className="title">WHY PIXEL ARCADE?</p>
-
-          <div className={styles.featureGrid}>
-            <div className={styles.featureCard}>
-              <span className={styles.featureEmoji}>⚡</span>
-              <h3 className={styles.featureTitle}>INSTANT PLAY</h3>
-              <p className={styles.featureText}>
-                No downloads. Jump right into the action!
-              </p>
-            </div>
-
-            <div className={styles.featureCard}>
-              <span className={styles.featureEmoji}>🏆</span>
-              <h3 className={styles.featureTitle}>LEADERBOARDS</h3>
-              <p className={styles.featureText}>
-                Compete globally and claim your rank
-              </p>
-            </div>
-
-            <div className={styles.featureCard}>
-              <span className={styles.featureEmoji}>🎯</span>
-              <h3 className={styles.featureTitle}>ACHIEVEMENTS</h3>
-              <p className={styles.featureText}>
-                Unlock badges and show off your skills
-              </p>
+              <div className={styles.statItem}>
+                <span className={`${styles.statNumber} glow-blue`}>1000+</span>
+                <span className={styles.statLabel}>PARTS</span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={`${styles.statNumber} glow-green`}>24/7</span>
+                <span className={styles.statLabel}>BUILD</span>
+              </div>
             </div>
           </div>
-        </div>
-      </section> */}
+        </section>
+      )}
+
+      {/* Features Section */}
+      {!isLoading && (
+        <section className={styles.features}>
+          <div className="nes-container is-dark with-title">
+            <p className="title">WHY BUILDO?</p>
+
+            <div className={styles.featureGrid}>
+              <div className={styles.featureCard}>
+                <span className={styles.featureEmoji}>🔧</span>
+                <h3 className={styles.featureTitle}>WIRING DIAGRAMS</h3>
+                <p className={styles.featureText}>
+                  Get detailed wiring and connection guides
+                </p>
+              </div>
+
+              <div className={styles.featureCard}>
+                <span className={styles.featureEmoji}>📦</span>
+                <h3 className={styles.featureTitle}>PARTS LIST</h3>
+                <p className={styles.featureText}>
+                  Everything you need to buy, organized
+                </p>
+              </div>
+
+              <div className={styles.featureCard}>
+                <span className={styles.featureEmoji}>📐</span>
+                <h3 className={styles.featureTitle}>CAD MODELS</h3>
+                <p className={styles.featureText}>
+                  3D models ready for printing or reference
+                </p>
+              </div>
+
+              <div className={styles.featureCard}>
+                <span className={styles.featureEmoji}>💻</span>
+                <h3 className={styles.featureTitle}>CODE</h3>
+                <p className={styles.featureText}>
+                  Ready-to-flash firmware and software
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className={styles.footer}>
         <div className="nes-container is-centered">
           <p className={styles.footerText}>
-            Project Name
+            Buildo © 2026
           </p>
         </div>
       </footer>

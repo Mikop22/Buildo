@@ -30,14 +30,14 @@ export default function Navbar() {
                 <div className={styles.brand}>
                     <Link href="/" className={styles.logoLink}>
                         <i className="nes-icon snes-jp-logo is-small"></i>
-                        <span className={styles.logoText}></span>
+                        <span className={styles.logoText}>BUILDO</span>
                     </Link>
                 </div>
 
                 <div className={styles.menu}>
-                    <Link href="/leaderboard" className={`${styles.menuItem} ${pathname === "/leaderboard" ? styles.active : ""}`}>
+                    <Link href="/arcade" className={`${styles.menuItem} ${pathname === "/arcade" ? styles.active : ""}`}>
                         <i className="nes-icon trophy is-small"></i>
-                        <span>LEADERS</span>
+                        <span>ARCADE</span>
                     </Link>
 
                     <Link href="/settings" className={styles.profileLink}>

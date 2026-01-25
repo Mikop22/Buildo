@@ -211,7 +211,7 @@ function StepCard({ step }) {
                     {step.tip && (
                         <div className={styles.tipCallout}>
                             <div className={styles.tipHeader}>
-                                <i className="nes-icon is-small star"></i>
+                                <i className="nes-icon is-small trophy"></i>
                                 <span className={styles.tipLabel}>TIP</span>
                             </div>
                             <p className={styles.tipText}>{step.tip}</p>

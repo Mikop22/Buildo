@@ -2,7 +2,16 @@
 const nextConfig = {
   /* config options here */
   images: {
-    domains: ['media.tenor.com', 'api.dicebear.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'media.tenor.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.dicebear.com',
+      },
+    ],
   },
 };
 

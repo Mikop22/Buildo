@@ -11,8 +11,8 @@ const pressStart = Press_Start_2P({
 });
 
 export const metadata = {
-  title: "Retro Pixel Adventure",
-  description: "Welcome to the 8-bit world of pixels and nostalgia!",
+  title: "Buildo - Build Your Ideas",
+  description: "All-in-one platform for makers to bring ideas to life with wiring diagrams, parts lists, build instructions, and more",
 };
 
 export default function RootLayout({ children }) {
