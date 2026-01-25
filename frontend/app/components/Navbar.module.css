@@ -17,9 +17,10 @@
     align-items: center;
 }
 
-.brand {
+.leftSection {
     display: flex;
     align-items: center;
+    gap: 2rem;
 }
 
 .logoLink {
@@ -37,6 +38,12 @@
     text-shadow: 2px 2px 0 #000;
 }
 
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
 .menu {
     display: flex;
     align-items: center;
@@ -51,6 +58,11 @@
     font-size: 0.85rem;
     color: var(--text-muted);
     transition: all 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
 }
 
 .menuItem:hover,
@@ -106,7 +118,11 @@
         display: none;
     }
 
-    .menu {
+    .leftSection {
+        gap: 1rem;
+    }
+
+    .rightSection {
         gap: 0.75rem;
     }
 
@@ -140,5 +156,193 @@
 
     .logoText {
         display: none;
+    }
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9998;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modalContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    max-width: 1200px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideDown 0.3s ease-out;
+}
+
+.modalContent .nes-container {
+    padding: 3rem 2.5rem;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.closeButton {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-light);
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.closeButton:hover {
+    color: var(--pixel-yellow);
+}
+
+.stepsGrid {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 3.5rem;
+    margin-top: 2.5rem;
+    flex-wrap: nowrap;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    min-width: 250px;
+    max-width: 320px;
+    gap: 1rem;
+}
+
+.stepNumber {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stepContent {
+    flex: 1;
+    width: 100%;
+}
+
+.stepTitle {
+    font-size: 1rem;
+    color: var(--pixel-yellow);
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.stepText {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+}
+
+.stepExample {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.6;
+    margin-top: 0.5rem;
+    opacity: 0.8;
+}
+
+.stepList {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-top: 0.75rem;
+    padding-left: 1.5rem;
+    list-style-type: disc;
+    text-align: left;
+}
+
+.stepList li {
+    margin-bottom: 0.5rem;
+}
+
+.stepArrow {
+    font-size: 2rem;
+    color: var(--accent-primary);
+    animation: arrowPulse 1.5s ease-in-out infinite;
+    margin-top: 2rem;
+    flex-shrink: 0;
+}
+
+@keyframes arrowPulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: translateX(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(5px);
+    }
+}
+
+@media (max-width: 768px) {
+    .stepsGrid {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .step {
+        max-width: 100%;
+        min-width: unset;
+    }
+
+    .stepArrow {
+        transform: rotate(90deg);
+        margin-top: 0;
+    }
+
+    @keyframes arrowPulse {
+        0%, 100% {
+            opacity: 0.5;
+            transform: rotate(90deg) translateY(0);
+        }
+        50% {
+            opacity: 1;
+            transform: rotate(90deg) translateY(5px);
+        }
     }
 }

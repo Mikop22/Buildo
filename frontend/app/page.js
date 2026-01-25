@@ -23,7 +23,9 @@ export default function Home() {
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isWhatYouGetOpen, setIsWhatYouGetOpen] = useState(false);
   const inputRef = useRef(null);
+  const whatYouGetRef = useRef(null);
 
   useEffect(() => {
     const currentText = placeholderIdeas[placeholderIndex];
@@ -52,6 +54,17 @@ export default function Home() {
 
     return () => clearTimeout(timeout);
   }, [displayedText, placeholderIndex, isDeleting]);
+
+  useEffect(() => {
+    if (isWhatYouGetOpen && whatYouGetRef.current) {
+      setTimeout(() => {
+        whatYouGetRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+  }, [isWhatYouGetOpen]);
 
 
   const handleCreate = () => {
@@ -103,11 +116,11 @@ export default function Home() {
             </h1>
 
             <p className={styles.tagline}>
-              Turn a <span className="glow-green">description</span> into a buildable hardware prototype
+              From idea to build-ready hardware prototype
             </p>
 
             <p className={styles.subtitle}>
-              Generate wiring diagrams, parts lists, CAD models, and code from a single idea.
+              You imagine it. We build it.
             </p>
 
             <div className={styles.inputContainer}>
@@ -139,6 +152,52 @@ export default function Home() {
             <p className={styles.hint}>
               <span className="blink">▶</span> Press ENTER or click BUILD to start
             </p>
+
+            {/* What You Get Section */}
+            <div ref={whatYouGetRef} className={styles.whatYouGetInline}>
+              <button 
+                className={styles.whatYouGetButtonInline}
+                onClick={() => setIsWhatYouGetOpen(!isWhatYouGetOpen)}
+              >
+                WHAT YOU GET {isWhatYouGetOpen ? "▼" : "▶"}
+              </button>
+
+              {isWhatYouGetOpen && (
+                <div className={styles.featureGridInline}>
+                  <div className={styles.featureCard}>
+                    <span className={styles.featureEmoji}>🔧</span>
+                    <h3 className={styles.featureTitle}>WIRING DIAGRAMS</h3>
+                    <p className={styles.featureText}>
+                      Visual guides showing how to connect all your components
+                    </p>
+                  </div>
+
+                  <div className={styles.featureCard}>
+                    <span className={styles.featureEmoji}>📦</span>
+                    <h3 className={styles.featureTitle}>PARTS LIST</h3>
+                    <p className={styles.featureText}>
+                      Validated bill of materials with real parts from suppliers
+                    </p>
+                  </div>
+
+                  <div className={styles.featureCard}>
+                    <span className={styles.featureEmoji}>📐</span>
+                    <h3 className={styles.featureTitle}>CAD MODELS</h3>
+                    <p className={styles.featureText}>
+                      Printable enclosures and mounts ready for 3D printing
+                    </p>
+                  </div>
+
+                  <div className={styles.featureCard}>
+                    <span className={styles.featureEmoji}>💻</span>
+                    <h3 className={styles.featureTitle}>FIRMWARE</h3>
+                    <p className={styles.featureText}>
+                      Working code scaffolding for your microcontroller
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </section>
       )}
@@ -154,94 +213,6 @@ export default function Home() {
           </div>
           <p className={`${styles.loadingText} blink`}>GENERATING BUILD...</p>
         </div>
-      )}
-
-      {/* How It Works Section */}
-      {!isLoading && (
-        <section className={styles.howItWorks}>
-          <div className="nes-container is-dark with-title">
-            <p className="title">HOW IT WORKS</p>
-
-            <div className={styles.stepsGrid}>
-              <div className={styles.step}>
-                <div className={styles.stepNumber}>1</div>
-                <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>DESCRIBE</h3>
-                  <p className={styles.stepText}>
-                    Tell us what you want to build in plain English
-                  </p>
-                </div>
-              </div>
-
-              <div className={styles.stepArrow}>→</div>
-
-              <div className={styles.step}>
-                <div className={styles.stepNumber}>2</div>
-                <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>GENERATE</h3>
-                  <p className={styles.stepText}>
-                    We create all the artifacts you need to build it
-                  </p>
-                </div>
-              </div>
-
-              <div className={styles.stepArrow}>→</div>
-
-              <div className={styles.step}>
-                <div className={styles.stepNumber}>3</div>
-                <div className={styles.stepContent}>
-                  <h3 className={styles.stepTitle}>BUILD</h3>
-                  <p className={styles.stepText}>
-                    Order parts, print enclosures, and assemble your project
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* What You Get Section */}
-      {!isLoading && (
-        <section className={styles.features}>
-          <div className="nes-container is-dark with-title">
-            <p className="title">WHAT YOU GET</p>
-
-            <div className={styles.featureGrid}>
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>🔧</span>
-                <h3 className={styles.featureTitle}>WIRING DIAGRAMS</h3>
-                <p className={styles.featureText}>
-                  Visual guides showing how to connect all your components
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>📦</span>
-                <h3 className={styles.featureTitle}>PARTS LIST</h3>
-                <p className={styles.featureText}>
-                  Validated bill of materials with real parts from suppliers
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>📐</span>
-                <h3 className={styles.featureTitle}>CAD MODELS</h3>
-                <p className={styles.featureText}>
-                  Printable enclosures and mounts ready for 3D printing
-                </p>
-              </div>
-
-              <div className={styles.featureCard}>
-                <span className={styles.featureEmoji}>💻</span>
-                <h3 className={styles.featureTitle}>FIRMWARE</h3>
-                <p className={styles.featureText}>
-                  Working code scaffolding for your microcontroller
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
       )}
 
       {/* Stats Section */}
