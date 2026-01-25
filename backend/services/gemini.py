@@ -165,13 +165,8 @@ def fetch_parts_by_category(description: str) -> dict:
         if "Jumper Wires" not in requested_parts["Wiring & Cables"] or not requested_parts["Wiring & Cables"]["Jumper Wires"]:
             requested_parts["Wiring & Cables"]["Jumper Wires"] = ["jumper wire", "dupont"]
     
-    # Ensure all required categories are present (Gemini sometimes omits them)
-    for category in VALID_CATEGORIES.keys():
-        if category not in requested_parts:
-            requested_parts[category] = {}
-    
-    # Build output with matched parts from database - ensure ALL categories are present
-    output = {cat: {} for cat in VALID_CATEGORIES.keys()}
+    # Build output with matched parts from database - only include categories with actual parts
+    output = {}
     
     for category, subcats in requested_parts.items():
         if category not in VALID_CATEGORIES:
@@ -188,6 +183,8 @@ def fetch_parts_by_category(description: str) -> dict:
             # Search for matching parts
             matched_parts = search_parts_by_keywords(category, subcategory, keywords)
             if matched_parts:
+                if category not in output:
+                    output[category] = {}
                 output[category][subcategory] = matched_parts
     
     return output

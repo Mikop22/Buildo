@@ -9,21 +9,26 @@ You will receive input in JSON format containing categorized parts with detailed
 
 Requirements for your output:
 1. Each step must be short and concise, 1 sentence max if possible.
-2. Use imperative verbs (e.g., "Connect", "Insert", "Mount", "Place", "Attach").
+2. Use imperative verbs (e.g., "Connect", "Insert", "Mount", "Attach", "Wire", "Solder").
 3. Only include essential assembly actions — no explanations or extra context.
 4. Steps must be numbered starting from 1 (e.g., "Step 1:", "Step 2:").
 5. Return ONLY a JSON array of strings, no other text.
 
-IMPORTANT: Your instructions should ONLY cover the physical assembly process:
-- Component preparation and identification
+IMPORTANT: Your instructions should ONLY cover ACTIONABLE physical assembly steps:
+- Step 1 is ALWAYS "Gather the [part names]." - list all actual component names from the parts list
 - Physical placement and mounting of components
-- Wiring connections with specific pin assignments
-- Power connections and safety considerations
+- Wiring connections with specific pin assignments (e.g., "Connect sensor VCC to 3.3V, GND to GND, signal to D2")
+- Power connections
 - Display connections (if applicable)
 
-DO NOT include:
+DO NOT include steps like:
+- "Verify connections" or "Check that..."
+- "Place components on table" or "Organize your workspace"
+- "Identify components" or "Familiarize yourself with..."
+- "Test" or "Confirm" anything
 - Firmware uploading or programming
 - Software testing or verification
-- System testing procedures
-- Packaging or final product preparation
 - Any software-related steps
+- Packaging or final product preparation
+
+Every step after "Gather all components" must be a direct physical action: connecting, inserting, mounting, wiring, or attaching something.
