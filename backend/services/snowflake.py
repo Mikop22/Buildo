@@ -45,24 +45,11 @@ def generate_code_and_steps(parts_by_category: dict) -> dict:
     with open(os.path.join(TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
         user_prompt_template = f.read()
     
-    assembly_task = "Generate step-by-step assembly instructions for putting together this device using these parts:"
-    assembly_requirements = """Provide clear, straightforward, step-by-step instructions covering:
-- Component preparation and identification
-- Physical assembly order
-- Wiring connections with specific pin assignments
-- Power connections and safety considerations
-- Display connections (if applicable)
-- Final testing procedures
-
-Return ONLY a JSON array of strings, where each string is one clear instruction step. Example format:
-["Step 1: Prepare all components and identify each part", "Step 2: Connect the ESP32 to the breadboard", "Step 3: Connect the soil moisture sensor to pin 5", ...]
-
-Make each step clear, actionable, and easy to follow. Do not include any text outside the JSON array."""
+    assembly_task = "Generate step-by-step PHYSICAL ASSEMBLY instructions for putting together this device using these parts:"
     
     assembly_user = user_prompt_template.format(
         task_description=assembly_task,
-        parts_json=parts_json,
-        requirements=assembly_requirements
+        parts_json=parts_json
     )
     assembly_prompt = f"{system_prompt}\n\n{assembly_user}"
     
