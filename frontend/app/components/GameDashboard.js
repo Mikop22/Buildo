@@ -48,7 +48,7 @@ export default function GameDashboard({ projectName }) {
                         className={`nes-btn ${activeTab === "assembly" ? "is-primary" : ""}`}
                         onClick={() => setActiveTab("assembly")}
                     >
-                        ASSEMBLY
+                        ASSEMBLE
                     </button>
                 </div>
                 <button

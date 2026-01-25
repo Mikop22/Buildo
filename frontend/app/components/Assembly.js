@@ -100,14 +100,28 @@ export default function Assembly() {
             let title = `Step ${stepNum}`;
             let instructionText = stepText;
             
+            // Remove step number prefixes from instruction text
+            // Patterns: "Step 1:", "Step 1 -", "1.", "1:", etc.
+            instructionText = instructionText
+                .replace(/^Step\s+\d+\s*[:-]\s*/i, '') // "Step 1:" or "Step 1 -"
+                .replace(/^\d+\.\s*/, '') // "1."
+                .replace(/^\d+\s*[:-]\s*/, '') // "1:" or "1 -"
+                .trim();
+            
             const colonIndex = stepText.indexOf(':');
             if (colonIndex > -1) {
                 const afterColon = stepText.substring(colonIndex + 1).trim();
+                // Remove step number prefix from afterColon too
+                const cleanedAfterColon = afterColon
+                    .replace(/^Step\s+\d+\s*[:-]\s*/i, '')
+                    .replace(/^\d+\.\s*/, '')
+                    .replace(/^\d+\s*[:-]\s*/, '')
+                    .trim();
                 // Take first sentence or first 50 chars as title
-                const firstSentence = afterColon.split('.')[0];
+                const firstSentence = cleanedAfterColon.split('.')[0];
                 if (firstSentence.length < 60) {
                     title = firstSentence;
-                    instructionText = afterColon;
+                    instructionText = cleanedAfterColon;
                 }
             }
             
@@ -210,6 +224,9 @@ function SafetyWarnings({ warnings }) {
 
 // Step Card Component
 function StepCard({ step }) {
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [imageError, setImageError] = useState(false);
+
     return (
         <div className={`nes-container is-rounded is-dark ${styles.stepCard}`}>
             <div className={styles.stepHeader}>
@@ -221,11 +238,27 @@ function StepCard({ step }) {
                 {/* Image Section */}
                 <div className={styles.stepImageSection}>
                     {step.imageUrl ? (
-                        <img
-                            src={step.imageUrl}
-                            alt={`Step ${step.id}: ${step.title}`}
-                            className={styles.stepImage}
-                        />
+                        <>
+                            {!imageLoaded && !imageError && (
+                                <div className={styles.imageLoading}>
+                                    <div className={styles.loadingDots}>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            )}
+                            <img
+                                src={step.imageUrl}
+                                alt={`Step ${step.id}: ${step.title}`}
+                                className={`${styles.stepImage} ${imageLoaded ? styles.stepImageLoaded : ''}`}
+                                onLoad={() => setImageLoaded(true)}
+                                onError={() => {
+                                    setImageError(true);
+                                    setImageLoaded(false);
+                                }}
+                            />
+                        </>
                     ) : (
                         <div className={styles.stepImagePlaceholder}>
                             <i className="nes-icon is-large image"></i>
