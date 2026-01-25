@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import styles from "./page.module.css";
 
 import { useTheme } from "../components/ThemeProvider";
@@ -122,6 +123,15 @@ export default function Settings() {
                         </label>
                     </div>
                 </div>
+
+                <Link href="/profile/user_local">
+                    <button
+                        className="nes-btn is-primary"
+                        style={{ width: "100%", marginTop: "2rem" }}
+                    >
+                        VIEW ACCOUNT / SAVED PROJECTS
+                    </button>
+                </Link>
 
                 <button
                     className="nes-btn is-success"

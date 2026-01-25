@@ -16,36 +16,74 @@ GEMINI_IMAGE_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/
 def select_part_for_image(parts_by_category: Dict) -> Optional[Dict]:
     """
     Selects one part from all categories to generate an image for.
-    Prioritizes parts from controller, outputs, or inputs categories.
+    Prioritizes parts from Microcontrollers, Actuators, or Sensors categories.
     
     Args:
-        parts_by_category: Dictionary with categories as keys and lists of parts as values
+        parts_by_category: Dictionary with nested structure:
+            {
+                "Microcontrollers": {"ESP": [part_dict, ...], "Arduino": [part_dict, ...]},
+                "Sensors": {"Environmental": [part_dict, ...]},
+                ...
+            }
         
     Returns:
         A single part dictionary, or None if no parts are available
     """
     # Priority order for selecting which category to pick from
-    priority_categories = ["controller", "outputs", "inputs", "power", "communication", "mechanical", "interconnect"]
+    priority_categories = ["Microcontrollers", "Actuators", "Sensors", "Displays", "Power"]
     
     # Try to find a part from priority categories
     for category in priority_categories:
-        parts = parts_by_category.get(category, [])
-        if parts:
-            # Return the first part from this category
-            part = parts[0]
-            return {
-                "part": part,
-                "category": category
-            }
+        subcategories = parts_by_category.get(category, {})
+        if not subcategories:
+            continue
+        
+        # Handle nested structure
+        if isinstance(subcategories, dict):
+            for subcategory, parts in subcategories.items():
+                if parts:
+                    # Return the first part from this subcategory
+                    part = parts[0]
+                    return {
+                        "part": part,
+                        "category": category,
+                        "subcategory": subcategory
+                    }
+        # Handle flat structure (legacy support)
+        elif isinstance(subcategories, list):
+            if subcategories:
+                part = subcategories[0]
+                return {
+                    "part": part,
+                    "category": category
+                }
     
     # If no parts found in priority categories, search all categories
-    for category, parts in parts_by_category.items():
-        if parts:
-            part = parts[0]
-            return {
-                "part": part,
-                "category": category
-            }
+    for category, subcategories in parts_by_category.items():
+        if category in ["firmware", "assembly_steps"]:
+            continue
+        
+        if not subcategories:
+            continue
+        
+        # Handle nested structure
+        if isinstance(subcategories, dict):
+            for subcategory, parts in subcategories.items():
+                if parts:
+                    part = parts[0]
+                    return {
+                        "part": part,
+                        "category": category,
+                        "subcategory": subcategory
+                    }
+        # Handle flat structure (legacy support)
+        elif isinstance(subcategories, list):
+            if subcategories:
+                part = subcategories[0]
+                return {
+                    "part": part,
+                    "category": category
+                }
     
     return None
 
@@ -164,39 +202,71 @@ def generate_images_for_all_parts(parts_by_category: Dict, device_description: s
     Generates images for ALL parts in all categories.
     
     Args:
-        parts_by_category: Dictionary with categories as keys and lists of parts as values
+        parts_by_category: Dictionary with nested structure:
+            {
+                "Microcontrollers": {"ESP": [part_dict, ...], "Arduino": [part_dict, ...]},
+                "Sensors": {"Environmental": [part_dict, ...]},
+                ...
+            }
         device_description: Optional device description for context
         
     Returns:
-        Dictionary with category names as keys and lists of parts with generated images as values
+        Dictionary with nested structure containing parts with generated images
     """
     result = {}
     
     # Iterate through all categories
-    for category, parts in parts_by_category.items():
+    for category, subcategories in parts_by_category.items():
         # Skip non-part categories
         if category in ["firmware", "assembly_steps"]:
             continue
         
-        if not parts:
+        if not subcategories:
             continue
         
-        # Generate images for all parts in this category
-        parts_with_images = []
-        for part in parts:
-            image_url = generate_part_image(part, device_description)
+        # Handle nested structure
+        if isinstance(subcategories, dict):
+            category_result = {}
+            for subcategory, parts in subcategories.items():
+                if not parts:
+                    continue
+                
+                # Generate images for all parts in this subcategory
+                parts_with_images = []
+                for part in parts:
+                    image_url = generate_part_image(part, device_description)
+                    
+                    # Create part dict with image
+                    part_with_image = dict(part)  # Copy the part dict
+                    if image_url:
+                        part_with_image["generated_image"] = image_url
+                    else:
+                        part_with_image["generated_image"] = None
+                    
+                    parts_with_images.append(part_with_image)
+                
+                if parts_with_images:
+                    category_result[subcategory] = parts_with_images
             
-            # Create part dict with image
-            part_with_image = dict(part)  # Copy the part dict
-            if image_url:
-                part_with_image["generated_image"] = image_url
-            else:
-                part_with_image["generated_image"] = None
+            if category_result:
+                result[category] = category_result
+        # Handle flat structure (legacy support)
+        elif isinstance(subcategories, list):
+            parts_with_images = []
+            for part in subcategories:
+                image_url = generate_part_image(part, device_description)
+                
+                # Create part dict with image
+                part_with_image = dict(part)  # Copy the part dict
+                if image_url:
+                    part_with_image["generated_image"] = image_url
+                else:
+                    part_with_image["generated_image"] = None
+                
+                parts_with_images.append(part_with_image)
             
-            parts_with_images.append(part_with_image)
-        
-        if parts_with_images:
-            result[category] = parts_with_images
+            if parts_with_images:
+                result[category] = parts_with_images
     
     return result
 
@@ -206,7 +276,12 @@ def generate_assembled_product_image(parts_by_category: Dict, device_description
     Generates a single image showing the complete assembled product with all parts put together.
     
     Args:
-        parts_by_category: Dictionary with categories as keys and lists of parts as values
+        parts_by_category: Dictionary with nested structure:
+            {
+                "Microcontrollers": {"ESP": [part_dict, ...], "Arduino": [part_dict, ...]},
+                "Sensors": {"Environmental": [part_dict, ...]},
+                ...
+            }
         device_description: Optional device description for context
         
     Returns:
@@ -216,31 +291,52 @@ def generate_assembled_product_image(parts_by_category: Dict, device_description
         print("Warning: GEMINI_API_KEY not set, cannot generate image")
         return None
     
-    # Collect all parts from all categories
+    # Collect all parts from all categories (handling nested structure)
     all_parts_list = []
-    for category, parts in parts_by_category.items():
+    for category, subcategories in parts_by_category.items():
         # Skip non-part categories
         if category in ["firmware", "assembly_steps"]:
             continue
         
-        if not parts:
+        if not subcategories:
             continue
         
-        # Extract part names/titles
-        for part in parts:
-            if isinstance(part, dict):
-                part_title = part.get("title", "")
-                # Also get description if available for better context
-                part_desc = part.get("description", "")
-            else:
-                part_title = str(part)
-                part_desc = ""
-            
-            if part_title:
-                part_entry = f"{category}: {part_title}"
-                if part_desc:
-                    part_entry += f" ({part_desc})"
-                all_parts_list.append(part_entry)
+        # Handle nested structure: category -> subcategory -> list of parts
+        if isinstance(subcategories, dict):
+            for subcategory, parts in subcategories.items():
+                if not parts:
+                    continue
+                
+                # Extract part names/titles from this subcategory
+                for part in parts:
+                    if isinstance(part, dict):
+                        part_title = part.get("title") or part.get("name", "")
+                        # Also get description if available for better context
+                        part_desc = part.get("description", "")
+                    else:
+                        part_title = str(part)
+                        part_desc = ""
+                    
+                    if part_title:
+                        part_entry = f"{category}/{subcategory}: {part_title}"
+                        if part_desc:
+                            part_entry += f" ({part_desc})"
+                        all_parts_list.append(part_entry)
+        # Handle flat structure (legacy support)
+        elif isinstance(subcategories, list):
+            for part in subcategories:
+                if isinstance(part, dict):
+                    part_title = part.get("title") or part.get("name", "")
+                    part_desc = part.get("description", "")
+                else:
+                    part_title = str(part)
+                    part_desc = ""
+                
+                if part_title:
+                    part_entry = f"{category}: {part_title}"
+                    if part_desc:
+                        part_entry += f" ({part_desc})"
+                    all_parts_list.append(part_entry)
     
     if not all_parts_list:
         print("No parts found to generate assembled product image")
@@ -250,22 +346,29 @@ def generate_assembled_product_image(parts_by_category: Dict, device_description
     for part in all_parts_list:
         print(f"  - {part}")
     
-    # Build prompt for assembled product image - focus on the parts, not the device name
+    # Build prompt for assembled product image - focus on the parts and device description
     parts_text = "\n".join([f"- {part}" for part in all_parts_list])
     
-    # Create a more detailed parts description
-    parts_description = ", ".join([part.split(": ")[1] if ": " in part else part for part in all_parts_list])
+    # Create a more detailed parts description (extract just the part names)
+    parts_description = ", ".join([
+        part.split(": ")[1].split(" (")[0] if ": " in part else part.split(" (")[0] 
+        for part in all_parts_list
+    ])
     
+    # Build comprehensive prompt
     prompt = f"Generate a clear, professional product image showing a complete assembled electronic device.\n\n"
+    if device_description:
+        prompt += f"Device Description: {device_description}\n\n"
     prompt += f"The device is assembled from these specific parts:\n{parts_text}\n\n"
-    prompt += f"Show how these parts ({parts_description}) are integrated together into a working device. "
+    prompt += f"Show how these parts ({parts_description}) are integrated together into a working {device_description or 'electronic device'}. "
     prompt += "The image should show:\n"
     prompt += "- All parts properly assembled and physically connected together\n"
     prompt += "- The complete device as a finished, functional product\n"
     prompt += "- Clean, professional presentation on a neutral background\n"
     prompt += "- Clear visibility of how all components are connected and work together\n"
     prompt += "- Realistic proportions showing the actual size relationships between parts\n"
-    prompt += "- Proper integration showing wires, connections, and physical assembly"
+    prompt += "- Proper integration showing wires, connections, and physical assembly\n"
+    prompt += "- The device should look like a complete, working product ready to use"
     
     try:
         response = requests.post(

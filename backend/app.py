@@ -36,13 +36,33 @@ def generate():
             "parts": []
         }
         
-        # Include list of all parts used in the assembly
-        for category, parts in parts_by_category.items():
+        # Include list of all parts used in the assembly (handling nested structure)
+        for category, subcategories in parts_by_category.items():
             if category not in ["firmware", "assembly_steps"]:
-                if parts:
-                    for part in parts:
+                if not subcategories:
+                    continue
+                
+                # Handle nested structure: category -> subcategory -> list of parts
+                if isinstance(subcategories, dict):
+                    for subcategory, parts in subcategories.items():
+                        if not parts:
+                            continue
+                        for part in parts:
+                            if isinstance(part, dict):
+                                part_title = part.get("title") or part.get("name", "")
+                            else:
+                                part_title = str(part)
+                            if part_title:
+                                result["assembled_product_image"]["parts"].append({
+                                    "category": category,
+                                    "subcategory": subcategory,
+                                    "title": part_title
+                                })
+                # Handle flat structure (legacy support)
+                elif isinstance(subcategories, list):
+                    for part in subcategories:
                         if isinstance(part, dict):
-                            part_title = part.get("title", "")
+                            part_title = part.get("title") or part.get("name", "")
                         else:
                             part_title = str(part)
                         if part_title:

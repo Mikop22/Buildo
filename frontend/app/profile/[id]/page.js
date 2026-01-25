@@ -11,6 +11,7 @@ export default function ProfilePage({ params }) {
     const { id } = unwrappedParams;
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [savedProjects, setSavedProjects] = useState([]);
 
     useEffect(() => {
         // Simulate API fetch delay
@@ -18,6 +19,9 @@ export default function ProfilePage({ params }) {
             let foundUser;
             if (id === "user_local") {
                 foundUser = getLocalUser();
+                // Load saved projects for local user
+                const stored = JSON.parse(localStorage.getItem("savedProjects") || "[]");
+                setSavedProjects(stored);
             } else {
                 foundUser = mockUsers.find(u => u.id === id);
             }
@@ -100,6 +104,32 @@ export default function ProfilePage({ params }) {
                         <p style={{ fontSize: "1.2rem", color: "#209cee" }}>{user.stats.playtime}</p>
                     </div>
                 </div>
+
+                {/* Saved Projects - Only for local user */}
+                {user.id === "user_local" && (
+                    <div className="nes-container is-dark with-title" style={{ marginTop: "2rem" }}>
+                        <p className="title">SAVED PROJECTS</p>
+                        {savedProjects.length === 0 ? (
+                            <p style={{ color: "#666" }}>No projects found. Start building!</p>
+                        ) : (
+                            <div className="nes-list is-disc">
+                                {savedProjects.map((project) => (
+                                    <div key={project.id} style={{ marginBottom: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                        <div>
+                                            <Link href={`/project-dashboard?name=${encodeURIComponent(project.name)}`} className="nes-text is-primary">
+                                                {project.name}
+                                            </Link>
+                                            <p style={{ fontSize: "0.8rem", color: "#666" }}>{project.date}</p>
+                                        </div>
+                                        <Link href={`/project-dashboard?name=${encodeURIComponent(project.name)}`}>
+                                            <button className="nes-btn is-small">OPEN</button>
+                                        </Link>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {/* Achievements */}
                 <div className="nes-container is-dark with-title" style={{ marginTop: "2rem" }}>

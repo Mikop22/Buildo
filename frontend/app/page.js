@@ -1,11 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./page.module.css";
 
+// Removed GameDashboard import as it is no longer used here
+
 export default function Home() {
+  const router = useRouter();
   const [stars, setStars] = useState([]);
+  const [inputText, setInputText] = useState("");
+  // Game States: 'MENU', 'LOADING'
+  const [gameState, setGameState] = useState("MENU");
 
   useEffect(() => {
     const generatedStars = Array.from({ length: 50 }, (_, i) => ({
@@ -17,6 +24,16 @@ export default function Home() {
     }));
     setStars(generatedStars);
   }, []);
+
+  const handleCreate = () => {
+    if (!inputText.trim()) return; // Don't create empty projects
+
+    setGameState("LOADING");
+    // Simulate generation time
+    setTimeout(() => {
+      router.push(`/project-dashboard?name=${encodeURIComponent(inputText)}`);
+    }, 3000); // 3 seconds loading
+  };
 
   const games = [
     {
@@ -67,27 +84,74 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <div className={`${styles.logoContainer} float`}>
-            <i class="nes-octocat animate"></i>
+      {/* Nyan Cat Background - Only show in MENU */}
+      {gameState === "MENU" && (
+        <img
+          src="https://media.tenor.com/-AyTtMgs2mMAAAAi/nyan-cat-nyan.gif"
+          alt="Nyan Cat"
+          className={styles.nyanCatBackground}
+        />
+      )}
+
+      {/* Hero Section - Only show in MENU */}
+      {gameState === "MENU" && (
+        <section className={styles.hero}>
+          <div className={styles.heroContent}>
+            <div className={`${styles.logoContainer} float`}>
+              <i className="nes-octocat animate"></i>
+            </div>
+
+            <h1 className={`${styles.title} glow-text`}>
+              PROJECT NAME
+            </h1>
+
+            <p className={styles.subtitle}>
+              <span className="glow-green">SUB</span> TITLE
+            </p>
+
+            <div className={styles.inputContainer}>
+              <input
+                type="text"
+                className={`nes-input is-dark ${styles.heroInput}`}
+                placeholder="CREATE A NEW PROJECT..."
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+              />
+              <button
+                className={`nes-btn is-error ${styles.submitBtn}`}
+                onClick={handleCreate}
+              >
+                CREATE
+              </button>
+            </div>
+
+            <div className={styles.blinkContainer}>
+              <span className={styles.pressStart}>SELECT A GAME</span>
+              <span className={`${styles.cursor} blink`}>▼</span>
+            </div>
           </div>
+        </section>
+      )}
 
-          <h1 className={`${styles.title} glow-text`}>
-            PROJECT NAME
-          </h1>
-
-          <p className={styles.subtitle}>
-            <span className="glow-green">SUB</span> TITLE
-          </p>
-
-          <div className={styles.blinkContainer}>
-            <span className={styles.pressStart}>SELECT A GAME</span>
-            <span className={`${styles.cursor} blink`}>▼</span>
+      {/* Loading Screen */}
+      {gameState === "LOADING" && (
+        <div className={styles.loadingScreen}>
+          <div className={styles.batteryContainer}>
+            <div className={styles.batteryBody}>
+              <div className={styles.batteryLevel}></div>
+            </div>
+            <div className={styles.batteryBump}></div>
           </div>
+          <p className={`${styles.loadingText} blink`}>CHARGING...</p>
         </div>
-      </section>
+      )}
+
+      {/* Dashboard - Show in DASHBOARD state */}
+      {gameState === "DASHBOARD" && (
+        <section className={styles.dashboardSection} style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+          <GameDashboard />
+        </section>
+      )}
 
       {/* Stats Section */}
       <section className={styles.stats}>

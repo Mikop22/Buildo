@@ -4,8 +4,8 @@ export const achievements = [
     { id: "veteran", name: "Veteran", description: "Play 50 games", icon: "trophy" },
     { id: "collector", name: "Collector", description: "Unlock all avatars", icon: "close" },
     { id: "speed", name: "Speed Demon", description: "Complete a level in <30s", icon: "like" },
-    { id: "sniper", name: "Pixel Sniper", description: "100% Accuracy in a game", icon: "star" },
-    { id: "night_owl", name: "Night Owl", description: "Play between 2AM and 5AM", icon: "moon" },
+    { id: "sniper", name: "Pixel Sniper", description: "100% Accuracy in a game", icon: "twitch" },
+    { id: "night_owl", name: "Night Owl", description: "Play between 2AM and 5AM", icon: "linkedin" },
 ];
 
 export const mockUsers = [
