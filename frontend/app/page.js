@@ -264,7 +264,7 @@ export default function Home() {
                 <span className={styles.statLabel}>IDEAS</span>
               </div>
               <div className={styles.statItem}>
-                <span className={`${styles.statNumber} glow-blue`}>3k+</span>
+                <span className={`${styles.statNumber} glow-blue`}>7k+</span>
                 <span className={styles.statLabel}>PARTS</span>
               </div>
               <div className={styles.statItem}>
