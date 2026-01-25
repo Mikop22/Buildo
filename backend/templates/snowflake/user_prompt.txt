@@ -1,0 +1,17 @@
+Desired product/device to assemble: {task_description}
+
+Parts to be used (in JSON format with categories, subcategories, and product details):
+{parts_json}
+
+Example output format (return ONLY a JSON array of strings, where each string is one clear instruction step):
+[
+  "Step 1: Identify and prepare all components from the parts list.",
+  "Step 2: Insert Arduino Nano into the Data Logging Shield.",
+  "Step 3: Mount the combined assembly onto the Expansion Board.",
+  "Step 4: Connect soil moisture sensor VCC to 3.3V, GND to GND, signal to D2.",
+  "Step 5: Connect relay module VCC to 5V, GND to ground, control pin to D3.",
+  "Step 6: Connect OLED display VCC to 3.3V, GND to ground, SDA to A4, SCL to A5.",
+  "Step 7: Verify all pins are properly seated and connections are secure."
+]
+
+Make each step concise, actionable, and use imperative verbs. Reference specific parts from the parts list. Do not include any text outside the JSON array.

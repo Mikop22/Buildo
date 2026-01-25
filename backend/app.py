@@ -25,7 +25,6 @@ def generate():
     
     # Build result with parts and generated assembled image
     result = dict(parts_by_category)
-    result["firmware"] = code_steps["firmware"]
     result["assembly_steps"] = code_steps["assembly_steps"]
     
     # Add the assembled product image

@@ -38,7 +38,7 @@ if not GEMINI_API_KEY:
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates")
+TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "gemini")
 with open(os.path.join(TEMPLATES_PATH, "system_prompt.txt"), "r", encoding="utf-8") as f:
     SYSTEM_PROMPT = f.read()
 with open(os.path.join(TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
