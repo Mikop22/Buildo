@@ -1,0 +1,13 @@
+{
+  "assembly_steps": [
+    "Upload firmware to the Microcontroller."
+  ],
+  "communication": [],
+  "controller": [],
+  "firmware": "// Firmware scaffold for Microcontroller\n#include <Arduino.h>\nvoid setup() {\n    // Initialize hardware\n}\nvoid loop() {\n    // Main logic\n}\n",
+  "inputs": [],
+  "interconnect": [],
+  "mechanical": [],
+  "outputs": [],
+  "power": []
+}

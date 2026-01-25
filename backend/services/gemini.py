@@ -6,8 +6,36 @@ from google.genai import types
 from llm_config import LLM_CONFIG
 from services.parts_storing import get_by_cat_subcat
 
-load_dotenv()
+# Load .env file from backend directory
+env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+if os.path.exists(env_path):
+    try:
+        load_dotenv(env_path, encoding='utf-8')
+    except UnicodeDecodeError:
+        # File might be UTF-16 - try to read and convert to UTF-8
+        try:
+            with open(env_path, 'r', encoding='utf-16') as f:
+                content = f.read()
+            # Write back as UTF-8
+            with open(env_path, 'w', encoding='utf-8', newline='\n') as f:
+                f.write(content)
+            print("Converted .env file from UTF-16 to UTF-8")
+            load_dotenv(env_path, encoding='utf-8')
+        except Exception as e:
+            print(f"Error converting .env file: {e}")
+            print("Please delete backend/.env and recreate it as UTF-8 (no BOM)")
+            load_dotenv()  # Fallback
+else:
+    load_dotenv()  # Try loading from current directory
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    raise ValueError(
+        "GEMINI_API_KEY not found in environment variables. "
+        "Please create a .env file in the backend/ directory with: GEMINI_API_KEY=your_key_here"
+    )
+
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates")
