@@ -1,0 +1,11 @@
+Desired product/device to assemble: {task_description}
+
+Parts to be used (in JSON format with categories, subcategories, and product details):
+{parts_json}
+
+{requirements}
+
+Example output format (return ONLY a JSON array of strings, where each string is one clear instruction step):
+["Step 1: Prepare all components and identify each part from the parts list", "Step 2: Connect the ESP32 breakout board to the breadboard, ensuring proper orientation", "Step 3: Connect the soil moisture sensor VCC pin to 3.3V, GND to ground, and signal pin to GPIO pin 5 on the ESP32", "Step 4: Connect the relay module to GPIO pin 2 on the ESP32", "Step 5: Connect the OLED display SDA to GPIO 21 and SCL to GPIO 22", "Step 6: Connect power supply ensuring proper voltage ratings", "Step 7: Test each component individually before final assembly", "Step 8: Upload firmware and verify all connections work correctly"]
+
+Make each step clear, actionable, and reference specific parts from the parts list. Do not include any text outside the JSON array.
