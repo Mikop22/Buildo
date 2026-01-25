@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Inventory from "./Inventory";
 import Blueprints from "./Blueprints";
+import Code from "./Code";
 import Assembly from "./Assembly";
 
 export default function GameDashboard({ projectName }) {
@@ -32,6 +33,14 @@ export default function GameDashboard({ projectName }) {
                 </button>
                 <button
                     type="button"
+                    className={`nes-btn ${activeTab === "code" ? "is-primary" : ""}`}
+                    onClick={() => setActiveTab("code")}
+                    style={{ marginRight: "1rem" }}
+                >
+                    CODE
+                </button>
+                <button
+                    type="button"
                     className={`nes-btn ${activeTab === "assembly" ? "is-primary" : ""}`}
                     onClick={() => setActiveTab("assembly")}
                 >
@@ -43,6 +52,7 @@ export default function GameDashboard({ projectName }) {
             <div className="dashboard-content">
                 {activeTab === "inventory" && <Inventory />}
                 {activeTab === "blueprints" && <Blueprints />}
+                {activeTab === "code" && <Code />}
                 {activeTab === "assembly" && <Assembly />}
             </div>
         </div>

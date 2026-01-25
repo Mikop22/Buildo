@@ -1,0 +1,154 @@
+/* Code Container */
+.codeContainer {
+    width: 100%;
+}
+
+/* Code Block Wrapper */
+.codeBlockWrapper {
+    border: 2px solid var(--accent-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.4);
+    transition: border-color 0.2s ease;
+}
+
+.codeBlockWrapper:hover {
+    border-color: var(--pixel-green);
+}
+
+/* Code Header Bar */
+.codeHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid var(--accent-secondary);
+}
+
+.languageLabel {
+    font-size: 12px;
+    color: var(--pixel-yellow);
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.copyButton {
+    font-size: 10px;
+    padding: 0.4rem 0.8rem;
+    min-width: auto;
+    transition: all 0.2s ease;
+}
+
+.copyButton:hover {
+    transform: scale(1.05);
+}
+
+.copyButton.copied {
+    background: var(--pixel-green);
+    color: var(--bg-dark);
+}
+
+/* Code Content */
+.codeContent {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #1e1e1e;
+}
+
+.codePre {
+    margin: 0;
+    padding: 1.5rem;
+    font-family: 'Consolas', 'Monaco', 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #d4d4d4;
+    white-space: pre;
+    overflow-x: auto;
+    overflow-y: hidden;
+    tab-size: 2;
+}
+
+.code {
+    display: block;
+    font-family: inherit;
+    color: inherit;
+    background: transparent;
+}
+
+/* Syntax Highlighting - Enhanced colors */
+.code {
+    color: #d4d4d4;
+}
+
+/* Use :global to target spans inserted via dangerouslySetInnerHTML */
+.code :global(span.keyword),
+.code span.keyword {
+    color: #c586c0 !important;
+    font-weight: 600;
+}
+
+.code :global(span.string),
+.code span.string {
+    color: #ce9178 !important;
+}
+
+.code :global(span.comment),
+.code span.comment {
+    color: #6a9955 !important;
+    font-style: italic;
+}
+
+.code :global(span.function),
+.code span.function {
+    color: #dcdcaa !important;
+    font-weight: 500;
+}
+
+.code :global(span.number),
+.code span.number {
+    color: #b5cea8 !important;
+}
+
+.code :global(span.key),
+.code span.key {
+    color: #9cdcfe !important;
+}
+
+.code :global(span.boolean),
+.code span.boolean {
+    color: #569cd6 !important;
+    font-weight: 500;
+}
+
+/* Scrollbar Styling */
+.codeContent::-webkit-scrollbar {
+    height: 8px;
+}
+
+.codeContent::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.codeContent::-webkit-scrollbar-thumb {
+    background: var(--accent-secondary);
+    border-radius: 4px;
+}
+
+.codeContent::-webkit-scrollbar-thumb:hover {
+    background: var(--pixel-green);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .codePre {
+        font-size: 11px;
+        padding: 1rem;
+    }
+
+    .codeHeader {
+        padding: 0.5rem 0.75rem;
+    }
+}
