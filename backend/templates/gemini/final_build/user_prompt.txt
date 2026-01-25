@@ -1,0 +1,8 @@
+Generate a realistic product image of an assembled electronic device.
+
+Device Description: {description}
+
+Parts Used:
+{parts_list}
+
+Create a professional product photograph showing the complete assembled device with all parts properly connected and integrated together. The image should have a neutral white background and show realistic proportions and connections.
