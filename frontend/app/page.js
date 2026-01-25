@@ -1,14 +1,58 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 import PixelBackground from "./components/PixelBackground";
+
+const placeholderIdeas = [
+  "Heart rate monitor",
+  "Coffee temperature checker",
+  "Plant soil health monitor",
+  "Motion-activated lighting",
+  "Smart doorbell with camera",
+  "Weather station display",
+  "Pet feeder automation",
+  "Air quality sensor"
+];
 
 export default function Home() {
   const router = useRouter();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const currentText = placeholderIdeas[placeholderIndex];
+    let timeout;
+
+    if (!isDeleting && displayedText.length < currentText.length) {
+      // Typing
+      timeout = setTimeout(() => {
+        setDisplayedText(currentText.slice(0, displayedText.length + 1));
+      }, 50);
+    } else if (!isDeleting && displayedText.length === currentText.length) {
+      // Finished typing, wait then start deleting
+      timeout = setTimeout(() => {
+        setIsDeleting(true);
+      }, 2000);
+    } else if (isDeleting && displayedText.length > 0) {
+      // Deleting
+      timeout = setTimeout(() => {
+        setDisplayedText(displayedText.slice(0, -1));
+      }, 30);
+    } else if (isDeleting && displayedText.length === 0) {
+      // Finished deleting, move to next idea
+      setIsDeleting(false);
+      setPlaceholderIndex((prev) => (prev + 1) % placeholderIdeas.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayedText, placeholderIndex, isDeleting]);
+
 
   const handleCreate = () => {
     if (!inputText.trim()) return;
@@ -67,14 +111,23 @@ export default function Home() {
             </p>
 
             <div className={styles.inputContainer}>
-              <input
-                type="text"
-                className={`nes-input is-dark ${styles.heroInput}`}
-                placeholder="DESCRIBE YOUR BUILD IDEA..."
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleCreate()}
-              />
+              <div className={styles.inputWrapper}>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className={`nes-input is-dark ${styles.heroInput}`}
+                  placeholder=""
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleCreate()}
+                />
+                {!inputText && (
+                  <span className={styles.placeholderOverlay}>
+                    {displayedText}
+                    <span className={styles.cursor}>|</span>
+                  </span>
+                )}
+              </div>
               <button
                 className={`nes-btn is-success ${styles.submitBtn}`}
                 onClick={handleCreate}
@@ -201,7 +254,7 @@ export default function Home() {
                 <span className={styles.statLabel}>IDEAS</span>
               </div>
               <div className={styles.statItem}>
-                <span className={`${styles.statNumber} glow-blue`}>1000+</span>
+                <span className={`${styles.statNumber} glow-blue`}>3k+</span>
                 <span className={styles.statLabel}>PARTS</span>
               </div>
               <div className={styles.statItem}>
@@ -219,7 +272,7 @@ export default function Home() {
           <div className="nes-container is-rounded is-centered">
             <p className={styles.ctaText}>Ready to bring your idea to life?</p>
             <button
-              className="nes-btn is-primary"
+              className={`nes-btn is-success ${styles.ctaButton}`}
               onClick={() => document.querySelector(`.${styles.heroInput}`)?.focus()}
             >
               START BUILDING NOW

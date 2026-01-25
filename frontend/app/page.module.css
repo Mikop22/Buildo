@@ -38,14 +38,14 @@
 }
 
 .tagline {
-  font-size: clamp(0.75rem, 2.5vw, 1.1rem);
+  font-size: clamp(1rem, 3vw, 1.4rem);
   margin-bottom: 0.75rem;
   color: var(--text-light);
   letter-spacing: 0.05em;
 }
 
 .subtitle {
-  font-size: clamp(0.55rem, 1.5vw, 0.75rem);
+  font-size: clamp(0.75rem, 2vw, 1rem);
   margin-bottom: 2.5rem;
   color: var(--text-muted);
   line-height: 1.6;
@@ -67,13 +67,51 @@
   flex-wrap: wrap;
 }
 
-.heroInput {
+.inputWrapper {
   flex: 1;
   min-width: 200px;
+  position: relative;
+}
+
+.heroInput {
+  width: 100%;
   height: auto !important;
   padding: 1rem !important;
   font-size: clamp(0.7rem, 1.8vw, 1rem) !important;
   min-height: 48px;
+}
+
+.placeholderOverlay {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(160, 160, 160, 0.6);
+  font-size: clamp(0.7rem, 1.8vw, 1rem) !important;
+  font-family: var(--font-press-start), "Press Start 2P", cursive !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 2rem);
+  z-index: 1;
+}
+
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: cursorBlink 1s steps(1) infinite;
+  color: rgba(160, 160, 160, 0.9);
+  font-weight: bold;
+}
+
+@keyframes cursorBlink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
 }
 
 .submitBtn {
@@ -86,9 +124,12 @@
 }
 
 .hint {
-  font-size: 0.6rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
   color: var(--pixel-yellow);
   letter-spacing: 0.1em;
+  text-align: center;
+  width: 100%;
+  margin-top: 0.5rem;
 }
 
 /* Loading Screen */
@@ -209,14 +250,14 @@
 }
 
 .stepNumber {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: var(--accent-primary);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.2rem;
   flex-shrink: 0;
   border: 2px solid white;
 }
@@ -226,13 +267,13 @@
 }
 
 .stepTitle {
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: var(--pixel-yellow);
   margin-bottom: 0.5rem;
 }
 
 .stepText {
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   color: var(--text-muted);
   line-height: 1.6;
 }
@@ -330,7 +371,7 @@
 }
 
 .statLabel {
-  font-size: 0.5rem;
+  font-size: 0.65rem;
   color: var(--text-muted);
   letter-spacing: 0.1em;
 }
@@ -359,7 +400,7 @@
 }
 
 .footerText {
-  font-size: 0.55rem;
+  font-size: 0.7rem;
   text-align: center;
   color: var(--text-muted);
   display: flex;
