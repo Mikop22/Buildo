@@ -8,7 +8,7 @@ from services.image_generator import generate_final_build_image
 
 app = Flask(__name__)
 # Enable CORS for frontend
-# Allow localhost for development and production URLs from environment
+# Allow localhost for development and production URLs
 import os
 allowed_origins = [
     "http://localhost:3000",
@@ -19,7 +19,9 @@ allowed_origins = [
 # Add production frontend URL from environment if set
 if os.getenv("FRONTEND_URL"):
     allowed_origins.append(os.getenv("FRONTEND_URL"))
-CORS(app, origins=allowed_origins)
+# Also allow all vercel.app domains for easier deployment
+allowed_origins.append("https://*.vercel.app")
+CORS(app, origins=allowed_origins, supports_credentials=True)
 
 @app.route('/generate', methods=['POST'])
 def generate():
