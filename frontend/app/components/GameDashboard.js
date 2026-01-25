@@ -8,11 +8,11 @@ import Code from "./Code";
 import Assembly from "./Assembly";
 
 export default function GameDashboard({ projectName }) {
-    const [activeTab, setActiveTab] = useState("inventory");
+    const [activeTab, setActiveTab] = useState("blueprints");
     const router = useRouter();
 
     const handleGenerateBuild = () => {
-        router.push("/final-build");
+        router.push("/");
     };
 
     return (
@@ -24,17 +24,17 @@ export default function GameDashboard({ projectName }) {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
                     <button
                         type="button"
-                        className={`nes-btn ${activeTab === "inventory" ? "is-primary" : ""}`}
-                        onClick={() => setActiveTab("inventory")}
-                    >
-                        INVENTORY
-                    </button>
-                    <button
-                        type="button"
                         className={`nes-btn ${activeTab === "blueprints" ? "is-primary" : ""}`}
                         onClick={() => setActiveTab("blueprints")}
                     >
-                        BLUEPRINTS
+                        VISUALIZE
+                    </button>
+                    <button
+                        type="button"
+                        className={`nes-btn ${activeTab === "inventory" ? "is-primary" : ""}`}
+                        onClick={() => setActiveTab("inventory")}
+                    >
+                        SHOP PARTS
                     </button>
                     <button
                         type="button"
@@ -48,7 +48,7 @@ export default function GameDashboard({ projectName }) {
                         className={`nes-btn ${activeTab === "assembly" ? "is-primary" : ""}`}
                         onClick={() => setActiveTab("assembly")}
                     >
-                        ASSEMBLY
+                        ASSEMBLE
                     </button>
                 </div>
                 <button
@@ -57,14 +57,14 @@ export default function GameDashboard({ projectName }) {
                     onClick={handleGenerateBuild}
                     style={{ marginLeft: "auto", marginRight: "0.5rem" }}
                 >
-                    GENERATE BUILD
+                    BUILD AGAIN
                 </button>
             </div>
 
             {/* Content Area */}
             <div className="dashboard-content">
-                {activeTab === "inventory" && <Inventory />}
                 {activeTab === "blueprints" && <Blueprints />}
+                {activeTab === "inventory" && <Inventory />}
                 {activeTab === "code" && <Code />}
                 {activeTab === "assembly" && <Assembly />}
             </div>

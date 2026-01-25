@@ -13,10 +13,17 @@ const ASSEMBLY_IMAGES_URL = process.env.NEXT_PUBLIC_ASSEMBLY_IMAGES_URL || 'http
  * @returns {Promise<object>} - Parts, assembly steps, and assembled product image
  */
 export async function generateProject(description) {
-  const res = await fetch(`${BACKEND_URL}/generate`, {
+  // Add timestamp to prevent any caching
+  const res = await fetch(`${BACKEND_URL}/generate?t=${Date.now()}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ description })
+    headers: { 
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    },
+    body: JSON.stringify({ description }),
+    cache: 'no-store'
   });
   if (!res.ok) {
     const errorData = await res.json().catch(() => ({}));

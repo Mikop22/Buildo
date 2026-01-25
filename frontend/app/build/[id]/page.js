@@ -28,36 +28,17 @@ export default function BuildPage() {
     if (hasLoadedRef.current) return;
     hasLoadedRef.current = true;
     
-    // Check for cached data synchronously first to avoid hydration mismatch
-    // Use setTimeout to defer state update until after hydration
-    const cachedDataKey = `projectData_${id}`;
-    const cachedDataValue = localStorage.getItem(cachedDataKey);
-    
-    if (cachedDataValue) {
-      // Use cached data, skip loading screen
-      const data = JSON.parse(cachedDataValue);
-      // Clean up cache immediately
-      localStorage.removeItem(cachedDataKey);
-      
-      // Get description from localStorage
-      const savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
-      const project = savedProjects.find(p => p.id === id);
-      const description = project?.name || id.replace(/-/g, ' ');
-      
-      // Set project data immediately
-      const initialProjectData = {
-        description,
-        parts: data,
-        assemblySteps: data.assembly_steps || [],
-        assembledProductImage: data.assembled_product_image?.imageUrl,
-        firmware: data.firmware || null,
-        stepImages: []
-      };
-      
-      // Set state immediately to skip loading screen
-      setProjectData(initialProjectData);
-      setLoading(false);
-      return; // Exit early, don't load from API
+    // Always call API, never use cached data
+    // Clean up ALL possible cached data keys on mount
+    if (typeof window !== 'undefined') {
+      // Remove any cached data for this project ID
+      localStorage.removeItem(`projectData_${id}`);
+      // Also clean up any other potential cache keys
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('projectData_')) {
+          localStorage.removeItem(key);
+        }
+      });
     }
     
     async function loadProject() {
@@ -164,7 +145,7 @@ export default function BuildPage() {
       <PixelBackground variant="tech" />
       <ProjectProvider initialData={projectData}>
         <ProjectDataUpdater projectData={projectData} />
-        <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{ padding: '2rem', maxWidth: '1600px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <GameDashboard projectName={projectData?.description} />
         </div>
       </ProjectProvider>

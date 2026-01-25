@@ -100,14 +100,28 @@ export default function Assembly() {
             let title = `Step ${stepNum}`;
             let instructionText = stepText;
             
+            // Remove step number prefixes from instruction text
+            // Patterns: "Step 1:", "Step 1 -", "1.", "1:", etc.
+            instructionText = instructionText
+                .replace(/^Step\s+\d+\s*[:-]\s*/i, '') // "Step 1:" or "Step 1 -"
+                .replace(/^\d+\.\s*/, '') // "1."
+                .replace(/^\d+\s*[:-]\s*/, '') // "1:" or "1 -"
+                .trim();
+            
             const colonIndex = stepText.indexOf(':');
             if (colonIndex > -1) {
                 const afterColon = stepText.substring(colonIndex + 1).trim();
+                // Remove step number prefix from afterColon too
+                const cleanedAfterColon = afterColon
+                    .replace(/^Step\s+\d+\s*[:-]\s*/i, '')
+                    .replace(/^\d+\.\s*/, '')
+                    .replace(/^\d+\s*[:-]\s*/, '')
+                    .trim();
                 // Take first sentence or first 50 chars as title
-                const firstSentence = afterColon.split('.')[0];
+                const firstSentence = cleanedAfterColon.split('.')[0];
                 if (firstSentence.length < 60) {
                     title = firstSentence;
-                    instructionText = afterColon;
+                    instructionText = cleanedAfterColon;
                 }
             }
             
@@ -122,6 +136,34 @@ export default function Assembly() {
 
     const toggleVideo = () => {
         setIsVideoOpen(!isVideoOpen);
+    };
+
+    const downloadSteps = () => {
+        let content = "ASSEMBLY STEPS\n";
+        content += "=".repeat(50) + "\n\n";
+        
+        assemblySteps.forEach((step, index) => {
+            content += `Step ${step.id}: ${step.title}\n`;
+            content += "-".repeat(50) + "\n";
+            step.instructions.forEach((instruction, idx) => {
+                content += `${idx + 1}. ${instruction}\n`;
+            });
+            if (step.tip) {
+                content += `\nTIP: ${step.tip}\n`;
+            }
+            content += "\n";
+        });
+
+        // Create blob and download
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `assembly-steps-${projectData?.description || 'project'}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     };
 
     return (
@@ -163,23 +205,31 @@ export default function Assembly() {
 
             {/* Main Content Area */}
             <div className={styles.mainContent}>
-                {/* Floating Video Button */}
-                <button
-                    type="button"
-                    className={`nes-btn is-primary ${styles.videoButton} ${isVideoOpen ? styles.videoButtonHidden : ''}`}
-                    onClick={toggleVideo}
-                    title="Open tutorial video"
-                >
-                    <i className="nes-icon youtube is-small"></i>
-                    <span>TUTORIAL VIDEO</span>
-                </button>
-
                 {/* Safety Warnings */}
                 <SafetyWarnings warnings={safetyWarnings} />
 
                 {/* Assembly Steps */}
                 <div className={styles.stepsContainer}>
                     <h2 className={styles.stepsTitle}>ASSEMBLY STEPS</h2>
+                    <div className={styles.stepsButtons}>
+                        <button
+                            type="button"
+                            className={`nes-btn is-primary ${styles.downloadButton}`}
+                            onClick={downloadSteps}
+                            title="Download assembly steps as text file"
+                        >
+                            <span>DOWNLOAD STEPS</span>
+                        </button>
+                        <button
+                            type="button"
+                            className={`nes-btn is-primary ${styles.tutorialButton}`}
+                            onClick={toggleVideo}
+                            title="Open tutorial video"
+                        >
+                            <i className="nes-icon youtube is-small"></i>
+                            <span>TUTORIAL VIDEO</span>
+                        </button>
+                    </div>
                     {assemblySteps.map((step) => (
                         <StepCard key={step.id} step={step} />
                     ))}
@@ -210,6 +260,9 @@ function SafetyWarnings({ warnings }) {
 
 // Step Card Component
 function StepCard({ step }) {
+    const [imageLoaded, setImageLoaded] = useState(false);
+    const [imageError, setImageError] = useState(false);
+
     return (
         <div className={`nes-container is-rounded is-dark ${styles.stepCard}`}>
             <div className={styles.stepHeader}>
@@ -221,11 +274,27 @@ function StepCard({ step }) {
                 {/* Image Section */}
                 <div className={styles.stepImageSection}>
                     {step.imageUrl ? (
-                        <img
-                            src={step.imageUrl}
-                            alt={`Step ${step.id}: ${step.title}`}
-                            className={styles.stepImage}
-                        />
+                        <>
+                            {!imageLoaded && !imageError && (
+                                <div className={styles.imageLoading}>
+                                    <div className={styles.loadingDots}>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            )}
+                            <img
+                                src={step.imageUrl}
+                                alt={`Step ${step.id}: ${step.title}`}
+                                className={`${styles.stepImage} ${imageLoaded ? styles.stepImageLoaded : ''}`}
+                                onLoad={() => setImageLoaded(true)}
+                                onError={() => {
+                                    setImageError(true);
+                                    setImageLoaded(false);
+                                }}
+                            />
+                        </>
                     ) : (
                         <div className={styles.stepImagePlaceholder}>
                             <i className="nes-icon is-large image"></i>
