@@ -38,11 +38,18 @@ if not GEMINI_API_KEY:
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
-TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "gemini")
+TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "gemini", "parts")
 with open(os.path.join(TEMPLATES_PATH, "system_prompt.txt"), "r", encoding="utf-8") as f:
     SYSTEM_PROMPT = f.read()
 with open(os.path.join(TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
     USER_PROMPT_TMPL = f.read()
+
+# Load final build image generation templates
+FINAL_BUILD_TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "gemini", "final_build")
+with open(os.path.join(FINAL_BUILD_TEMPLATES_PATH, "system_prompt.txt"), "r", encoding="utf-8") as f:
+    FINAL_BUILD_SYSTEM_PROMPT = f.read()
+with open(os.path.join(FINAL_BUILD_TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
+    FINAL_BUILD_USER_PROMPT_TMPL = f.read()
 
 VALID_CATEGORIES = {
     "Microcontrollers": ["ESP", "Arduino", "RP2040", "STM"],
@@ -165,5 +172,5 @@ def fetch_parts_by_category(description: str) -> dict:
     # Ensure Components is always present in output (even if empty)
     if "Components" not in output:
         output["Components"] = {}
-    
+
     return output

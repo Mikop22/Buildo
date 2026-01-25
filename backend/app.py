@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from services.gemini import fetch_parts_by_category
 from services.snowflake import generate_code_and_steps
 from services.cache import get_cached, save_cached
-from services.image_generator import generate_assembled_product_image
+from services.image_generator import generate_final_build_image
 
 app = Flask(__name__)
 
@@ -21,7 +21,7 @@ def generate():
     code_steps = generate_code_and_steps(parts_by_category)
     
     # Generate assembled product image with all parts put together
-    assembled_image = generate_assembled_product_image(parts_by_category, description)
+    assembled_image = generate_final_build_image(parts_by_category, description)
     
     # Build result with parts and generated assembled image
     result = dict(parts_by_category)
@@ -30,7 +30,7 @@ def generate():
     # Add the assembled product image
     if assembled_image:
         result["assembled_product_image"] = {
-            "imageUrl": assembled_image,
+            "imageUrl": f"data:image/png;base64,{assembled_image}",
             "description": description,
             "parts": []
         }
