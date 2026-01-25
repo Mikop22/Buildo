@@ -35,8 +35,13 @@ export default function Navbar() {
                 </div>
 
                 <div className={styles.menu}>
-                    <Link href="/arcade" className={`${styles.menuItem} ${pathname === "/arcade" ? styles.active : ""}`}>
+                    <Link href="/leaderboard" className={`${styles.menuItem} ${pathname === "/leaderboard" ? styles.active : ""}`}>
                         <i className="nes-icon trophy is-small"></i>
+                        <span>LEADERS</span>
+                    </Link>
+
+                    <Link href="/arcade" className={`${styles.menuItem} ${pathname === "/arcade" ? styles.active : ""}`}>
+                        <i className="nes-icon coin is-small"></i>
                         <span>ARCADE</span>
                     </Link>
 
