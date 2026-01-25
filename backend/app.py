@@ -1,10 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
+from flask_cors import CORS
+import requests
 from services.gemini import fetch_parts_by_category
 from services.snowflake import generate_code_and_steps
 from services.cache import get_cached, save_cached
 from services.image_generator import generate_final_build_image
 
 app = Flask(__name__)
+# Enable CORS for frontend
+CORS(app, origins=["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000", "http://127.0.0.1:3001"])
 
 @app.route('/generate', methods=['POST'])
 def generate():
@@ -72,6 +76,41 @@ def generate():
     
     save_cached(description, result)
     return jsonify(result)
+
+
+@app.route('/proxy-image', methods=['GET'])
+def proxy_image():
+    """Proxy endpoint to fetch remote images and bypass CORS restrictions."""
+    url = request.args.get('url')
+    if not url:
+        return jsonify({'error': 'Missing url parameter'}), 400
+    
+    try:
+        # Fetch the image from the remote URL
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        # Return the image with appropriate content type
+        content_type = response.headers.get('content-type', 'image/png')
+        return Response(
+            response.content,
+            mimetype=content_type,
+            headers={
+                'Cache-Control': 'public, max-age=3600'
+            }
+        )
+    except requests.RequestException as e:
+        return jsonify({'error': f'Failed to fetch image: {str(e)}'}), 500
+
+
+@app.route('/health', methods=['GET'])
+def health():
+    """Health check endpoint."""
+    return jsonify({'status': 'ok'})
+
 
 if __name__ == '__main__':
     app.run()
