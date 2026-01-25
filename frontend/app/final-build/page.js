@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
+import PixelBackground from "../components/PixelBackground";
 
 // Mock parts data - using similar structure to Inventory
 const mockParts = [
@@ -44,70 +45,73 @@ export default function BuildComplete() {
     };
 
     return (
-        <div className={styles.buildCompleteContainer}>
-            {/* Navigation Controls */}
-            <div className={styles.navigationBar}>
-                <button
-                    type="button"
-                    className="nes-btn"
-                    onClick={handleBack}
-                >
-                    ← BACK
-                </button>
-                <div className={styles.congratulationsMessage}>
-                    <h1 className={styles.congratulationsTitle}>
-                        Congratulations on completing your build!
-                    </h1>
+        <>
+            <PixelBackground variant="tech" />
+            <div className={styles.buildCompleteContainer}>
+                {/* Navigation Controls */}
+                <div className={styles.navigationBar}>
+                    <button
+                        type="button"
+                        className="nes-btn"
+                        onClick={handleBack}
+                    >
+                        ← BACK
+                    </button>
+                    <div className={styles.congratulationsMessage}>
+                        <h1 className={styles.congratulationsTitle}>
+                            Congratulations on completing your build!
+                        </h1>
+                    </div>
+                    <button
+                        type="button"
+                        className="nes-btn is-primary"
+                        onClick={handleNewBuild}
+                    >
+                        MAKE A NEW BUILD
+                    </button>
                 </div>
-                <button
-                    type="button"
-                    className="nes-btn is-primary"
-                    onClick={handleNewBuild}
-                >
-                    MAKE A NEW BUILD
-                </button>
-            </div>
 
-            {/* Main Content */}
-            <div className={styles.mainContent}>
-                {/* Hero Section - Completed Build Image */}
-                <div className={styles.heroSection}>
-                    <div className={`nes-container is-rounded is-dark ${styles.buildImageContainer}`}>
-                        <div className={styles.buildImagePlaceholder}>
-                            <i className="nes-icon is-large trophy"></i>
-                            <p className={styles.placeholderText}>Completed Build Image</p>
+                {/* Main Content */}
+                <div className={styles.mainContent}>
+                    {/* Hero Section - Completed Build Image */}
+                    <div className={styles.heroSection}>
+                        <div className={`nes-container is-rounded is-dark ${styles.buildImageContainer}`}>
+                            <div className={styles.buildImagePlaceholder}>
+                                <i className="nes-icon is-large trophy"></i>
+                                <p className={styles.placeholderText}>Completed Build Image</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                {/* Parts List Sidebar */}
-                <div className={styles.partsSection}>
-                    <div className={`nes-container is-rounded is-dark ${styles.partsCard}`}>
-                        <p className={styles.partsTitle}>PARTS USED</p>
-                        <div className={styles.partsList}>
-                            {mockParts.map((part, index) => (
-                                <div key={part.id}>
-                                    <div className={styles.partItem}>
-                                        <div className={styles.partThumbnail}>
-                                            {part.imageUrl ? (
-                                                <img src={part.imageUrl} alt={part.title} />
-                                            ) : (
-                                                <div className={styles.partPlaceholderImage}>
-                                                    <i className="nes-icon is-medium package"></i>
-                                                </div>
-                                            )}
+                    {/* Parts List Sidebar */}
+                    <div className={styles.partsSection}>
+                        <div className={`nes-container is-rounded is-dark ${styles.partsCard}`}>
+                            <p className={styles.partsTitle}>PARTS USED</p>
+                            <div className={styles.partsList}>
+                                {mockParts.map((part, index) => (
+                                    <div key={part.id}>
+                                        <div className={styles.partItem}>
+                                            <div className={styles.partThumbnail}>
+                                                {part.imageUrl ? (
+                                                    <img src={part.imageUrl} alt={part.title} />
+                                                ) : (
+                                                    <div className={styles.partPlaceholderImage}>
+                                                        <i className="nes-icon is-medium package"></i>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <div className={styles.partInfo}>
+                                                <h3 className={styles.partTitle}>{part.title}</h3>
+                                            </div>
                                         </div>
-                                        <div className={styles.partInfo}>
-                                            <h3 className={styles.partTitle}>{part.title}</h3>
-                                        </div>
+                                        {index < mockParts.length - 1 && <div className={styles.partDivider} />}
                                     </div>
-                                    {index < mockParts.length - 1 && <div className={styles.partDivider} />}
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
