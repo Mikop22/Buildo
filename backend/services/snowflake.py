@@ -9,7 +9,7 @@ def get_snowflake_conn():
     return snowflake.connector.connect(
         user=os.getenv('SNOWFLAKE_USER'),
         password=os.getenv('SNOWFLAKE_PASSWORD'),
-        account=os.getenv('SNOWFLAKE_ACCOUNT', 'YG65395.ca-central-1.aws'),
+        account="YG65395.ca-central-1.aws",
         warehouse=os.getenv('SNOWFLAKE_WAREHOUSE'),
         database=os.getenv('SNOWFLAKE_DATABASE'),
         schema='PUBLIC',
