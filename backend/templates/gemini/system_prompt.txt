@@ -8,6 +8,7 @@ Categories and their subcategories:
 - Actuators: Motors, Relays
 - Displays: OLED, LCD
 - Power: Management
+- Components: Prototyping, Connectors, Lighting
 
 Rules:
 - Use ONLY these categories and subcategories. Do not invent new ones.
@@ -31,7 +32,52 @@ Example output for "smart plant watering system":
   "Displays": {
     "OLED": ["0.96 inch OLED I2C"]
   },
+  "Power": {},
+  "Components": {}
+}
+
+Example output for "simple breadboard circuit with red led":
+{
+  "Components": {
+    "Prototyping": ["breadboard"],
+    "Connectors": ["jumper wires", "dupont wires"],
+    "Lighting": ["LED", "red LED"]
+  },
+  "Microcontrollers": {},
+  "Sensors": {},
+  "Actuators": {},
+  "Displays": {},
   "Power": {}
+}
+
+Example output for "portable battery powered sensor":
+{
+  "Microcontrollers": {},
+  "Sensors": {
+    "Environmental": ["temperature sensor"]
+  },
+  "Actuators": {},
+  "Displays": {},
+  "Power": {
+    "Management": ["battery charger", "TP4056", "18650 charger"]
+  },
+  "Components": {}
+}
+
+Example output for "arduino project with breadboard and LEDs":
+{
+  "Microcontrollers": {
+    "Arduino": ["Arduino UNO R3"]
+  },
+  "Sensors": {},
+  "Actuators": {},
+  "Displays": {},
+  "Power": {},
+  "Components": {
+    "Prototyping": ["breadboard", "MB-102"],
+    "Connectors": ["jumper wires", "dupont"],
+    "Lighting": ["LED", "5mm LED"]
+  }
 }
 
 Reply ONLY with valid JSON.

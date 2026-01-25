@@ -49,17 +49,23 @@ VALID_CATEGORIES = {
     "Sensors": ["Environmental", "Gas", "Motion"],
     "Actuators": ["Motors", "Relays"],
     "Displays": ["OLED", "LCD"],
-    "Power": ["Management"]
+    "Power": ["Management"],
+    "Components": ["Prototyping", "Connectors", "Lighting"]
 }
 
 def search_parts_by_keywords(category: str, subcategory: str, keywords: list, limit: int = 3) -> list:
     parts = get_by_cat_subcat(category, subcategory)
+    if not parts:
+        return []
+    
     results = []
     
     for part in parts:
         name_lower = part.get("name", "").lower()
         for kw in keywords:
-            if kw.lower() in name_lower:
+            kw_lower = kw.lower().strip()
+            # More flexible matching: check if keyword appears as whole word or substring
+            if kw_lower in name_lower:
                 results.append(part)
                 break
     
@@ -86,7 +92,53 @@ def fetch_parts_by_category(description: str) -> dict:
     
     requested_parts = json.loads(raw_output)
     
-    # Build output with matched parts from database
+    # Check if Components is missing
+    if "Components" not in requested_parts:
+        print("WARNING: Components category missing from Gemini output!")
+    
+    # Fallback: Auto-detect common component keywords from description
+    description_lower = description.lower()
+    component_keywords = {}
+    
+    breadboard_words = ["breadboard", "protoboard", "prototype"]
+    wire_words = ["wire", "cable", "jumper", "dupont", "connector"]
+    led_words = ["led", "light", "lighting", "diode"]
+    
+    if any(word in description_lower for word in breadboard_words):
+        if "Prototyping" not in component_keywords:
+            component_keywords["Prototyping"] = []
+        component_keywords["Prototyping"].extend(["breadboard", "MB-102"])
+    
+    if any(word in description_lower for word in wire_words):
+        if "Connectors" not in component_keywords:
+            component_keywords["Connectors"] = []
+        component_keywords["Connectors"].extend(["jumper wire", "dupont"])
+    
+    if any(word in description_lower for word in led_words):
+        if "Lighting" not in component_keywords:
+            component_keywords["Lighting"] = []
+        component_keywords["Lighting"].extend(["LED", "light emitting diode"])
+    
+    # Merge fallback keywords if Components is empty or missing
+    if component_keywords:
+        if "Components" not in requested_parts:
+            requested_parts["Components"] = {}
+        for subcat, keywords in component_keywords.items():
+            # Always use fallback keywords if Components was empty or subcategory is missing
+            if subcat not in requested_parts["Components"] or not requested_parts["Components"][subcat]:
+                requested_parts["Components"][subcat] = keywords
+            else:
+                # Merge keywords if both exist
+                existing = requested_parts["Components"][subcat]
+                merged = list(set(existing + keywords))
+                requested_parts["Components"][subcat] = merged
+    
+    # Ensure all required categories are present (Gemini sometimes omits them)
+    for category in VALID_CATEGORIES.keys():
+        if category not in requested_parts:
+            requested_parts[category] = {}
+    
+    # Build output with matched parts from database - ensure ALL categories are present
     output = {cat: {} for cat in VALID_CATEGORIES.keys()}
     
     for category, subcats in requested_parts.items():
@@ -105,5 +157,9 @@ def fetch_parts_by_category(description: str) -> dict:
             matched_parts = search_parts_by_keywords(category, subcategory, keywords)
             if matched_parts:
                 output[category][subcategory] = matched_parts
+    
+    # Ensure Components is always present in output (even if empty)
+    if "Components" not in output:
+        output["Components"] = {}
     
     return output
