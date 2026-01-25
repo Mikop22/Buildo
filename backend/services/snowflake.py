@@ -39,11 +39,11 @@ def call_cortex(prompt):
 def generate_code_and_steps(parts_by_category: dict) -> dict:
     parts_json = json.dumps(parts_by_category, indent=2)
     
-    TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "snowflake")
+    INSTRUCTIONS_TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "snowflake", "instructions")
     
-    with open(os.path.join(TEMPLATES_PATH, "system_prompt.txt"), "r", encoding="utf-8") as f:
+    with open(os.path.join(INSTRUCTIONS_TEMPLATES_PATH, "system_prompt.txt"), "r", encoding="utf-8") as f:
         system_prompt = f.read()
-    with open(os.path.join(TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
+    with open(os.path.join(INSTRUCTIONS_TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
         user_prompt_template = f.read()
     
     assembly_task = "Generate step-by-step PHYSICAL ASSEMBLY instructions for putting together this device using these parts:"
@@ -65,6 +65,77 @@ def generate_code_and_steps(parts_by_category: dict) -> dict:
     return {
         "assembly_steps": assembly_steps
     }
+
+def generate_skeleton_code(parts_by_category: dict, description: str, assembly_steps: list) -> str:
+    """
+    Generate skeleton code for the device based on parts, description, and assembly instructions.
+    
+    Args:
+        parts_by_category: Dictionary with nested structure containing matched parts
+        description: User's device description
+        assembly_steps: List of assembly instruction strings
+        
+    Returns:
+        Skeleton code as a string, or None if generation fails
+    """
+    parts_json = json.dumps(parts_by_category, indent=2)
+    assembly_steps_text = "\n".join([f"{i+1}. {step}" for i, step in enumerate(assembly_steps)])
+    
+    CODE_TEMPLATES_PATH = os.path.join(os.path.dirname(__file__), "..", "templates", "snowflake", "code")
+    
+    with open(os.path.join(CODE_TEMPLATES_PATH, "system_prompt.txt"), "r", encoding="utf-8") as f:
+        system_prompt = f.read()
+    with open(os.path.join(CODE_TEMPLATES_PATH, "user_prompt.txt"), "r", encoding="utf-8") as f:
+        user_prompt_template = f.read()
+    
+    user_prompt = user_prompt_template.format(
+        description=description,
+        parts_json=parts_json,
+        assembly_steps=assembly_steps_text
+    )
+    
+    full_prompt = f"{system_prompt}\n\n{user_prompt}"
+    
+    code_response = call_cortex(full_prompt)
+    
+    if not code_response:
+        return None
+    
+    # Check if response indicates no code needed
+    response_lower = code_response.lower().strip()
+    if "no code required" in response_lower or "no code needed" in response_lower or response_lower == "":
+        return None
+    
+    # Extract code from markdown code blocks if present
+    if "```" in code_response:
+        # Handle multiple code blocks
+        blocks = []
+        lines = code_response.split("\n")
+        current_block = []
+        in_code_block = False
+        
+        for line in lines:
+            if line.strip().startswith("```"):
+                if in_code_block:
+                    # End of code block - save it
+                    if current_block:
+                        blocks.append("\n".join(current_block))
+                        current_block = []
+                in_code_block = not in_code_block
+                continue
+            if in_code_block:
+                current_block.append(line)
+        
+        # Add final block if any
+        if current_block:
+            blocks.append("\n".join(current_block))
+        
+        # Join multiple blocks with double newline, or return single block
+        if blocks:
+            return "\n\n".join(blocks) if len(blocks) > 1 else blocks[0]
+        return code_response
+    
+    return code_response
 
 if __name__ == "__main__":
     try:
