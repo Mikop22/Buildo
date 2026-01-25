@@ -115,9 +115,8 @@ export default function Home() {
 
     try {
       // Actually call the API to generate the project
-      const projectData = await generateProject(inputText);
-      // Store the generated data so build page doesn't need to regenerate
-      localStorage.setItem(`projectData_${generatedProjectId}`, JSON.stringify(projectData));
+      await generateProject(inputText);
+      // Don't store cache - build page will always call API fresh
       // When API call completes, show completion state
       setIsBuildComplete(true);
     } catch (error) {

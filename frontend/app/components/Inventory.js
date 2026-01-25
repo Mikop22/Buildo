@@ -215,7 +215,18 @@ function CartItemRow({ item, onQuantityChange, onRemove, subtotal }) {
 
             {/* Item Info */}
             <div className={styles.itemInfo}>
-                <h3 className={styles.itemTitle}>{item.title}</h3>
+                {item.url ? (
+                    <a 
+                        href={item.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={styles.itemTitleLink}
+                    >
+                        <h3 className={styles.itemTitle}>{item.title}</h3>
+                    </a>
+                ) : (
+                    <h3 className={styles.itemTitle}>{item.title}</h3>
+                )}
                 <p className={styles.itemDescription}>{item.description}</p>
                 {item.rating && (
                     <div className={styles.ratingLabel}>

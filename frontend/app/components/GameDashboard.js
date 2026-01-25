@@ -8,7 +8,7 @@ import Code from "./Code";
 import Assembly from "./Assembly";
 
 export default function GameDashboard({ projectName }) {
-    const [activeTab, setActiveTab] = useState("inventory");
+    const [activeTab, setActiveTab] = useState("blueprints");
     const router = useRouter();
 
     const handleGenerateBuild = () => {
@@ -24,17 +24,17 @@ export default function GameDashboard({ projectName }) {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
                     <button
                         type="button"
-                        className={`nes-btn ${activeTab === "inventory" ? "is-primary" : ""}`}
-                        onClick={() => setActiveTab("inventory")}
-                    >
-                        INVENTORY
-                    </button>
-                    <button
-                        type="button"
                         className={`nes-btn ${activeTab === "blueprints" ? "is-primary" : ""}`}
                         onClick={() => setActiveTab("blueprints")}
                     >
-                        BLUEPRINTS
+                        VISUALIZE
+                    </button>
+                    <button
+                        type="button"
+                        className={`nes-btn ${activeTab === "inventory" ? "is-primary" : ""}`}
+                        onClick={() => setActiveTab("inventory")}
+                    >
+                        SHOP PARTS
                     </button>
                     <button
                         type="button"
@@ -63,8 +63,8 @@ export default function GameDashboard({ projectName }) {
 
             {/* Content Area */}
             <div className="dashboard-content">
-                {activeTab === "inventory" && <Inventory />}
                 {activeTab === "blueprints" && <Blueprints />}
+                {activeTab === "inventory" && <Inventory />}
                 {activeTab === "code" && <Code />}
                 {activeTab === "assembly" && <Assembly />}
             </div>
