@@ -40,4 +40,6 @@ def create_app() -> Flask:
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=config.DEBUG)
+    import os
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host="0.0.0.0", port=port, debug=config.DEBUG)
