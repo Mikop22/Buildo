@@ -88,10 +88,6 @@ export default function Inventory() {
         return getCartSubtotal() + getTax();
     };
 
-    // Handle checkout (placeholder)
-    const handleCheckout = () => {
-        alert("Checkout functionality coming soon! Total: $" + getTotal().toFixed(2));
-    };
 
     // Empty cart state
     if (cartItems.length === 0) {
@@ -143,7 +139,6 @@ export default function Inventory() {
                     subtotal={getCartSubtotal()}
                     tax={getTax()}
                     total={getTotal()}
-                    onCheckout={handleCheckout}
                 />
             </div>
         </div>
@@ -227,7 +222,7 @@ function CartItemRow({ item, onQuantityChange, onRemove, subtotal }) {
 }
 
 // Cart Summary Component
-function CartSummary({ subtotal, tax, total, onCheckout }) {
+function CartSummary({ subtotal, tax, total }) {
     return (
         <div className={`nes-container is-rounded is-dark ${styles.summaryCard}`}>
             <p className={styles.summaryTitle}>ORDER SUMMARY</p>
@@ -247,13 +242,6 @@ function CartSummary({ subtotal, tax, total, onCheckout }) {
                     <span className="glow-green">${total.toFixed(2)}</span>
                 </div>
             </div>
-
-            <button
-                className={`nes-btn is-success ${styles.checkoutBtn}`}
-                onClick={onCheckout}
-            >
-                GENERATE BUILD
-            </button>
         </div>
     );
 }

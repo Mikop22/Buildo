@@ -1,0 +1,261 @@
+/* Build Complete Container */
+.buildCompleteContainer {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+/* Navigation Bar */
+.navigationBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.navigationBar button {
+    flex-shrink: 0;
+}
+
+/* Main Content - Desktop: Side by Side, Mobile: Stacked */
+.mainContent {
+    display: flex;
+    gap: 2rem;
+    flex-direction: row;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+/* Ensure both containers align perfectly at the top */
+.heroSection,
+.partsSection {
+    display: flex;
+    align-items: flex-start;
+}
+
+/* Force alignment by ensuring both NES containers start at same position */
+.buildImageContainer,
+.partsCard {
+    vertical-align: top;
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        flex-direction: column;
+    }
+}
+
+/* Hero Section */
+.heroSection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.buildImageContainer {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .buildImageContainer {
+        min-height: 300px;
+        padding: 1.5rem;
+    }
+}
+
+.buildImagePlaceholder {
+    width: 100%;
+    height: 100%;
+    min-height: 350px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .buildImagePlaceholder {
+        min-height: 250px;
+    }
+}
+
+.buildImagePlaceholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    image-rendering: pixelated;
+}
+
+.placeholderText {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Congratulations Message */
+.congratulationsMessage {
+    flex: 1;
+    text-align: center;
+    padding: 0 1rem;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.congratulationsTitle {
+    font-size: 24px;
+    color: var(--pixel-yellow);
+    margin: 0;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .congratulationsTitle {
+        font-size: 18px;
+    }
+    
+    .congratulationsMessage {
+        order: 2;
+        width: 100%;
+        padding: 1rem 0 0 0;
+    }
+    
+    .navigationBar {
+        flex-direction: column;
+    }
+    
+    .navigationBar button:first-child {
+        order: 1;
+    }
+    
+    .navigationBar button:last-child {
+        order: 3;
+    }
+}
+
+/* Parts Section - Sidebar on Desktop */
+.partsSection {
+    width: 350px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 0;
+    padding-top: 0;
+    align-items: flex-start;
+}
+
+/* Raise parts section to align with build image */
+@media (min-width: 769px) {
+    .partsSection {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .partsSection {
+        width: 100%;
+    }
+}
+
+.partsCard {
+    position: sticky;
+    top: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    align-self: flex-start;
+}
+
+@media (max-width: 768px) {
+    .partsCard {
+        position: static;
+    }
+}
+
+.partsTitle {
+    font-size: 14px;
+    margin-bottom: 1.5rem;
+    margin-top: 0;
+    color: var(--pixel-yellow);
+    text-transform: uppercase;
+}
+
+.partsList {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Part Item */
+.partItem {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    align-items: center;
+}
+
+.partThumbnail {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+}
+
+.partThumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 2px solid var(--accent-secondary);
+    border-radius: 4px;
+    image-rendering: pixelated;
+}
+
+.partPlaceholderImage {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.partInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.partTitle {
+    font-size: 14px;
+    color: var(--text-light);
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.partDivider {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0.5rem 0;
+}

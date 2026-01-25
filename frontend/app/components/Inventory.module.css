@@ -3,6 +3,7 @@
     display: flex;
     gap: 2rem;
     flex-direction: row;
+    align-items: flex-start;
 }
 
 @media (max-width: 768px) {
@@ -15,11 +16,17 @@
 .cartItemsSection {
     flex: 1;
     min-width: 0; /* Prevents flex item from overflowing */
+    margin-top: 0;
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .sectionTitle {
     font-size: 14px;
     margin-bottom: 1.5rem;
+    margin-top: 0;
     color: var(--pixel-yellow);
     text-transform: uppercase;
 }
@@ -222,6 +229,11 @@
 .summarySection {
     width: 320px;
     flex-shrink: 0;
+    margin-top: 0;
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 @media (max-width: 768px) {
@@ -232,7 +244,11 @@
 
 .summaryCard {
     position: sticky;
-    top: 2rem;
+    top: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    align-self: flex-start;
 }
 
 @media (max-width: 768px) {
@@ -244,6 +260,7 @@
 .summaryTitle {
     font-size: 14px;
     margin-bottom: 1.5rem;
+    margin-top: 0;
     color: var(--pixel-yellow);
     text-transform: uppercase;
 }
