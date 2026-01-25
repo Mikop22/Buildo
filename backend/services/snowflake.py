@@ -2,6 +2,7 @@ import os
 import json
 import snowflake.connector
 from dotenv import load_dotenv
+from llm_config import SNOWFLAKE_CONFIG
 
 load_dotenv()
 
@@ -24,7 +25,7 @@ def call_cortex(prompt):
     
     cur.execute(f"""
         SELECT SNOWFLAKE.CORTEX.COMPLETE(
-            'claude-3-5-sonnet',
+            '{SNOWFLAKE_CONFIG["model"]}',
             '{escaped_prompt}'
         )
     """)
