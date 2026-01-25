@@ -276,18 +276,26 @@ function StepCard({ step }) {
                     {step.imageUrl ? (
                         <>
                             {!imageLoaded && !imageError && (
-                                <div className={styles.imageLoading}>
-                                    <div className={styles.loadingDots}>
-                                        <span></span>
-                                        <span></span>
-                                        <span></span>
-                                    </div>
+                                <div className={styles.stepImagePlaceholder} style={{ 
+                                    display: 'flex', 
+                                    flexDirection: 'column', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center' 
+                                }}>
+                                    <i className="nes-icon is-large image" style={{ opacity: 0.3 }}></i>
+                                    <p className={styles.placeholderText} style={{ 
+                                        color: "#666", 
+                                        fontSize: "0.85rem",
+                                        marginTop: "0.5rem",
+                                        textAlign: "center"
+                                    }}>Loading...</p>
                                 </div>
                             )}
                             <img
                                 src={step.imageUrl}
                                 alt={`Step ${step.id}: ${step.title}`}
                                 className={`${styles.stepImage} ${imageLoaded ? styles.stepImageLoaded : ''}`}
+                                style={{ display: imageLoaded ? 'block' : 'none' }}
                                 onLoad={() => setImageLoaded(true)}
                                 onError={() => {
                                     setImageError(true);
@@ -296,9 +304,19 @@ function StepCard({ step }) {
                             />
                         </>
                     ) : (
-                        <div className={styles.stepImagePlaceholder}>
-                            <i className="nes-icon is-large image"></i>
-                            <p className={styles.placeholderText}>Step {step.id} Image</p>
+                        <div className={styles.stepImagePlaceholder} style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column', 
+                            alignItems: 'center', 
+                            justifyContent: 'center' 
+                        }}>
+                            <i className="nes-icon is-large image" style={{ opacity: 0.3 }}></i>
+                            <p className={styles.placeholderText} style={{ 
+                                color: "#666", 
+                                fontSize: "0.85rem",
+                                marginTop: "0.5rem",
+                                textAlign: "center"
+                            }}>Loading...</p>
                         </div>
                     )}
                 </div>
