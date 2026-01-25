@@ -12,7 +12,7 @@ export default function GameDashboard({ projectName }) {
     const router = useRouter();
 
     const handleGenerateBuild = () => {
-        router.push("/final-build");
+        router.push("/");
     };
 
     return (
@@ -57,7 +57,7 @@ export default function GameDashboard({ projectName }) {
                     onClick={handleGenerateBuild}
                     style={{ marginLeft: "auto", marginRight: "0.5rem" }}
                 >
-                    GENERATE BUILD
+                    BUILD AGAIN
                 </button>
             </div>
 

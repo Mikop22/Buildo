@@ -138,6 +138,34 @@ export default function Assembly() {
         setIsVideoOpen(!isVideoOpen);
     };
 
+    const downloadSteps = () => {
+        let content = "ASSEMBLY STEPS\n";
+        content += "=".repeat(50) + "\n\n";
+        
+        assemblySteps.forEach((step, index) => {
+            content += `Step ${step.id}: ${step.title}\n`;
+            content += "-".repeat(50) + "\n";
+            step.instructions.forEach((instruction, idx) => {
+                content += `${idx + 1}. ${instruction}\n`;
+            });
+            if (step.tip) {
+                content += `\nTIP: ${step.tip}\n`;
+            }
+            content += "\n";
+        });
+
+        // Create blob and download
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `assembly-steps-${projectData?.description || 'project'}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <div className={styles.assemblyContainer}>
             {/* Video Panel Section - Pushes content down when open */}
@@ -177,23 +205,31 @@ export default function Assembly() {
 
             {/* Main Content Area */}
             <div className={styles.mainContent}>
-                {/* Floating Video Button */}
-                <button
-                    type="button"
-                    className={`nes-btn is-primary ${styles.videoButton} ${isVideoOpen ? styles.videoButtonHidden : ''}`}
-                    onClick={toggleVideo}
-                    title="Open tutorial video"
-                >
-                    <i className="nes-icon youtube is-small"></i>
-                    <span>TUTORIAL VIDEO</span>
-                </button>
-
                 {/* Safety Warnings */}
                 <SafetyWarnings warnings={safetyWarnings} />
 
                 {/* Assembly Steps */}
                 <div className={styles.stepsContainer}>
                     <h2 className={styles.stepsTitle}>ASSEMBLY STEPS</h2>
+                    <div className={styles.stepsButtons}>
+                        <button
+                            type="button"
+                            className={`nes-btn is-primary ${styles.downloadButton}`}
+                            onClick={downloadSteps}
+                            title="Download assembly steps as text file"
+                        >
+                            <span>DOWNLOAD STEPS</span>
+                        </button>
+                        <button
+                            type="button"
+                            className={`nes-btn is-primary ${styles.tutorialButton}`}
+                            onClick={toggleVideo}
+                            title="Open tutorial video"
+                        >
+                            <i className="nes-icon youtube is-small"></i>
+                            <span>TUTORIAL VIDEO</span>
+                        </button>
+                    </div>
                     {assemblySteps.map((step) => (
                         <StepCard key={step.id} step={step} />
                     ))}

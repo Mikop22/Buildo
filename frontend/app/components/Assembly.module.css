@@ -99,44 +99,41 @@
     width: 100%;
 }
 
-/* Floating Video Button */
-.videoButton {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    z-index: 10;
+/* Steps Buttons */
+.stepsButtons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}
+
+.downloadButton,
+.tutorialButton {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.25rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    transition: opacity 0.3s ease, transform 0.3s ease;
     font-size: 11px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.videoButton:hover {
+.downloadButton:hover,
+.tutorialButton:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
-}
-
-.videoButtonHidden {
-    opacity: 0;
-    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {
-    .videoButton {
-        position: relative;
-        right: auto;
-        top: auto;
-        transform: none;
-        width: 100%;
-        margin-bottom: 1.5rem;
-        justify-content: center;
+    .stepsButtons {
+        flex-direction: column;
+        gap: 1rem;
     }
 
-    .videoButtonHidden {
-        display: none;
+    .downloadButton,
+    .tutorialButton {
+        width: 100%;
+        justify-content: center;
     }
 
     .videoSection {
