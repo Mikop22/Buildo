@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { generateProject } from "@/lib/api";
 import styles from "./page.module.css";
 import PixelBackground from "./components/PixelBackground";
 
@@ -20,6 +21,8 @@ export default function Home() {
   const router = useRouter();
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isBuildComplete, setIsBuildComplete] = useState(false);
+  const [projectId, setProjectId] = useState("");
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -66,24 +69,42 @@ export default function Home() {
     }
   }, [isWhatYouGetOpen]);
 
+  useEffect(() => {
+    if (!isBuildComplete || !projectId) return;
 
-  const handleCreate = () => {
+    const handleKeyPress = (e) => {
+      if (e.key === "Enter") {
+        // Use Next.js router for seamless client-side navigation
+        // This avoids the full page reload flash
+        router.push(`/build/${projectId}`);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [isBuildComplete, projectId, router]);
+
+
+  const handleCreate = async () => {
     if (!inputText.trim()) return;
 
     setIsLoading(true);
+    setIsBuildComplete(false);
     // Generate a URL-friendly ID from the project name
-    const projectId = inputText
+    const generatedProjectId = inputText
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
 
+    setProjectId(generatedProjectId);
+
     // Save to localStorage
     const savedProjects = JSON.parse(localStorage.getItem("savedProjects") || "[]");
-    const exists = savedProjects.some(p => p.id === projectId);
+    const exists = savedProjects.some(p => p.id === generatedProjectId);
 
     if (!exists) {
       const newProject = {
-        id: projectId,
+        id: generatedProjectId,
         name: inputText,
         date: new Date().toLocaleDateString(),
         status: "In Progress"
@@ -92,10 +113,18 @@ export default function Home() {
       localStorage.setItem("savedProjects", JSON.stringify(updatedProjects));
     }
 
-    // Navigate to the build page
-    setTimeout(() => {
-      router.push(`/build/${projectId}`);
-    }, 2000);
+    try {
+      // Actually call the API to generate the project
+      const projectData = await generateProject(inputText);
+      // Store the generated data so build page doesn't need to regenerate
+      localStorage.setItem(`projectData_${generatedProjectId}`, JSON.stringify(projectData));
+      // When API call completes, show completion state
+      setIsBuildComplete(true);
+    } catch (error) {
+      console.error("Build failed:", error);
+      // On error, still navigate but show error on build page
+      setIsBuildComplete(true);
+    }
   };
 
   return (
@@ -202,16 +231,27 @@ export default function Home() {
         </section>
       )}
 
-      {/* Loading Screen */}
-      {isLoading && (
-        <div className={styles.loadingScreen}>
-          <div className={styles.batteryContainer}>
-            <div className={styles.batteryBody}>
-              <div className={styles.batteryLevel}></div>
+      {/* Loading Screen - Keep visible during navigation to prevent flash */}
+      {(isLoading || isBuildComplete) && (
+        <div className={`${styles.loadingScreen} ${isBuildComplete ? styles.loadingComplete : ""}`}>
+          {!isBuildComplete && (
+            <div className={styles.batteryContainer}>
+              <div className={styles.batteryBody}>
+                <div className={styles.batteryLevel}></div>
+              </div>
+              <div className={styles.batteryBump}></div>
             </div>
-            <div className={styles.batteryBump}></div>
-          </div>
-          <p className={`${styles.loadingText} blink`}>GENERATING BUILD...</p>
+          )}
+          {!isBuildComplete ? (
+            <p className={`${styles.loadingText} blink`}>BUILDING...</p>
+          ) : (
+            <>
+              <p className={styles.builtText}>BUILT!</p>
+              <p className={styles.proceedText}>
+                <span className="blink">▶</span> Press ENTER to proceed
+              </p>
+            </>
+          )}
         </div>
       )}
 

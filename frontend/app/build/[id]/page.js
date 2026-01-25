@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { 
   generateProject, 
@@ -28,6 +28,38 @@ export default function BuildPage() {
     if (hasLoadedRef.current) return;
     hasLoadedRef.current = true;
     
+    // Check for cached data synchronously first to avoid hydration mismatch
+    // Use setTimeout to defer state update until after hydration
+    const cachedDataKey = `projectData_${id}`;
+    const cachedDataValue = localStorage.getItem(cachedDataKey);
+    
+    if (cachedDataValue) {
+      // Use cached data, skip loading screen
+      const data = JSON.parse(cachedDataValue);
+      // Clean up cache immediately
+      localStorage.removeItem(cachedDataKey);
+      
+      // Get description from localStorage
+      const savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
+      const project = savedProjects.find(p => p.id === id);
+      const description = project?.name || id.replace(/-/g, ' ');
+      
+      // Set project data immediately
+      const initialProjectData = {
+        description,
+        parts: data,
+        assemblySteps: data.assembly_steps || [],
+        assembledProductImage: data.assembled_product_image?.imageUrl,
+        firmware: data.firmware || null,
+        stepImages: []
+      };
+      
+      // Set state immediately to skip loading screen
+      setProjectData(initialProjectData);
+      setLoading(false);
+      return; // Exit early, don't load from API
+    }
+    
     async function loadProject() {
       // Get description from localStorage (saved by landing page)
       const savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
@@ -35,9 +67,10 @@ export default function BuildPage() {
       const description = project?.name || id.replace(/-/g, ' ');
 
       try {
+        let data;
         // 1. Call /generate to get parts, assembly steps, and final build image
         setLoadingStage('Generating parts list...');
-        const data = await generateProject(description);
+        data = await generateProject(description);
         
         // 2. Set project data immediately with empty stepImages array
         // This allows the UI to render while images load in the background
@@ -156,7 +189,7 @@ function ProjectDataUpdater({ projectData }) {
 
 function LoadingScreen({ stage }) {
   return (
-    <div className={mainStyles.loadingScreen}>
+    <div className={mainStyles.loadingScreen} suppressHydrationWarning>
       <div className={mainStyles.batteryContainer}>
         <div className={mainStyles.batteryBody}>
           <div className={mainStyles.batteryLevel}></div>
