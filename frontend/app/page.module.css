@@ -184,28 +184,30 @@
 .batteryContainer {
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-bottom: 2rem;
+  width: 100%;
 }
 
 .batteryBody {
-  width: 150px;
-  height: 60px;
-  border: 4px solid var(--pixel-yellow);
+  width: 220px;
+  height: 90px;
+  border: 5px solid var(--pixel-yellow);
   border-radius: 4px;
-  padding: 4px;
+  padding: 5px;
   position: relative;
   background: rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 10px var(--pixel-yellow);
+  box-shadow: 0 0 15px var(--pixel-yellow);
 }
 
 .batteryBump {
-  width: 10px;
-  height: 30px;
+  width: 15px;
+  height: 45px;
   background-color: var(--pixel-yellow);
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
-  margin-left: 4px;
-  box-shadow: 0 0 10px var(--pixel-yellow);
+  margin-left: 5px;
+  box-shadow: 0 0 15px var(--pixel-yellow);
 }
 
 .batteryLevel {
@@ -249,10 +251,47 @@
 }
 
 .loadingText {
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   color: var(--pixel-yellow);
   font-family: var(--font-press-start) !important;
   margin-top: 2rem;
+  text-align: center;
+  width: 100%;
+  padding-left: 1.5em;
+  letter-spacing: 0.05em;
+}
+
+.builtText {
+  font-size: 2.2rem;
+  color: #00ff00;
+  font-family: var(--font-press-start) !important;
+  margin-top: 0;
+  text-align: center;
+  width: 100%;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+  animation: builtPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes builtPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+.proceedText {
+  font-size: 1rem;
+  color: var(--pixel-yellow);
+  font-family: var(--font-press-start) !important;
+  margin-top: 1.5rem;
+  text-align: center;
+  width: 100%;
+  letter-spacing: 0.05em;
 }
 
 /* How It Works Section */

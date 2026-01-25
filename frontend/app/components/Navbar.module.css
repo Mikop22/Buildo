@@ -166,8 +166,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 9998;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
     animation: fadeIn 0.2s ease-out;
 }
 
@@ -185,7 +185,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 9999;
+    z-index: 10001;
     max-width: 1200px;
     width: 95%;
     max-height: 90vh;
