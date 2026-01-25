@@ -44,6 +44,25 @@ export async function generateAssemblyImages(payload) {
 }
 
 /**
+ * Generate a single assembly step image (for progressive loading)
+ * @param {object} payload - Single step image request payload
+ * @param {function} onProgress - Callback called when image is generated: (stepImage) => void
+ * @returns {Promise<{step: number, image_b64: string}>}
+ */
+export async function generateSingleStepImage(payload) {
+  const res = await fetch(`${ASSEMBLY_IMAGES_URL}/v1/assembly-image`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => ({}));
+    throw new Error(errorData.error || 'Failed to generate step image');
+  }
+  return res.json();
+}
+
+/**
  * Convert a remote image URL to base64 via backend proxy (to avoid CORS)
  * @param {string} url - Remote image URL
  * @returns {Promise<{data: string, mimeType: string}>} - Base64 data and MIME type

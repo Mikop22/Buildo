@@ -23,7 +23,18 @@ def create_app() -> Flask:
     app.config["DEBUG"] = config.DEBUG
     
     # Enable CORS for frontend
-    CORS(app, origins=["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000", "http://127.0.0.1:3001"])
+    # Allow localhost for development and production URLs from environment
+    import os
+    allowed_origins = [
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3001"
+    ]
+    # Add production frontend URL from environment if set
+    if os.getenv("FRONTEND_URL"):
+        allowed_origins.append(os.getenv("FRONTEND_URL"))
+    CORS(app, origins=allowed_origins)
 
     # Register blueprints
     app.register_blueprint(api_bp)

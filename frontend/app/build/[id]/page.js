@@ -4,14 +4,16 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { 
   generateProject, 
-  generateAssemblyImages, 
+  generateAssemblyImages,
+  generateSingleStepImage,
   buildReferenceImages,
   extractModuleNames 
 } from '@/lib/api';
-import { ProjectProvider } from '@/app/context/ProjectContext';
+import { ProjectProvider, useProject } from '@/app/context/ProjectContext';
 import GameDashboard from '@/app/components/GameDashboard';
 import PixelBackground from '@/app/components/PixelBackground';
 import styles from './page.module.css';
+import mainStyles from '../../page.module.css';
 
 export default function BuildPage() {
   const { id } = useParams();
@@ -33,12 +35,25 @@ export default function BuildPage() {
       const description = project?.name || id.replace(/-/g, ' ');
 
       try {
-        // 1. Call /generate to get parts and assembly steps
+        // 1. Call /generate to get parts, assembly steps, and final build image
         setLoadingStage('Generating parts list...');
         const data = await generateProject(description);
         
-        // 2. Build reference images (download + base64 encode via proxy)
-        setLoadingStage('Processing reference images...');
+        // 2. Set project data immediately with empty stepImages array
+        // This allows the UI to render while images load in the background
+        const initialProjectData = {
+          description,
+          parts: data,
+          assemblySteps: data.assembly_steps || [],
+          assembledProductImage: data.assembled_product_image?.imageUrl,
+          stepImages: [] // Start with empty array, will be populated in background
+        };
+        
+        setProjectData(initialProjectData);
+        setLoading(false); // Show UI immediately after main data loads
+        
+        // 3. Load assembly images in the background (non-blocking)
+        // Build reference images (download + base64 encode via proxy)
         let referenceImages = [];
         try {
           referenceImages = await buildReferenceImages(data);
@@ -47,42 +62,54 @@ export default function BuildPage() {
           // Continue without reference images
         }
         
-        // 3. Build steps payload
+        // 4. Build steps payload
         const steps = (data.assembly_steps || []).map((s, i) => ({
           id: i + 1,
           human_description: s
         }));
         
-        // 4. Call /v1/assembly-images if we have steps
-        let stepImages = [];
+        // 5. Generate assembly images one by one (in background, progressive loading)
         if (steps.length > 0) {
-          setLoadingStage('Generating step images...');
-          try {
-            const stepImagesResponse = await generateAssemblyImages({
-              project_id: id,
-              title: description,
-              scene: { modules: extractModuleNames(data) },
-              reference_images: referenceImages,
-              steps
-            });
-            stepImages = stepImagesResponse.images || [];
-          } catch (stepErr) {
-            console.warn('Could not generate step images:', stepErr.message);
-            // Continue without step images
+          // Generate images sequentially, updating UI as each completes
+          let previousImageB64 = null;
+          const generatedImages = [];
+          
+          for (let i = 0; i < steps.length; i++) {
+            try {
+              const step = steps[i];
+              const stepImageResponse = await generateSingleStepImage({
+                project_id: id,
+                title: description,
+                scene: { modules: extractModuleNames(data) },
+                reference_images: referenceImages,
+                step: {
+                  id: step.id,
+                  human_description: step.human_description
+                },
+                previous_image_b64: previousImageB64
+              });
+              
+              // Add to generated images
+              generatedImages.push(stepImageResponse);
+              
+              // Update projectData immediately with this new image
+              setProjectData(prev => ({
+                ...prev,
+                stepImages: [...generatedImages]
+              }));
+              
+              // Update previous image for next iteration
+              previousImageB64 = stepImageResponse.image_b64;
+              
+            } catch (stepErr) {
+              console.warn(`Could not generate image for step ${i + 1}:`, stepErr.message);
+              // Continue with next step even if one fails
+            }
           }
         }
-
-        setProjectData({
-          description,
-          parts: data,
-          assemblySteps: data.assembly_steps || [],
-          assembledProductImage: data.assembled_product_image?.imageUrl,
-          stepImages
-        });
       } catch (err) {
         console.error('Project loading error:', err);
         setError(err.message);
-      } finally {
         setLoading(false);
       }
     }
@@ -102,6 +129,7 @@ export default function BuildPage() {
     <>
       <PixelBackground variant="tech" />
       <ProjectProvider initialData={projectData}>
+        <ProjectDataUpdater projectData={projectData} />
         <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <GameDashboard projectName={projectData?.description} />
         </div>
@@ -110,19 +138,31 @@ export default function BuildPage() {
   );
 }
 
+// Component to sync projectData updates to context (for progressive image loading)
+function ProjectDataUpdater({ projectData }) {
+  const { setProjectData } = useProject();
+  
+  useEffect(() => {
+    if (projectData) {
+      // Always update context when projectData changes
+      // This ensures progressive image loading works
+      setProjectData(projectData);
+    }
+  }, [projectData?.stepImages?.length, projectData?.description, setProjectData]);
+  
+  return null;
+}
+
 function LoadingScreen({ stage }) {
   return (
-    <div className={styles.loadingScreen}>
-      <div className={styles.loadingContent}>
-        <div className={styles.batteryContainer}>
-          <div className={styles.batteryBody}>
-            <div className={styles.batteryLevel}></div>
-          </div>
-          <div className={styles.batteryBump}></div>
+    <div className={mainStyles.loadingScreen}>
+      <div className={mainStyles.batteryContainer}>
+        <div className={mainStyles.batteryBody}>
+          <div className={mainStyles.batteryLevel}></div>
         </div>
-        <p className={`${styles.loadingText} blink`}>BUILDING YOUR PROJECT...</p>
-        <p className={styles.loadingStage}>{stage}</p>
+        <div className={mainStyles.batteryBump}></div>
       </div>
+      <p className={mainStyles.loadingText}>BUILDING...</p>
     </div>
   );
 }
