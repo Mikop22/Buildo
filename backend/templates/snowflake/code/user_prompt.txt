@@ -1,0 +1,9 @@
+Device Description: {description}
+
+Parts to be used (in JSON format with categories, subcategories, and product details):
+{parts_json}
+
+Assembly Instructions:
+{assembly_steps}
+
+Generate skeleton code for this device based on the parts and assembly instructions above. Include all necessary pin definitions, initialization code, and placeholder functions for the components listed.
