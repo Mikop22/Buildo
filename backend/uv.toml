@@ -2,5 +2,6 @@
 dependencies = [
     "flask",
     "python-dotenv",
-    "google-genai"
+    "google-genai",
+    "pymongo"
 ]
