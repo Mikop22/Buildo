@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import GameDashboard from "../../components/GameDashboard";
+import PixelBackground from "../../components/PixelBackground";
 
 export default function BuildPage() {
     const params = useParams();
@@ -28,8 +29,11 @@ export default function BuildPage() {
     }, [projectId]);
 
     return (
-        <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
-            <GameDashboard projectName={projectName} />
-        </div>
+        <>
+            <PixelBackground variant="tech" />
+            <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto", position: "relative", zIndex: 1 }}>
+                <GameDashboard projectName={projectName} />
+            </div>
+        </>
     );
 }

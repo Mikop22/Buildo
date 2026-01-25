@@ -7,7 +7,7 @@ import styles from "./PixelBackground.module.css";
  * PixelBackground Component
  * Creates animated pixel-art style backgrounds using CSS
  * 
- * @param {string} variant - "city" | "space" | "grid" | "mountains"
+ * @param {string} variant - "city" | "space" | "grid" | "tech"
  * @param {boolean} animated - Enable/disable animations
  */
 export default function PixelBackground({ variant = "space", animated = true }) {
@@ -48,6 +48,32 @@ export default function PixelBackground({ variant = "space", animated = true }) 
                 type: "pixel"
             }));
             setElements(pixels);
+        } else if (variant === "tech") {
+            // Generate tech elements: particles, data streams, nodes
+            const particles = Array.from({ length: 40 }, (_, i) => ({
+                id: i,
+                x: Math.random() * 100,
+                y: Math.random() * 100,
+                size: 2 + Math.random() * 4,
+                delay: Math.random() * 6,
+                speed: 3 + Math.random() * 4,
+                type: "particle"
+            }));
+            const dataStreams = Array.from({ length: 8 }, (_, i) => ({
+                id: i + 100,
+                x: 10 + i * 12,
+                delay: Math.random() * 3,
+                type: "stream"
+            }));
+            const nodes = Array.from({ length: 12 }, (_, i) => ({
+                id: i + 200,
+                x: Math.random() * 100,
+                y: Math.random() * 100,
+                size: 6 + Math.random() * 6,
+                delay: Math.random() * 2,
+                type: "node"
+            }));
+            setElements([...particles, ...dataStreams, ...nodes]);
         }
     }, [variant]);
 
@@ -117,6 +143,56 @@ export default function PixelBackground({ variant = "space", animated = true }) 
                                 width: `${pixel.size}px`,
                                 height: `${pixel.size}px`,
                                 animationDelay: `${pixel.delay}s`
+                            }}
+                        />
+                    ))}
+                </>
+            )}
+
+            {variant === "tech" && (
+                <>
+                    {/* Circuit grid */}
+                    <div className={styles.circuitGrid} />
+
+                    {/* Data streams */}
+                    {elements.filter(e => e.type === "stream").map((stream) => (
+                        <div
+                            key={stream.id}
+                            className={styles.dataStream}
+                            style={{
+                                left: `${stream.x}%`,
+                                animationDelay: `${stream.delay}s`
+                            }}
+                        />
+                    ))}
+
+                    {/* Glowing nodes */}
+                    {elements.filter(e => e.type === "node").map((node) => (
+                        <div
+                            key={node.id}
+                            className={styles.techNode}
+                            style={{
+                                left: `${node.x}%`,
+                                top: `${node.y}%`,
+                                width: `${node.size}px`,
+                                height: `${node.size}px`,
+                                animationDelay: `${node.delay}s`
+                            }}
+                        />
+                    ))}
+
+                    {/* Floating particles */}
+                    {elements.filter(e => e.type === "particle").map((particle) => (
+                        <div
+                            key={particle.id}
+                            className={styles.techParticle}
+                            style={{
+                                left: `${particle.x}%`,
+                                top: `${particle.y}%`,
+                                width: `${particle.size}px`,
+                                height: `${particle.size}px`,
+                                animationDelay: `${particle.delay}s`,
+                                animationDuration: `${particle.speed}s`
                             }}
                         />
                     ))}

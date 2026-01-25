@@ -175,6 +175,167 @@
     background: var(--pixel-green);
 }
 
+/* ========== TECH VARIANT ========== */
+.circuitGrid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--pixel-blue) 1px, transparent 1px),
+        linear-gradient(90deg, var(--pixel-blue) 1px, transparent 1px),
+        linear-gradient(45deg, transparent 48%, var(--pixel-pink) 49%, var(--pixel-pink) 51%, transparent 52%);
+    background-size: 60px 60px, 60px 60px, 120px 120px;
+    opacity: 0.08;
+    animation: circuitPulse 4s ease-in-out infinite;
+}
+
+@keyframes circuitPulse {
+
+    0%,
+    100% {
+        opacity: 0.05;
+        filter: hue-rotate(0deg);
+    }
+
+    50% {
+        opacity: 0.12;
+        filter: hue-rotate(30deg);
+    }
+}
+
+.dataStream {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(180deg,
+            transparent 0%,
+            var(--pixel-blue) 20%,
+            var(--pixel-pink) 50%,
+            var(--pixel-blue) 80%,
+            transparent 100%);
+    opacity: 0;
+    animation: streamFlow 3s ease-in-out infinite;
+}
+
+@keyframes streamFlow {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+}
+
+.dataStream:nth-child(odd) {
+    animation-direction: reverse;
+}
+
+.techNode {
+    position: absolute;
+    background: var(--pixel-green);
+    border-radius: 50%;
+    box-shadow:
+        0 0 10px var(--pixel-green),
+        0 0 20px var(--pixel-green),
+        0 0 30px var(--pixel-blue);
+    animation: nodePulse 2s ease-in-out infinite;
+}
+
+@keyframes nodePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.4;
+        box-shadow:
+            0 0 5px var(--pixel-green),
+            0 0 10px var(--pixel-green);
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 1;
+        box-shadow:
+            0 0 15px var(--pixel-green),
+            0 0 30px var(--pixel-blue),
+            0 0 45px var(--pixel-pink);
+    }
+}
+
+.techNode:nth-child(3n) {
+    background: var(--pixel-pink);
+    box-shadow:
+        0 0 10px var(--pixel-pink),
+        0 0 20px var(--pixel-pink);
+}
+
+.techNode:nth-child(3n+1) {
+    background: var(--pixel-blue);
+    box-shadow:
+        0 0 10px var(--pixel-blue),
+        0 0 20px var(--pixel-blue);
+}
+
+.techParticle {
+    position: absolute;
+    background: var(--pixel-yellow);
+    border-radius: 0;
+    opacity: 0.6;
+    box-shadow: 0 0 4px var(--pixel-yellow);
+    animation: particleFloat 5s linear infinite;
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translateY(-100px) translateX(50px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.techParticle:nth-child(4n) {
+    background: var(--pixel-blue);
+    box-shadow: 0 0 6px var(--pixel-blue);
+    animation-direction: reverse;
+}
+
+.techParticle:nth-child(4n+1) {
+    background: var(--pixel-pink);
+    box-shadow: 0 0 6px var(--pixel-pink);
+}
+
+.techParticle:nth-child(4n+2) {
+    background: var(--pixel-green);
+    box-shadow: 0 0 6px var(--pixel-green);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .building {
@@ -183,5 +344,9 @@
 
     .gridPattern {
         background-size: 30px 30px;
+    }
+
+    .circuitGrid {
+        background-size: 40px 40px, 40px 40px, 80px 80px;
     }
 }
