@@ -107,10 +107,14 @@
 }
 
 @keyframes cursorBlink {
-  0%, 50% {
+
+  0%,
+  50% {
     opacity: 1;
   }
-  51%, 100% {
+
+  51%,
+  100% {
     opacity: 0;
   }
 }
@@ -274,24 +278,26 @@
 }
 
 @keyframes builtPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.9;
     transform: scale(1.05);
   }
 }
 
-.proceedText {
+.proceedBtn {
   font-size: 1rem;
-  color: var(--pixel-yellow);
   font-family: var(--font-press-start) !important;
   margin-top: 1.5rem;
-  text-align: center;
-  width: 100%;
+  padding: 1rem 2rem;
   letter-spacing: 0.05em;
+  animation: pulse 2s infinite;
 }
 
 /* How It Works Section */
@@ -334,6 +340,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

@@ -246,9 +246,12 @@ export default function Home() {
           ) : (
             <>
               <p className={styles.builtText}>BUILT!</p>
-              <p className={styles.proceedText}>
-                <span className="blink">▶</span> Press ENTER to proceed
-              </p>
+              <button
+                className={`nes-btn is-success ${styles.proceedBtn}`}
+                onClick={() => router.push(`/build/${projectId}`)}
+              >
+                PROCEED →
+              </button>
             </>
           )}
         </div>
