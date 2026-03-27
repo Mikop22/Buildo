@@ -8,7 +8,7 @@ Super straightfoward README so you can try for yourself along the way.
 
 Describe your hardware idea in plain English. Buildo gives you a visualization of your idea, a complete parts list that you can easily shop for, skeleton firmware code and step-by-step assembly instructions with images as well as a video demo. Everything you need to build it.
 
-**If curious and don't want to setup** Check out our [Devpost](https://devpost.com) for a demo and overview.
+**If curious and don't want to setup** Check out our [Devpost](https://devpost.com/software/product-creator-temp-name-conu-x) for a demo and overview.
 
 ## Try for yourself
 
