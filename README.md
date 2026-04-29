@@ -2,8 +2,6 @@
 <img width="1551" height="944" alt="Screenshot 2026-02-12 at 12 06 47 PM" src="https://github.com/user-attachments/assets/b26e4c5e-fc21-4040-8b2f-b205a465e0fc" />
 
 
-Super straightfoward README so you can try for yourself along the way.
-
 # What is Buildo
 
 Describe your hardware idea in plain English. Buildo gives you a visualization of your idea, a complete parts list that you can easily shop for, skeleton firmware code and step-by-step assembly instructions with images as well as a video demo. Everything you need to build it.
