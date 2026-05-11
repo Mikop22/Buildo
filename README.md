@@ -1,5 +1,4 @@
 
-<img width="1551" height="944" alt="Screenshot 2026-02-12 at 12 06 47 PM" src="https://github.com/user-attachments/assets/b26e4c5e-fc21-4040-8b2f-b205a465e0fc" />
 
 
 # What is Buildo
@@ -7,6 +6,11 @@
 Describe your hardware idea in plain English. Buildo gives you a visualization of your idea, a complete parts list that you can easily shop for, skeleton firmware code and step-by-step assembly instructions with images as well as a video demo. Everything you need to build it.
 
 **If curious and don't want to setup** Check out our [Devpost](https://devpost.com/software/product-creator-temp-name-conu-x) for a demo and overview.
+
+
+https://github.com/user-attachments/assets/424f4cb9-cebe-40e0-ad4b-ef03d9894ccf
+
+
 
 ## Try for yourself
 
